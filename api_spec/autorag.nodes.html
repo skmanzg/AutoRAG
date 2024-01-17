@@ -222,38 +222,54 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="autorag.nodes.generator.html">autorag.nodes.generator package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.generator.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.generator.html#module-autorag.nodes.generator">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="autorag.nodes.passagecompressor.html">autorag.nodes.passagecompressor package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.passagecompressor.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.passagecompressor.html#module-autorag.nodes.passagecompressor">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="autorag.nodes.passagereranker.html">autorag.nodes.passagereranker package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.passagereranker.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="autorag.nodes.promptmaker.html">autorag.nodes.promptmaker package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.promptmaker.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.promptmaker.html#module-autorag.nodes.promptmaker">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="autorag.nodes.queryexpansion.html">autorag.nodes.queryexpansion package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.queryexpansion.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="autorag.nodes.retrieval.html">autorag.nodes.retrieval package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="autorag.nodes.retrieval.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag-nodes-retrieval-base-module">autorag.nodes.retrieval.base module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag-nodes-retrieval-bm25-module">autorag.nodes.retrieval.bm25 module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag-nodes-retrieval-run-module">autorag.nodes.retrieval.run module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.retrieval.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.base">autorag.nodes.retrieval.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.base.cast_queries"><code class="docutils literal notranslate"><span class="pre">cast_queries()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.base.evenly_distribute_passages"><code class="docutils literal notranslate"><span class="pre">evenly_distribute_passages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.base.load_bm25_corpus"><code class="docutils literal notranslate"><span class="pre">load_bm25_corpus()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.base.retrieval_node"><code class="docutils literal notranslate"><span class="pre">retrieval_node()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.bm25">autorag.nodes.retrieval.bm25 module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.bm25"><code class="docutils literal notranslate"><span class="pre">bm25()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.bm25_ingest"><code class="docutils literal notranslate"><span class="pre">bm25_ingest()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.bm25_pure"><code class="docutils literal notranslate"><span class="pre">bm25_pure()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.bm25_tokenize"><code class="docutils literal notranslate"><span class="pre">bm25_tokenize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.run">autorag.nodes.retrieval.run module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.evaluate_retrieval_node"><code class="docutils literal notranslate"><span class="pre">evaluate_retrieval_node()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.run_retrieval_node"><code class="docutils literal notranslate"><span class="pre">run_retrieval_node()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.retrieval.html#module-autorag.nodes.retrieval">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<section id="module-autorag.nodes">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-autorag.nodes" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -314,7 +330,7 @@
             <ul>
 <li><a class="reference internal" href="#">autorag.nodes package</a><ul>
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-autorag.nodes">Module contents</a></li>
 </ul>
 </li>
 </ul>
