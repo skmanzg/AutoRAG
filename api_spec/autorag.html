@@ -321,6 +321,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="autorag.utils.html#module-autorag.utils.util">autorag.utils.util module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="autorag.utils.html#autorag.utils.util.fetch_contents"><code class="docutils literal notranslate"><span class="pre">fetch_contents()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="autorag.utils.html#autorag.utils.util.find_best_result_path"><code class="docutils literal notranslate"><span class="pre">find_best_result_path()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="autorag.utils.html#autorag.utils.util.make_module_file_name"><code class="docutils literal notranslate"><span class="pre">make_module_file_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="autorag.utils.html#autorag.utils.util.result_to_dataframe"><code class="docutils literal notranslate"><span class="pre">result_to_dataframe()</span></code></a></li>
 </ul>
@@ -392,7 +393,7 @@ It keeps the first input parameter of the function as the origin results.
 
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.strategy.filter_by_threshold">
-<span class="sig-prename descclassname"><span class="pre">autorag.strategy.</span></span><span class="sig-name descname"><span class="pre">filter_by_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="../_modules/autorag/strategy.html#filter_by_threshold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.strategy.filter_by_threshold" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">autorag.strategy.</span></span><span class="sig-name descname"><span class="pre">filter_by_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/strategy.html#filter_by_threshold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.strategy.filter_by_threshold" title="Link to this definition">#</a></dt>
 <dd><p>Filter results by value’s threshold.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -401,6 +402,8 @@ It keeps the first input parameter of the function as the origin results.
 <li><p><strong>value</strong> – The value list to be filtered.
 It must have the same length with results.</p></li>
 <li><p><strong>threshold</strong> – The threshold value.</p></li>
+<li><p><strong>module_filename</strong> – The module filename list.
+It uses to recognize which module is filtered or not.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -417,7 +420,7 @@ It must have the same length with results.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.strategy.select_best_average">
-<span class="sig-prename descclassname"><span class="pre">autorag.strategy.</span></span><span class="sig-name descname"><span class="pre">select_best_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typing.Iterable[str]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/autorag/strategy.html#select_best_average"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.strategy.select_best_average" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">autorag.strategy.</span></span><span class="sig-name descname"><span class="pre">select_best_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/strategy.html#select_best_average"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.strategy.select_best_average" title="Link to this definition">#</a></dt>
 <dd><p>Select the best result by average value among given columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -426,6 +429,8 @@ It must have the same length with results.</p></li>
 Each result must be pd.DataFrame.</p></li>
 <li><p><strong>columns</strong> – Column names to be averaged.
 Standard to select the best result.</p></li>
+<li><p><strong>module_filename</strong> – The module filename list.
+It uses to recognize which module is selected.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
