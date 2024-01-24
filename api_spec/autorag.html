@@ -229,6 +229,7 @@
 <li class="toctree-l2"><a class="reference internal" href="autorag.evaluate.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="autorag.evaluate.metric.html">autorag.evaluate.metric package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="autorag.evaluate.metric.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autorag.evaluate.metric.html#module-autorag.evaluate.metric.generation">autorag.evaluate.metric.generation module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.evaluate.metric.html#module-autorag.evaluate.metric.retrieval">autorag.evaluate.metric.retrieval module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.evaluate.metric.html#module-autorag.evaluate.metric">Module contents</a></li>
 </ul>
@@ -236,6 +237,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="autorag.evaluate.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.evaluate.html#module-autorag.evaluate.generation">autorag.evaluate.generation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autorag.evaluate.html#autorag.evaluate.generation.evaluate_generation"><code class="docutils literal notranslate"><span class="pre">evaluate_generation()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="autorag.evaluate.html#module-autorag.evaluate.retrieval">autorag.evaluate.retrieval module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="autorag.evaluate.html#autorag.evaluate.retrieval.evaluate_retrieval"><code class="docutils literal notranslate"><span class="pre">evaluate_retrieval()</span></code></a></li>
 </ul>
@@ -386,14 +391,12 @@ If None, it loads qa data from data/qa.parquet.</p></li>
 <span class="sig-prename descclassname"><span class="pre">autorag.strategy.</span></span><span class="sig-name descname"><span class="pre">avoid_empty_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/strategy.html#avoid_empty_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.strategy.avoid_empty_result" title="Link to this definition">#</a></dt>
 <dd><p>Decorator for avoiding empty results from the function.
 When the func returns an empty result, it will return the origin results.
-It keeps the first input parameter of the function as the origin results.
-:param func:
-:return:</p>
+It keeps the first input parameter of the function as the origin results.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.strategy.filter_by_threshold">
-<span class="sig-prename descclassname"><span class="pre">autorag.strategy.</span></span><span class="sig-name descname"><span class="pre">filter_by_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/strategy.html#filter_by_threshold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.strategy.filter_by_threshold" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">autorag.strategy.</span></span><span class="sig-name descname"><span class="pre">filter_by_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadatas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/strategy.html#filter_by_threshold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.strategy.filter_by_threshold" title="Link to this definition">#</a></dt>
 <dd><p>Filter results by value’s threshold.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -402,12 +405,15 @@ It keeps the first input parameter of the function as the origin results.
 <li><p><strong>value</strong> – The value list to be filtered.
 It must have the same length with results.</p></li>
 <li><p><strong>threshold</strong> – The threshold value.</p></li>
-<li><p><strong>module_filename</strong> – The module filename list.
-It uses to recognize which module is filtered or not.</p></li>
+<li><p><strong>metadatas</strong> – The metadata of each result.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Filtered list of results.</p>
+<dd class="field-even"><p>Filtered list of results and filtered list of metadatas.
+Metadatas will be returned even if you did not give input metadatas.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[List, List]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -420,7 +426,7 @@ It uses to recognize which module is filtered or not.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.strategy.select_best_average">
-<span class="sig-prename descclassname"><span class="pre">autorag.strategy.</span></span><span class="sig-name descname"><span class="pre">select_best_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/strategy.html#select_best_average"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.strategy.select_best_average" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">autorag.strategy.</span></span><span class="sig-name descname"><span class="pre">select_best_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadatas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/strategy.html#select_best_average"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.strategy.select_best_average" title="Link to this definition">#</a></dt>
 <dd><p>Select the best result by average value among given columns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -429,12 +435,16 @@ It uses to recognize which module is filtered or not.</p></li>
 Each result must be pd.DataFrame.</p></li>
 <li><p><strong>columns</strong> – Column names to be averaged.
 Standard to select the best result.</p></li>
-<li><p><strong>module_filename</strong> – The module filename list.
-It uses to recognize which module is selected.</p></li>
+<li><p><strong>metadatas</strong> – The metadata of each result. 
+It will select one metadata with the best result.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The best result.</p>
+<dd class="field-even"><p>The best result and the best metadata.
+The metadata will be returned even if you did not give input ‘metadatas’ parameter.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[pd.DataFrame, Any]</p>
 </dd>
 </dl>
 </dd></dl>

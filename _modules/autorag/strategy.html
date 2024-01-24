@@ -216,7 +216,7 @@
           <h1>Source code for autorag.strategy</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -241,8 +241,6 @@
 <span class="sd">    Decorator for avoiding empty results from the function.</span>
 <span class="sd">    When the func returns an empty result, it will return the origin results.</span>
 <span class="sd">    It keeps the first input parameter of the function as the origin results.</span>
-<span class="sd">    :param func:</span>
-<span class="sd">    :return:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
@@ -260,7 +258,7 @@
 <div class="viewcode-block" id="filter_by_threshold">
 <a class="viewcode-back" href="../../api_spec/autorag.html#autorag.strategy.filter_by_threshold">[docs]</a>
 <span class="nd">@avoid_empty_result</span>
-<span class="k">def</span> <span class="nf">filter_by_threshold</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">module_filename</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="k">def</span> <span class="nf">filter_by_threshold</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">metadatas</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Filter results by value&#39;s threshold.</span>
 
@@ -268,21 +266,23 @@
 <span class="sd">    :param value: The value list to be filtered.</span>
 <span class="sd">        It must have the same length with results.</span>
 <span class="sd">    :param threshold: The threshold value.</span>
-<span class="sd">    :param module_filename: The module filename list.</span>
-<span class="sd">        It uses to recognize which module is filtered or not.</span>
-<span class="sd">    :return: Filtered list of results.</span>
+<span class="sd">    :param metadatas: The metadata of each result.</span>
+<span class="sd">    :return: Filtered list of results and filtered list of metadatas.</span>
+<span class="sd">        Metadatas will be returned even if you did not give input metadatas.</span>
+<span class="sd">    :rtype: Tuple[List, List]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">metadatas</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">metadatas</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="s2">&quot;results and value must have the same length.&quot;</span>
-    <span class="n">filtered_results</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">filtered_module_filename</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">threshold</span><span class="p">,</span>
-                                                                <span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">module_filename</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">filtered_results</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">filtered_module_filename</span><span class="p">)</span></div>
+    <span class="n">filtered_results</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">filtered_metadatas</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">threshold</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">metadatas</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">filtered_results</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">filtered_metadatas</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="select_best_average">
 <a class="viewcode-back" href="../../api_spec/autorag.html#autorag.strategy.select_best_average">[docs]</a>
 <span class="k">def</span> <span class="nf">select_best_average</span><span class="p">(</span><span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">columns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-                        <span class="n">module_filename</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+                        <span class="n">metadatas</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Select the best result by average value among given columns.</span>
 
@@ -290,18 +290,22 @@
 <span class="sd">        Each result must be pd.DataFrame.</span>
 <span class="sd">    :param columns: Column names to be averaged.</span>
 <span class="sd">        Standard to select the best result.</span>
-<span class="sd">    :param module_filename: The module filename list.</span>
-<span class="sd">        It uses to recognize which module is selected.</span>
-<span class="sd">    :return: The best result.</span>
+<span class="sd">    :param metadatas: The metadata of each result. </span>
+<span class="sd">        It will select one metadata with the best result.</span>
+<span class="sd">    :return: The best result and the best metadata.</span>
+<span class="sd">        The metadata will be returned even if you did not give input &#39;metadatas&#39; parameter.</span>
+<span class="sd">    :rtype: Tuple[pd.DataFrame, Any]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">module_filename</span><span class="p">),</span> <span class="s2">&quot;results and module_filename must have the same length.&quot;</span>
+    <span class="k">if</span> <span class="n">metadatas</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">metadatas</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">metadatas</span><span class="p">),</span> <span class="s2">&quot;results and module_filename must have the same length.&quot;</span>
     <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]),</span> \
         <span class="s2">&quot;results must be pd.DataFrame.&quot;</span>
     <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">column</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">]),</span> \
         <span class="s2">&quot;columns must be in the columns of results.&quot;</span>
     <span class="n">each_average</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
     <span class="n">best_index</span> <span class="o">=</span> <span class="n">each_average</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">each_average</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="n">best_index</span><span class="p">],</span> <span class="n">module_filename</span><span class="p">[</span><span class="n">best_index</span><span class="p">]</span></div>
+    <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="n">best_index</span><span class="p">],</span> <span class="n">metadatas</span><span class="p">[</span><span class="n">best_index</span><span class="p">]</span></div>
 
 </pre></div>
         </article>
