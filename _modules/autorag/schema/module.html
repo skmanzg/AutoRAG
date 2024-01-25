@@ -218,10 +218,11 @@
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span>
 
-<span class="kn">from</span> <span class="nn">autorag.nodes.retrieval</span> <span class="kn">import</span> <span class="n">bm25</span>
+<span class="kn">from</span> <span class="nn">autorag.nodes.retrieval</span> <span class="kn">import</span> <span class="n">bm25</span><span class="p">,</span> <span class="n">vectordb</span>
 
 <span class="n">SUPPORT_MODULES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;bm25&#39;</span><span class="p">:</span> <span class="n">bm25</span><span class="p">,</span>
+    <span class="s1">&#39;vectordb&#39;</span><span class="p">:</span> <span class="n">vectordb</span><span class="p">,</span>
 <span class="p">}</span>
 
 
