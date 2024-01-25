@@ -270,6 +270,8 @@
         <span class="n">trial_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_new_trial_name</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__make_trial_dir</span><span class="p">(</span><span class="n">trial_name</span><span class="p">)</span>
 
+        <span class="c1"># copy yaml file to trial directory</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">yaml_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_dir</span><span class="p">,</span> <span class="n">trial_name</span><span class="p">,</span> <span class="s1">&#39;config.yaml&#39;</span><span class="p">))</span>
         <span class="n">node_lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_node_lines</span><span class="p">(</span><span class="n">yaml_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__embed</span><span class="p">(</span><span class="n">node_lines</span><span class="p">)</span>
 
