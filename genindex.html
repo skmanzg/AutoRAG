@@ -215,7 +215,7 @@
           
 <section class="genindex-section">
   <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#V"><strong>V</strong></a></div>
+  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#Q"><strong>Q</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#V"><strong>V</strong></a></div>
 </section>
 <section id="A" class="genindex-section">
   <h2>A</h2>
@@ -233,6 +233,13 @@
 
         <ul>
           <li><a href="api_spec/autorag.data.html#module-autorag.data">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.deploy
+
+        <ul>
+          <li><a href="api_spec/autorag.html#module-autorag.deploy">module</a>
 </li>
         </ul></li>
         <li>
@@ -471,11 +478,13 @@
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.evaluate_retrieval_node">evaluate_retrieval_node() (in module autorag.nodes.retrieval.run)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.html#autorag.evaluator.Evaluator">Evaluator (class in autorag.evaluator)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.base.evenly_distribute_passages">evenly_distribute_passages() (in module autorag.nodes.retrieval.base)</a>
+</li>
+        <li><a href="api_spec/autorag.html#autorag.deploy.extract_best_config">extract_best_config() (in module autorag.deploy)</a>
 </li>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.node.extract_values">extract_values() (in module autorag.schema.node)</a>
 </li>
@@ -493,16 +502,20 @@
 </li>
         <li><a href="api_spec/autorag.html#autorag.strategy.filter_by_threshold">filter_by_threshold() (in module autorag.strategy)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.utils.html#autorag.utils.util.find_best_result_path">find_best_result_path() (in module autorag.utils.util)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.module.Module.from_dict">from_dict() (autorag.schema.module.Module class method)</a>
 
         <ul>
           <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.from_dict">(autorag.schema.node.Node class method)</a>
 </li>
         </ul></li>
+        <li><a href="api_spec/autorag.html#autorag.deploy.Runner.from_trial_folder">from_trial_folder() (autorag.deploy.Runner class method)</a>
+</li>
+        <li><a href="api_spec/autorag.html#autorag.deploy.Runner.from_yaml">from_yaml() (autorag.deploy.Runner class method)</a>
+</li>
     </ul></td>
   </tr></table>
 </section>
@@ -563,6 +576,10 @@
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.meteor">meteor() (in module autorag.evaluate.metric.generation)</a>
 </li>
+        <li><a href="api_spec/autorag.html#autorag.deploy.RunnerInput.model_config">model_config (autorag.deploy.RunnerInput attribute)</a>
+</li>
+        <li><a href="api_spec/autorag.html#autorag.deploy.RunnerInput.model_fields">model_fields (autorag.deploy.RunnerInput attribute)</a>
+</li>
         <li>
     module
 
@@ -570,6 +587,8 @@
           <li><a href="api_spec/autorag.html#module-autorag">autorag</a>
 </li>
           <li><a href="api_spec/autorag.data.html#module-autorag.data">autorag.data</a>
+</li>
+          <li><a href="api_spec/autorag.html#module-autorag.deploy">autorag.deploy</a>
 </li>
           <li><a href="api_spec/autorag.evaluate.html#module-autorag.evaluate">autorag.evaluate</a>
 </li>
@@ -658,10 +677,22 @@
   </tr></table>
 </section>
 
+<section id="Q" class="genindex-section">
+  <h2>Q</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.html#autorag.deploy.RunnerInput.query">query (autorag.deploy.RunnerInput attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
 <section id="R" class="genindex-section">
   <h2>R</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.html#autorag.deploy.RunnerInput.result_column">result_column (autorag.deploy.RunnerInput attribute)</a>
+</li>
         <li><a href="api_spec/autorag.utils.html#autorag.utils.util.result_to_dataframe">result_to_dataframe() (in module autorag.utils.util)</a>
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval.retrieval_f1">retrieval_f1() (in module autorag.evaluate.metric.retrieval)</a>
@@ -672,19 +703,29 @@
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval.retrieval_precision">retrieval_precision() (in module autorag.evaluate.metric.retrieval)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval.retrieval_recall">retrieval_recall() (in module autorag.evaluate.metric.retrieval)</a>
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.rouge">rouge() (in module autorag.evaluate.metric.generation)</a>
 </li>
-        <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.run">run() (autorag.schema.node.Node method)</a>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.html#autorag.deploy.Runner.run">run() (autorag.deploy.Runner method)</a>
+
+        <ul>
+          <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.run">(autorag.schema.node.Node method)</a>
+</li>
+        </ul></li>
+        <li><a href="api_spec/autorag.html#autorag.deploy.Runner.run_api_server">run_api_server() (autorag.deploy.Runner method)</a>
 </li>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.run_node">run_node (autorag.schema.node.Node attribute)</a>
 </li>
         <li><a href="api_spec/autorag.html#autorag.node_line.run_node_line">run_node_line() (in module autorag.node_line)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.run_retrieval_node">run_retrieval_node() (in module autorag.nodes.retrieval.run)</a>
+</li>
+        <li><a href="api_spec/autorag.html#autorag.deploy.Runner">Runner (class in autorag.deploy)</a>
+</li>
+        <li><a href="api_spec/autorag.html#autorag.deploy.RunnerInput">RunnerInput (class in autorag.deploy)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -696,11 +737,13 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.html#autorag.strategy.select_best_average">select_best_average() (in module autorag.strategy)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.html#autorag.evaluator.Evaluator.start_trial">start_trial() (autorag.evaluator.Evaluator method)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.strategy">strategy (autorag.schema.node.Node attribute)</a>
+</li>
+        <li><a href="api_spec/autorag.html#autorag.deploy.summary_df_to_yaml">summary_df_to_yaml() (in module autorag.deploy)</a>
 </li>
     </ul></td>
   </tr></table>
