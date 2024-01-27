@@ -218,9 +218,11 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">chromadb</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">llama_index.embeddings</span> <span class="kn">import</span> <span class="n">BaseEmbedding</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.retrieval.base</span> <span class="kn">import</span> <span class="n">retrieval_node</span><span class="p">,</span> <span class="n">evenly_distribute_passages</span>
+<span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">validate_corpus_dataset</span>
 
 
 <div class="viewcode-block" id="vectordb">
@@ -286,6 +288,19 @@
               <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">score_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">pair</span><span class="p">:</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
     <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">result</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">id_result</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">score_result</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="vectordb_ingest">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.vectordb.vectordb_ingest">[docs]</a>
+<span class="k">def</span> <span class="nf">vectordb_ingest</span><span class="p">(</span><span class="n">collection</span><span class="p">:</span> <span class="n">chromadb</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span> <span class="n">corpus_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">embedding_model</span><span class="p">:</span> <span class="n">BaseEmbedding</span><span class="p">):</span>
+    <span class="n">validate_corpus_dataset</span><span class="p">(</span><span class="n">corpus_data</span><span class="p">)</span>
+    <span class="n">ids</span> <span class="o">=</span> <span class="n">corpus_data</span><span class="p">[</span><span class="s1">&#39;doc_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">contents</span> <span class="o">=</span> <span class="n">corpus_data</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="c1"># embed corpus</span>
+    <span class="n">embedded_contents</span> <span class="o">=</span> <span class="n">embedding_model</span><span class="o">.</span><span class="n">_get_text_embeddings</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+    <span class="n">collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span> <span class="n">embeddings</span><span class="o">=</span><span class="n">embedded_contents</span><span class="p">)</span></div>
 
 </pre></div>
         </article>
