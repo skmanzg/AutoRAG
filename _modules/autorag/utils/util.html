@@ -215,8 +215,9 @@
         <article role="main">
           <h1>Source code for autorag.utils.util</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Collection</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">swifter</span>
@@ -252,7 +253,10 @@
         <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
             <span class="n">results</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">df_input</span> <span class="o">=</span> <span class="p">{</span><span class="n">column_name</span><span class="p">:</span> <span class="n">result</span> <span class="k">for</span> <span class="n">result</span><span class="p">,</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">column_names</span><span class="p">)}</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">df_input</span> <span class="o">=</span> <span class="p">{</span><span class="n">column_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">results</span><span class="p">}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df_input</span> <span class="o">=</span> <span class="p">{</span><span class="n">column_name</span><span class="p">:</span> <span class="n">result</span> <span class="k">for</span> <span class="n">result</span><span class="p">,</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">column_names</span><span class="p">)}</span>
             <span class="n">result_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df_input</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">result_df</span>
 
@@ -318,6 +322,51 @@
 
     <span class="n">summary_df</span><span class="p">[</span><span class="n">dict_columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary_df</span><span class="p">[</span><span class="n">dict_columns</span><span class="p">]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">delete_none_at_dict</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">summary_df</span></div>
+
+
+
+<div class="viewcode-block" id="make_combinations">
+<a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.make_combinations">[docs]</a>
+<span class="k">def</span> <span class="nf">make_combinations</span><span class="p">(</span><span class="n">target_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make combinations from target_dict.</span>
+<span class="sd">    The target_dict key value must be a string,</span>
+<span class="sd">    and the value can be list of values or single value.</span>
+<span class="sd">    If generates all combinations of values from target_dict,</span>
+<span class="sd">    which means generated dictionaries that contain only one value for each key,</span>
+<span class="sd">    and all dictionaries will be different from each other.</span>
+
+<span class="sd">    :param target_dict: The target dictionary.</span>
+<span class="sd">    :return: The list of generated dictionaries.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dict_with_lists</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span>
+                               <span class="n">target_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="n">dict_with_lists</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))),</span> <span class="n">dict_with_lists</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="n">combination</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">dict_with_lists</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="n">combination_dicts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">dict_with_lists</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">combo</span><span class="p">))</span> <span class="k">for</span> <span class="n">combo</span> <span class="ow">in</span> <span class="n">combination</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">combination_dicts</span></div>
+
+
+
+<div class="viewcode-block" id="explode">
+<a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.explode">[docs]</a>
+<span class="k">def</span> <span class="nf">explode</span><span class="p">(</span><span class="n">index_values</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">explode_values</span><span class="p">:</span> <span class="n">Collection</span><span class="p">[</span><span class="n">Collection</span><span class="p">[</span><span class="n">Any</span><span class="p">]]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Explode index_values and explode_values.</span>
+<span class="sd">    The index_values and explode_values must have the same length.</span>
+<span class="sd">    It will flatten explode_values and keep index_values as a pair.</span>
+
+<span class="sd">    :param index_values: The index values.</span>
+<span class="sd">    :param explode_values: The exploded values.</span>
+<span class="sd">    :return: Tuple of exploded index_values and exploded explode_values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">index_values</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">explode_values</span><span class="p">),</span> <span class="s2">&quot;Index values and explode values must have same length&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s1">&#39;index_values&#39;</span><span class="p">:</span> <span class="n">index_values</span><span class="p">,</span>
+        <span class="s1">&#39;explode_values&#39;</span><span class="p">:</span> <span class="n">explode_values</span>
+    <span class="p">})</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">explode</span><span class="p">(</span><span class="s1">&#39;explode_values&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;index_values&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;explode_values&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
 
 </pre></div>
         </article>
