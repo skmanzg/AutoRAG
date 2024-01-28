@@ -255,11 +255,11 @@
 
             <span class="n">metric_result_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">metric_scores</span><span class="p">)</span>
             <span class="n">execution_result_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-                <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="n">generation_result</span>
+                <span class="s1">&#39;generated_texts&#39;</span><span class="p">:</span> <span class="n">generated_str</span>
             <span class="p">})</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">generation_result</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="p">:</span>
-                <span class="n">execution_result_df</span><span class="p">[</span><span class="s1">&#39;tokens&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">generation_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">execution_result_df</span><span class="p">[</span><span class="s1">&#39;log_probs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">generation_result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">execution_result_df</span><span class="p">[</span><span class="s1">&#39;generated_tokens&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">generation_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">execution_result_df</span><span class="p">[</span><span class="s1">&#39;generated_log_probs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">generation_result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
             <span class="n">result_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">execution_result_df</span><span class="p">,</span> <span class="n">metric_result_df</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">result_df</span>
