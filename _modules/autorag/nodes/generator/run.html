@@ -287,7 +287,7 @@
     <span class="n">selected_result</span><span class="p">,</span> <span class="n">selected_filename</span> <span class="o">=</span> <span class="n">select_best_average</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metrics&#39;</span><span class="p">),</span> <span class="n">filenames</span><span class="p">)</span>
     <span class="n">best_result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">previous_result</span><span class="p">,</span> <span class="n">selected_result</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="c1"># add summary.csv &#39;is_best&#39; column</span>
+    <span class="c1"># add &#39;is_best&#39; column at summary file</span>
     <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;is_best&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">selected_filename</span>
 
     <span class="c1"># save files</span>
