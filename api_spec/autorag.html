@@ -267,13 +267,19 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autorag.nodes.promptmaker.html">autorag.nodes.promptmaker package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autorag.nodes.promptmaker.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autorag.nodes.promptmaker.html#module-autorag.nodes.promptmaker.base">autorag.nodes.promptmaker.base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autorag.nodes.promptmaker.html#module-autorag.nodes.promptmaker.fstring">autorag.nodes.promptmaker.fstring module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autorag.nodes.promptmaker.html#module-autorag.nodes.promptmaker.run">autorag.nodes.promptmaker.run module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.nodes.promptmaker.html#module-autorag.nodes.promptmaker">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autorag.nodes.queryexpansion.html">autorag.nodes.queryexpansion package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="autorag.nodes.queryexpansion.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion.base">autorag.nodes.queryexpansion.base module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion.hyde">autorag.nodes.queryexpansion.hyde module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion.query_decompose">autorag.nodes.queryexpansion.query_decompose module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion.run">autorag.nodes.queryexpansion.run module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion">Module contents</a></li>
 </ul>
 </li>
@@ -595,6 +601,24 @@ The metadata will be returned even if you did not give input ‘metadatas’ par
 </dd></dl>
 
 </section>
+<section id="module-autorag.support">
+<span id="autorag-support-module"></span><h2>autorag.support module<a class="headerlink" href="#module-autorag.support" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.support.dynamically_find_function">
+<span class="sig-prename descclassname"><span class="pre">autorag.support.</span></span><span class="sig-name descname"><span class="pre">dynamically_find_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../_modules/autorag/support.html#dynamically_find_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.support.dynamically_find_function" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.support.get_support_modules">
+<span class="sig-prename descclassname"><span class="pre">autorag.support.</span></span><span class="sig-name descname"><span class="pre">get_support_modules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../_modules/autorag/support.html#get_support_modules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.support.get_support_modules" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.support.get_support_nodes">
+<span class="sig-prename descclassname"><span class="pre">autorag.support.</span></span><span class="sig-name descname"><span class="pre">get_support_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../_modules/autorag/support.html#get_support_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.support.get_support_nodes" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
 <section id="module-autorag">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-autorag" title="Link to this heading">#</a></h2>
 <dl class="py function">
@@ -697,6 +721,12 @@ The metadata will be returned even if you did not give input ‘metadatas’ par
 <li><a class="reference internal" href="#autorag.strategy.filter_by_threshold"><code class="docutils literal notranslate"><span class="pre">filter_by_threshold()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.strategy.measure_speed"><code class="docutils literal notranslate"><span class="pre">measure_speed()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.strategy.select_best_average"><code class="docutils literal notranslate"><span class="pre">select_best_average()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.support">autorag.support module</a><ul>
+<li><a class="reference internal" href="#autorag.support.dynamically_find_function"><code class="docutils literal notranslate"><span class="pre">dynamically_find_function()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.support.get_support_modules"><code class="docutils literal notranslate"><span class="pre">get_support_modules()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.support.get_support_nodes"><code class="docutils literal notranslate"><span class="pre">get_support_nodes()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag">Module contents</a><ul>
