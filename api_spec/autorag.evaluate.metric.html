@@ -328,6 +328,36 @@ It contains and/or connections between ids.</p></li>
 <dd></dd></dl>
 
 </section>
+<section id="module-autorag.evaluate.metric.retrieval_contents">
+<span id="autorag-evaluate-metric-retrieval-contents-module"></span><h2>autorag.evaluate.metric.retrieval_contents module<a class="headerlink" href="#module-autorag.evaluate.metric.retrieval_contents" title="Link to this heading">#</a></h2>
+<p>This file contains the retrieval contents metric,
+which means calculate the metric based on the contents of the retrieved items.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.evaluate.metric.retrieval_contents.retrieval_contents_metric">
+<span class="sig-prename descclassname"><span class="pre">autorag.evaluate.metric.retrieval_contents.</span></span><span class="sig-name descname"><span class="pre">retrieval_contents_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/evaluate/metric/retrieval_contents.html#retrieval_contents_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluate.metric.retrieval_contents.retrieval_contents_metric" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.evaluate.metric.retrieval_contents.retrieval_token_f1">
+<span class="sig-prename descclassname"><span class="pre">autorag.evaluate.metric.retrieval_contents.</span></span><span class="sig-name descname"><span class="pre">retrieval_token_f1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/evaluate/metric/retrieval_contents.html#retrieval_token_f1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluate.metric.retrieval_contents.retrieval_token_f1" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.evaluate.metric.retrieval_contents.retrieval_token_precision">
+<span class="sig-prename descclassname"><span class="pre">autorag.evaluate.metric.retrieval_contents.</span></span><span class="sig-name descname"><span class="pre">retrieval_token_precision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/evaluate/metric/retrieval_contents.html#retrieval_token_precision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluate.metric.retrieval_contents.retrieval_token_precision" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.evaluate.metric.retrieval_contents.retrieval_token_recall">
+<span class="sig-prename descclassname"><span class="pre">autorag.evaluate.metric.retrieval_contents.</span></span><span class="sig-name descname"><span class="pre">retrieval_token_recall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/evaluate/metric/retrieval_contents.html#retrieval_token_recall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluate.metric.retrieval_contents.retrieval_token_recall" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.evaluate.metric.retrieval_contents.single_token_f1">
+<span class="sig-prename descclassname"><span class="pre">autorag.evaluate.metric.retrieval_contents.</span></span><span class="sig-name descname"><span class="pre">single_token_f1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ground_truth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prediction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/evaluate/metric/retrieval_contents.html#single_token_f1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluate.metric.retrieval_contents.single_token_f1" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
 <section id="module-autorag.evaluate.metric">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-autorag.evaluate.metric" title="Link to this heading">#</a></h2>
 </section>
@@ -403,6 +433,14 @@ It contains and/or connections between ids.</p></li>
 <li><a class="reference internal" href="#autorag.evaluate.metric.retrieval.retrieval_metric"><code class="docutils literal notranslate"><span class="pre">retrieval_metric()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.evaluate.metric.retrieval.retrieval_precision"><code class="docutils literal notranslate"><span class="pre">retrieval_precision()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.evaluate.metric.retrieval.retrieval_recall"><code class="docutils literal notranslate"><span class="pre">retrieval_recall()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.evaluate.metric.retrieval_contents">autorag.evaluate.metric.retrieval_contents module</a><ul>
+<li><a class="reference internal" href="#autorag.evaluate.metric.retrieval_contents.retrieval_contents_metric"><code class="docutils literal notranslate"><span class="pre">retrieval_contents_metric()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.evaluate.metric.retrieval_contents.retrieval_token_f1"><code class="docutils literal notranslate"><span class="pre">retrieval_token_f1()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.evaluate.metric.retrieval_contents.retrieval_token_precision"><code class="docutils literal notranslate"><span class="pre">retrieval_token_precision()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.evaluate.metric.retrieval_contents.retrieval_token_recall"><code class="docutils literal notranslate"><span class="pre">retrieval_token_recall()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.evaluate.metric.retrieval_contents.single_token_f1"><code class="docutils literal notranslate"><span class="pre">single_token_f1()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.evaluate.metric">Module contents</a></li>

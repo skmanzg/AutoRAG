@@ -278,10 +278,24 @@
 </li>
         </ul></li>
         <li>
+    autorag.evaluate.metric.retrieval_contents
+
+        <ul>
+          <li><a href="api_spec/autorag.evaluate.metric.html#module-autorag.evaluate.metric.retrieval_contents">module</a>
+</li>
+        </ul></li>
+        <li>
     autorag.evaluate.retrieval
 
         <ul>
           <li><a href="api_spec/autorag.evaluate.html#module-autorag.evaluate.retrieval">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.evaluate.retrieval_contents
+
+        <ul>
+          <li><a href="api_spec/autorag.evaluate.html#module-autorag.evaluate.retrieval_contents">module</a>
 </li>
         </ul></li>
         <li>
@@ -354,6 +368,8 @@
           <li><a href="api_spec/autorag.nodes.promptmaker.html#module-autorag.nodes.promptmaker">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.promptmaker.base
 
@@ -361,8 +377,6 @@
           <li><a href="api_spec/autorag.nodes.promptmaker.html#module-autorag.nodes.promptmaker.base">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.promptmaker.fstring
 
@@ -571,6 +585,8 @@
 </li>
         <li><a href="api_spec/autorag.evaluate.html#autorag.evaluate.retrieval.evaluate_retrieval">evaluate_retrieval() (in module autorag.evaluate.retrieval)</a>
 </li>
+        <li><a href="api_spec/autorag.evaluate.html#autorag.evaluate.retrieval_contents.evaluate_retrieval_contents">evaluate_retrieval_contents() (in module autorag.evaluate.retrieval_contents)</a>
+</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.evaluate_retrieval_node">evaluate_retrieval_node() (in module autorag.nodes.retrieval.run)</a>
@@ -713,7 +729,11 @@
 </li>
           <li><a href="api_spec/autorag.evaluate.metric.html#module-autorag.evaluate.metric.retrieval">autorag.evaluate.metric.retrieval</a>
 </li>
+          <li><a href="api_spec/autorag.evaluate.metric.html#module-autorag.evaluate.metric.retrieval_contents">autorag.evaluate.metric.retrieval_contents</a>
+</li>
           <li><a href="api_spec/autorag.evaluate.html#module-autorag.evaluate.retrieval">autorag.evaluate.retrieval</a>
+</li>
+          <li><a href="api_spec/autorag.evaluate.html#module-autorag.evaluate.retrieval_contents">autorag.evaluate.retrieval_contents</a>
 </li>
           <li><a href="api_spec/autorag.html#module-autorag.evaluator">autorag.evaluator</a>
 </li>
@@ -802,11 +822,13 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node">Node (class in autorag.schema.node)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.node_params">node_params (autorag.schema.node.Node attribute)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.node_type">node_type (autorag.schema.node.Node attribute)</a>
+</li>
+        <li><a href="api_spec/autorag.utils.html#autorag.utils.util.normalize_string">normalize_string() (in module autorag.utils.util)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -848,6 +870,8 @@
 </li>
         <li><a href="api_spec/autorag.utils.html#autorag.utils.util.result_to_dataframe">result_to_dataframe() (in module autorag.utils.util)</a>
 </li>
+        <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval_contents.retrieval_contents_metric">retrieval_contents_metric() (in module autorag.evaluate.metric.retrieval_contents)</a>
+</li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval.retrieval_f1">retrieval_f1() (in module autorag.evaluate.metric.retrieval)</a>
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval.retrieval_metric">retrieval_metric() (in module autorag.evaluate.metric.retrieval)</a>
@@ -858,6 +882,14 @@
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval.retrieval_recall">retrieval_recall() (in module autorag.evaluate.metric.retrieval)</a>
 </li>
+        <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval_contents.retrieval_token_f1">retrieval_token_f1() (in module autorag.evaluate.metric.retrieval_contents)</a>
+</li>
+        <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval_contents.retrieval_token_precision">retrieval_token_precision() (in module autorag.evaluate.metric.retrieval_contents)</a>
+</li>
+        <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval_contents.retrieval_token_recall">retrieval_token_recall() (in module autorag.evaluate.metric.retrieval_contents)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.rouge">rouge() (in module autorag.evaluate.metric.generation)</a>
 </li>
         <li><a href="api_spec/autorag.html#autorag.deploy.Runner.run">run() (autorag.deploy.Runner method)</a>
@@ -866,8 +898,6 @@
           <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.run">(autorag.schema.node.Node method)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.html#autorag.deploy.Runner.run_api_server">run_api_server() (autorag.deploy.Runner method)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.generator.html#autorag.nodes.generator.run.run_generator_node">run_generator_node() (in module autorag.nodes.generator.run)</a>
@@ -896,10 +926,12 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.html#autorag.strategy.select_best_average">select_best_average() (in module autorag.strategy)</a>
 </li>
-        <li><a href="api_spec/autorag.html#autorag.evaluator.Evaluator.start_trial">start_trial() (autorag.evaluator.Evaluator method)</a>
+        <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval_contents.single_token_f1">single_token_f1() (in module autorag.evaluate.metric.retrieval_contents)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.html#autorag.evaluator.Evaluator.start_trial">start_trial() (autorag.evaluator.Evaluator method)</a>
+</li>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.strategy">strategy (autorag.schema.node.Node attribute)</a>
 </li>
         <li><a href="api_spec/autorag.html#autorag.deploy.summary_df_to_yaml">summary_df_to_yaml() (in module autorag.deploy)</a>
