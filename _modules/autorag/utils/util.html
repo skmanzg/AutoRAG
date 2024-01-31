@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>autorag.utils.util - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
@@ -217,6 +217,7 @@
 <span></span><span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">string</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Collection</span>
@@ -369,6 +370,27 @@
     <span class="p">})</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">explode</span><span class="p">(</span><span class="s1">&#39;explode_values&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;index_values&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;explode_values&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="replace_value_in_dict">
+<a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.replace_value_in_dict">[docs]</a>
+<span class="k">def</span> <span class="nf">replace_value_in_dict</span><span class="p">(</span><span class="n">target_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                          <span class="n">replace_value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Replace the value of the certain key in target_dict.</span>
+<span class="sd">    If there is not targeted key in target_dict, it will return target_dict.</span>
+
+<span class="sd">    :param target_dict: The target dictionary.</span>
+<span class="sd">    :param key: The key to replace.</span>
+<span class="sd">    :param replace_value: The value to replace.</span>
+<span class="sd">    :return: The replaced dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">replaced_dict</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">target_dict</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">replaced_dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">replaced_dict</span>
+    <span class="n">replaced_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">replace_value</span>
+    <span class="k">return</span> <span class="n">replaced_dict</span></div>
 
 
 

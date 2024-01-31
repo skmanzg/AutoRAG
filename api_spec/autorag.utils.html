@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="autorag.schema package" href="autorag.schema.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>autorag.utils package - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -341,6 +341,25 @@ Lower text and remove punctuation, articles and extra whitespace.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.replace_value_in_dict">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">replace_value_in_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#replace_value_in_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.replace_value_in_dict" title="Link to this definition">#</a></dt>
+<dd><p>Replace the value of the certain key in target_dict.
+If there is not targeted key in target_dict, it will return target_dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_dict</strong> – The target dictionary.</p></li>
+<li><p><strong>key</strong> – The key to replace.</p></li>
+<li><p><strong>replace_value</strong> – The value to replace.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The replaced dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="autorag.utils.util.result_to_dataframe">
 <span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">result_to_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#result_to_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.result_to_dataframe" title="Link to this definition">#</a></dt>
 <dd><p>Decorator for converting results to pd.DataFrame.</p>
@@ -416,6 +435,7 @@ Lower text and remove punctuation, articles and extra whitespace.</p>
 <li><a class="reference internal" href="#autorag.utils.util.make_combinations"><code class="docutils literal notranslate"><span class="pre">make_combinations()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.make_module_file_name"><code class="docutils literal notranslate"><span class="pre">make_module_file_name()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.normalize_string"><code class="docutils literal notranslate"><span class="pre">normalize_string()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.replace_value_in_dict"><code class="docutils literal notranslate"><span class="pre">replace_value_in_dict()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.result_to_dataframe"><code class="docutils literal notranslate"><span class="pre">result_to_dataframe()</span></code></a></li>
 </ul>
 </li>
