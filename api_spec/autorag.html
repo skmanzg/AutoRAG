@@ -546,10 +546,21 @@ If None, it loads qa data from data/qa.parquet.</p></li>
 <span id="autorag-strategy-module"></span><h2>autorag.strategy module<a class="headerlink" href="#module-autorag.strategy" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.strategy.avoid_empty_result">
-<span class="sig-prename descclassname"><span class="pre">autorag.strategy.</span></span><span class="sig-name descname"><span class="pre">avoid_empty_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/strategy.html#avoid_empty_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.strategy.avoid_empty_result" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">autorag.strategy.</span></span><span class="sig-name descname"><span class="pre">avoid_empty_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/strategy.html#avoid_empty_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.strategy.avoid_empty_result" title="Link to this definition">#</a></dt>
 <dd><p>Decorator for avoiding empty results from the function.
 When the func returns an empty result, it will return the origin results.
-It keeps the first input parameter of the function as the origin results.</p>
+When the func returns a None, it will return the origin results.
+When the return value is a tuple, it will check all the value or list is empty.
+If so, it will return the origin results.
+It keeps parameters at return_index of the function as the origin results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>return_index</strong> – The index of the result to be returned when there is no result.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The origin results or the results from the function.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

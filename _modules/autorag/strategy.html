@@ -216,7 +216,7 @@
           <h1>Source code for autorag.strategy</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -236,28 +236,42 @@
 
 <div class="viewcode-block" id="avoid_empty_result">
 <a class="viewcode-back" href="../../api_spec/autorag.html#autorag.strategy.avoid_empty_result">[docs]</a>
-<span class="k">def</span> <span class="nf">avoid_empty_result</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">avoid_empty_result</span><span class="p">(</span><span class="n">return_index</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decorator for avoiding empty results from the function.</span>
 <span class="sd">    When the func returns an empty result, it will return the origin results.</span>
-<span class="sd">    It keeps the first input parameter of the function as the origin results.</span>
+<span class="sd">    When the func returns a None, it will return the origin results.</span>
+<span class="sd">    When the return value is a tuple, it will check all the value or list is empty.</span>
+<span class="sd">    If so, it will return the origin results.</span>
+<span class="sd">    It keeps parameters at return_index of the function as the origin results.</span>
+
+<span class="sd">    :param return_index: The index of the result to be returned when there is no result.</span>
+<span class="sd">    :return: The origin results or the results from the function.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
-        <span class="n">func_result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">func_result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">func_result</span>
+    <span class="k">def</span> <span class="nf">decorator_avoid_empty_result</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
 
-    <span class="k">return</span> <span class="n">wrapper</span></div>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+            <span class="n">func_result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func_result</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                <span class="c1"># if all the results are empty, return the origin results.</span>
+                <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">func_result</span><span class="p">]):</span>
+                    <span class="k">return</span> <span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">return_index</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">func_result</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">args</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">return_index</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">func_result</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span>
+
+    <span class="k">return</span> <span class="n">decorator_avoid_empty_result</span></div>
 
 
 
 <div class="viewcode-block" id="filter_by_threshold">
 <a class="viewcode-back" href="../../api_spec/autorag.html#autorag.strategy.filter_by_threshold">[docs]</a>
-<span class="nd">@avoid_empty_result</span>
+<span class="nd">@avoid_empty_result</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">filter_by_threshold</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">metadatas</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Filter results by value&#39;s threshold.</span>
@@ -274,7 +288,11 @@
     <span class="k">if</span> <span class="n">metadatas</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">metadatas</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="s2">&quot;results and value must have the same length.&quot;</span>
-    <span class="n">filtered_results</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">filtered_metadatas</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">threshold</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">metadatas</span><span class="p">)))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">filtered_results</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">filtered_metadatas</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="o">*</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">threshold</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">metadatas</span><span class="p">)))</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[],</span> <span class="p">[]</span>
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">filtered_results</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">filtered_metadatas</span><span class="p">)</span></div>
 
 
