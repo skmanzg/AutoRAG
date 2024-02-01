@@ -218,7 +218,7 @@
           
 <section class="genindex-section">
   <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#Q"><strong>Q</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#V"><strong>V</strong></a></div>
+  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#Q"><strong>Q</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#V"><strong>V</strong></a></div>
 </section>
 <section id="A" class="genindex-section">
   <h2>A</h2>
@@ -406,8 +406,6 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.run">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagereranker.tart
 
@@ -415,6 +413,8 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#module-autorag.nodes.passagereranker.tart">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagereranker.tart.modeling_enc_t5
 
@@ -434,6 +434,13 @@
 
         <ul>
           <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#module-autorag.nodes.passagereranker.tart.tokenization_enc_t5">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.nodes.passagereranker.upr
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.upr">module</a>
 </li>
         </ul></li>
         <li>
@@ -622,12 +629,14 @@
   <h2>C</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_spec/autorag.utils.html#autorag.utils.preprocess.cast_corpus_dataset">cast_corpus_dataset() (in module autorag.utils.preprocess)</a>
+        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.upr.calculate_likelihood">calculate_likelihood() (in module autorag.nodes.passagereranker.upr)</a>
 </li>
-        <li><a href="api_spec/autorag.utils.html#autorag.utils.preprocess.cast_qa_dataset">cast_qa_dataset() (in module autorag.utils.preprocess)</a>
+        <li><a href="api_spec/autorag.utils.html#autorag.utils.preprocess.cast_corpus_dataset">cast_corpus_dataset() (in module autorag.utils.preprocess)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.utils.html#autorag.utils.preprocess.cast_qa_dataset">cast_qa_dataset() (in module autorag.utils.preprocess)</a>
+</li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.base.cast_queries">cast_queries() (in module autorag.nodes.retrieval.base)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.tokenization_enc_t5.EncT5Tokenizer.create_token_type_ids_from_sequences">create_token_type_ids_from_sequences() (autorag.nodes.passagereranker.tart.tokenization_enc_t5.EncT5Tokenizer method)</a>
@@ -872,6 +881,8 @@
 </li>
           <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#module-autorag.nodes.passagereranker.tart.tokenization_enc_t5">autorag.nodes.passagereranker.tart.tokenization_enc_t5</a>
 </li>
+          <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.upr">autorag.nodes.passagereranker.upr</a>
+</li>
           <li><a href="api_spec/autorag.nodes.promptmaker.html#module-autorag.nodes.promptmaker">autorag.nodes.promptmaker</a>
 </li>
           <li><a href="api_spec/autorag.nodes.promptmaker.html#module-autorag.nodes.promptmaker.base">autorag.nodes.promptmaker.base</a>
@@ -1090,6 +1101,20 @@
         <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.tart.tart_pure">tart_pure() (in module autorag.nodes.passagereranker.tart.tart)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagecompressor.html#autorag.nodes.passagecompressor.tree_summarize.tree_summarize">tree_summarize() (in module autorag.nodes.passagecompressor.tree_summarize)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="U" class="genindex-section">
+  <h2>U</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.upr.upr">upr() (in module autorag.nodes.passagereranker.upr)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.upr.upr_pure">upr_pure() (in module autorag.nodes.passagereranker.upr)</a>
 </li>
     </ul></td>
   </tr></table>

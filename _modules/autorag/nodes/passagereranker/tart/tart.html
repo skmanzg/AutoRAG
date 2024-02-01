@@ -293,6 +293,8 @@
     <span class="n">sorted_contents_ids_scores</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">contents_ids_scores</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># crop with top_k</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">top_k</span><span class="p">:</span>
+        <span class="n">top_k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
     <span class="n">sorted_contents_ids_scores</span> <span class="o">=</span> <span class="n">sorted_contents_ids_scores</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]</span>
 
     <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">sorted_contents_ids_scores</span><span class="p">)</span>
