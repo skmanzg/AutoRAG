@@ -217,6 +217,88 @@
         <article role="main">
           <section id="autorag-nodes-passagereranker-package">
 <h1>autorag.nodes.passagereranker package<a class="headerlink" href="#autorag-nodes-passagereranker-package" title="Link to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+</section>
+<section id="module-autorag.nodes.passagereranker.base">
+<span id="autorag-nodes-passagereranker-base-module"></span><h2>autorag.nodes.passagereranker.base module<a class="headerlink" href="#module-autorag.nodes.passagereranker.base" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.base.passage_reranker_node">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.base.</span></span><span class="sig-name descname"><span class="pre">passage_reranker_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/base.html#passage_reranker_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.base.passage_reranker_node" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-autorag.nodes.passagereranker.monot5">
+<span id="autorag-nodes-passagereranker-monot5-module"></span><h2>autorag.nodes.passagereranker.monot5 module<a class="headerlink" href="#module-autorag.nodes.passagereranker.monot5" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.monot5.mono_t5_pure">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.monot5.</span></span><span class="sig-name descname"><span class="pre">mono_t5_pure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_false_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_true_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/monot5.html#mono_t5_pure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.monot5.mono_t5_pure" title="Link to this definition">#</a></dt>
+<dd><p>Rerank a list of contents based on their relevance to a query using MonoT5.
+:param query: The query to use for reranking
+:param contents: The list of contents to rerank
+:param scores: The list of scores retrieved from the initial ranking
+:param ids: The list of ids retrieved from the initial ranking
+:param model: The MonoT5 model to use for reranking
+:param device: The device to run the model on (GPU if available, otherwise CPU)
+:param tokenizer: The tokenizer to use for the model
+:param token_false_id: The id of the token used by the model to represent a false prediction
+:param token_true_id: The id of the token used by the model to represent a true prediction
+:return: tuple of lists containing the reranked contents, ids, and scores</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.monot5.monot5">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.monot5.</span></span><span class="sig-name descname"><span class="pre">monot5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'castorini/monot5-3b-msmarco-10k'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/monot5.html#monot5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.monot5.monot5" title="Link to this definition">#</a></dt>
+<dd><p>Rerank a list of contents based on their relevance to a query using MonoT5.
+:param queries: The list of queries to use for reranking
+:param contents_list: The list of lists of contents to rerank
+:param scores_list: The list of lists of scores retrieved from the initial ranking
+:param ids_list: The list of lists of ids retrieved from the initial ranking
+:param top_k: The number of passages to be retrieved
+:param model_name: The name of the MonoT5 model to use for reranking</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Note: default model name is ‘castorini/monot5-3b-msmarco-10k’</dt><dd><p>If there is a ‘/’ in the model name parameter,
+when we create the file to store the results, the path will be twisted because of the ‘/’.
+Therefore, it will be received as ‘_’ instead of ‘/’.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of lists containing the reranked contents, ids, and scores</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-autorag.nodes.passagereranker.run">
+<span id="autorag-nodes-passagereranker-run-module"></span><h2>autorag.nodes.passagereranker.run module<a class="headerlink" href="#module-autorag.nodes.passagereranker.run" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.run.run_passage_reranker_node">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.run.</span></span><span class="sig-name descname"><span class="pre">run_passage_reranker_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_line_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/run.html#run_passage_reranker_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.run.run_passage_reranker_node" title="Link to this definition">#</a></dt>
+<dd><p>Run evaluation and select the best module among passage reranker node results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>modules</strong> – Passage reranker modules to run.</p></li>
+<li><p><strong>module_params</strong> – Passage reranker module parameters.</p></li>
+<li><p><strong>previous_result</strong> – Previous result dataframe.
+Could be retrieval, reranker modules result.
+It means it must contain ‘query’, ‘retrieved_contents’, ‘retrieved_ids’, ‘retrieve_scores’ columns.</p></li>
+<li><p><strong>node_line_dir</strong> – This node line’s directory.</p></li>
+<li><p><strong>strategies</strong> – Strategies for passage reranker node.
+In this node, we use
+You can skip evaluation when you use only one module and a module parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The best result dataframe with previous result columns.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-autorag.nodes.passagereranker">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-autorag.nodes.passagereranker" title="Link to this heading">#</a></h2>
 </section>
@@ -278,6 +360,20 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">autorag.nodes.passagereranker package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-autorag.nodes.passagereranker.base">autorag.nodes.passagereranker.base module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.base.passage_reranker_node"><code class="docutils literal notranslate"><span class="pre">passage_reranker_node()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.passagereranker.monot5">autorag.nodes.passagereranker.monot5 module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.monot5.mono_t5_pure"><code class="docutils literal notranslate"><span class="pre">mono_t5_pure()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.monot5.monot5"><code class="docutils literal notranslate"><span class="pre">monot5()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.passagereranker.run">autorag.nodes.passagereranker.run module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.run.run_passage_reranker_node"><code class="docutils literal notranslate"><span class="pre">run_passage_reranker_node()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-autorag.nodes.passagereranker">Module contents</a></li>
 </ul>
 </li>
