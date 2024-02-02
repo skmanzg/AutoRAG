@@ -230,7 +230,6 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 
-
 <span class="kn">from</span> <span class="nn">autorag.deploy</span> <span class="kn">import</span> <span class="n">Runner</span>
 <span class="kn">from</span> <span class="nn">autorag</span> <span class="kn">import</span> <span class="n">embedding_models</span>
 <span class="kn">from</span> <span class="nn">autorag.node_line</span> <span class="kn">import</span> <span class="n">run_node_line</span>
@@ -239,7 +238,7 @@
 <span class="kn">from</span> <span class="nn">autorag.schema</span> <span class="kn">import</span> <span class="n">Node</span>
 <span class="kn">from</span> <span class="nn">autorag.schema.node</span> <span class="kn">import</span> <span class="n">module_type_exists</span><span class="p">,</span> <span class="n">extract_values_from_nodes</span>
 <span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">cast_qa_dataset</span><span class="p">,</span> <span class="n">cast_corpus_dataset</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">load_summary_file</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">load_summary_file</span><span class="p">,</span> <span class="n">convert_string_to_tuple_in_dict</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AutoRAG&quot;</span><span class="p">)</span>
 
@@ -334,7 +333,8 @@
                 <span class="c1"># ingest VectorDB corpus</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Embedding VectorDB corpus with </span><span class="si">{</span><span class="n">embedding_model_str</span><span class="si">}</span><span class="s1">...&#39;</span><span class="p">)</span>
                 <span class="c1"># Get the collection with GET or CREATE, as it may already exist</span>
-                <span class="n">collection</span> <span class="o">=</span> <span class="n">vectordb</span><span class="o">.</span><span class="n">get_or_create_collection</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">embedding_model_str</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;hnsw:space&quot;</span><span class="p">:</span> <span class="s2">&quot;cosine&quot;</span><span class="p">})</span>
+                <span class="n">collection</span> <span class="o">=</span> <span class="n">vectordb</span><span class="o">.</span><span class="n">get_or_create_collection</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">embedding_model_str</span><span class="p">,</span>
+                                                               <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;hnsw:space&quot;</span><span class="p">:</span> <span class="s2">&quot;cosine&quot;</span><span class="p">})</span>
                 <span class="c1"># get embedding_model</span>
                 <span class="k">if</span> <span class="n">embedding_model_str</span> <span class="ow">in</span> <span class="n">embedding_models</span><span class="p">:</span>
                     <span class="n">embedding_model</span> <span class="o">=</span> <span class="n">embedding_models</span><span class="p">[</span><span class="n">embedding_model_str</span><span class="p">]</span>
@@ -380,6 +380,7 @@
             <span class="k">except</span> <span class="n">yaml</span><span class="o">.</span><span class="n">YAMLError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;YAML file </span><span class="si">{</span><span class="n">yaml_path</span><span class="si">}</span><span class="s2"> could not be loaded.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
 
+        <span class="n">yaml_dict</span> <span class="o">=</span> <span class="n">convert_string_to_tuple_in_dict</span><span class="p">(</span><span class="n">yaml_dict</span><span class="p">)</span>
         <span class="n">node_lines</span> <span class="o">=</span> <span class="n">yaml_dict</span><span class="p">[</span><span class="s1">&#39;node_lines&#39;</span><span class="p">]</span>
         <span class="n">node_line_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">node_line</span> <span class="ow">in</span> <span class="n">node_lines</span><span class="p">:</span>
