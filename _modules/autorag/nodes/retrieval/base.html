@@ -227,7 +227,6 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">autorag</span> <span class="kn">import</span> <span class="n">embedding_models</span>
-<span class="kn">from</span> <span class="nn">autorag.strategy</span> <span class="kn">import</span> <span class="n">select_best_average</span>
 <span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">fetch_contents</span><span class="p">,</span> <span class="n">result_to_dataframe</span><span class="p">,</span> <span class="n">validate_qa_dataset</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -263,7 +262,7 @@
             <span class="k">assert</span> <span class="n">bm25_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;bm25_path must be specified for using bm25 retrieval.&quot;</span>
             <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">bm25_path</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;bm25_path </span><span class="si">{</span><span class="n">bm25_path</span><span class="si">}</span><span class="s2"> does not exist. Please ingest first.&quot;</span>
         <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;vectordb&quot;</span><span class="p">:</span>
-            <span class="c1"># check if chroma_path and file exists</span>
+            <span class="c1"># check if chroma_path and file exist</span>
             <span class="n">chroma_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">resources_dir</span><span class="p">,</span> <span class="s1">&#39;chroma&#39;</span><span class="p">)</span>
             <span class="n">embedding_model_str</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;embedding_model&quot;</span><span class="p">)</span>
             <span class="k">assert</span> <span class="n">chroma_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;chroma_path must be specified for using vectordb retrieval.&quot;</span>
@@ -289,7 +288,7 @@
                 <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;embedding_model_str </span><span class="si">{</span><span class="n">embedding_model_str</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
             <span class="n">ids</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">queries</span><span class="o">=</span><span class="n">queries</span><span class="p">,</span> <span class="n">collection</span><span class="o">=</span><span class="n">chroma_collection</span><span class="p">,</span>
                                <span class="n">embedding_model</span><span class="o">=</span><span class="n">embedding_model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;hybrid_rrf&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hybrid_rrf&quot;</span><span class="p">,</span> <span class="s2">&quot;hybrid_cc&quot;</span><span class="p">]:</span>
             <span class="n">ids</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;invalid func name for using retrieval_io decorator.&quot;</span><span class="p">)</span>
