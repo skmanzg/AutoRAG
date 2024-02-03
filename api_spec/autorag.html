@@ -383,13 +383,14 @@
 <span id="autorag-deploy-module"></span><h2>autorag.deploy module<a class="headerlink" href="#module-autorag.deploy" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="autorag.deploy.Runner">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.deploy.</span></span><span class="sig-name descname"><span class="pre">Runner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/deploy.html#Runner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.deploy.Runner" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.deploy.</span></span><span class="sig-name descname"><span class="pre">Runner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/deploy.html#Runner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.deploy.Runner" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="autorag.deploy.Runner.from_trial_folder">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_trial_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/deploy.html#Runner.from_trial_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.deploy.Runner.from_trial_folder" title="Link to this definition">#</a></dt>
 <dd><p>Load Runner from evaluated trial folder.
-Must already be evaluated using Evaluator class.</p>
+Must already be evaluated using Evaluator class.
+It sets the project_dir as the parent directory of the trial folder.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>trial_path</strong> – The path of the trial folder.</p>
@@ -417,7 +418,7 @@ Must be extracted yaml file from evaluated trial using extract_best_config metho
 
 <dl class="py method">
 <dt class="sig sig-object py" id="autorag.deploy.Runner.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'answer'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/deploy.html#Runner.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.deploy.Runner.run" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'generated_texts'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/deploy.html#Runner.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.deploy.Runner.run" title="Link to this definition">#</a></dt>
 <dd><p>Run the pipeline with query.
 The loaded pipeline must start with a single query,
 so the first module of the pipeline must be <cite>query_expansion</cite> or <cite>retrieval</cite> module.</p>
@@ -426,7 +427,7 @@ so the first module of the pipeline must be <cite>query_expansion</cite> or <cit
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>query</strong> – The query of the user.</p></li>
 <li><p><strong>result_column</strong> – The result column name for the answer.
-Default is <cite>answer</cite>, which is the output of the <cite>generation</cite> and <cite>answer_filter</cite> module.</p></li>
+Default is <cite>generated_texts</cite>, which is the output of the <cite>generation</cite> module.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -498,12 +499,32 @@ Default is None.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="autorag.deploy.extract_node_line_names">
+<span class="sig-prename descclassname"><span class="pre">autorag.deploy.</span></span><span class="sig-name descname"><span class="pre">extract_node_line_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/deploy.html#extract_node_line_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.deploy.extract_node_line_names" title="Link to this definition">#</a></dt>
+<dd><p>Extract node line names with the given config dictionary order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config_dict</strong> – The yaml configuration dict for the pipeline.
+You can load this to access trail_folder/config.yaml.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list of node line names.
+It is the order of the node line names in the pipeline.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="autorag.deploy.summary_df_to_yaml">
-<span class="sig-prename descclassname"><span class="pre">autorag.deploy.</span></span><span class="sig-name descname"><span class="pre">summary_df_to_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">summary_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../_modules/autorag/deploy.html#summary_df_to_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.deploy.summary_df_to_yaml" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">autorag.deploy.</span></span><span class="sig-name descname"><span class="pre">summary_df_to_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">summary_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../_modules/autorag/deploy.html#summary_df_to_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.deploy.summary_df_to_yaml" title="Link to this definition">#</a></dt>
 <dd><p>Convert trial summary dataframe to config yaml file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>summary_df</strong> – </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>summary_df</strong> – The trial summary dataframe of the evaluated trial.</p></li>
+<li><p><strong>config_dict</strong> – The yaml configuration dict for the pipeline.
+You can load this to access trail_folder/config.yaml.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Dictionary of config yaml file.
@@ -734,6 +755,7 @@ The metadata will be returned even if you did not give input ‘metadatas’ par
 </ul>
 </li>
 <li><a class="reference internal" href="#autorag.deploy.extract_best_config"><code class="docutils literal notranslate"><span class="pre">extract_best_config()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.deploy.extract_node_line_names"><code class="docutils literal notranslate"><span class="pre">extract_node_line_names()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.deploy.summary_df_to_yaml"><code class="docutils literal notranslate"><span class="pre">summary_df_to_yaml()</span></code></a></li>
 </ul>
 </li>
