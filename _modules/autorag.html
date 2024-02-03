@@ -224,8 +224,10 @@
 
 <span class="kn">from</span> <span class="nn">rich.logging</span> <span class="kn">import</span> <span class="n">RichHandler</span>
 
-<span class="kn">from</span> <span class="nn">llama_index</span> <span class="kn">import</span> <span class="n">OpenAIEmbedding</span>
-<span class="kn">from</span> <span class="nn">llama_index.llms</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">from</span> <span class="nn">llama_index.embeddings</span> <span class="kn">import</span> <span class="n">OpenAIEmbedding</span><span class="p">,</span> <span class="n">HuggingFaceEmbedding</span>
+<span class="kn">from</span> <span class="nn">llama_index.embeddings.openai</span> <span class="kn">import</span> <span class="n">OpenAIEmbeddingModelType</span>
+<span class="kn">from</span> <span class="nn">llama_index.llms</span> <span class="kn">import</span> <span class="n">OpenAI</span><span class="p">,</span> <span class="n">Anthropic</span><span class="p">,</span> <span class="n">AzureOpenAI</span><span class="p">,</span> <span class="n">HuggingFaceLLM</span><span class="p">,</span> <span class="n">LangChainLLM</span><span class="p">,</span> <span class="n">GradientBaseModelLLM</span><span class="p">,</span> \
+    <span class="n">GradientModelAdapterLLM</span><span class="p">,</span> <span class="n">LiteLLM</span><span class="p">,</span> <span class="n">LlamaCPP</span><span class="p">,</span> <span class="n">OpenAILike</span><span class="p">,</span> <span class="n">OpenLLM</span><span class="p">,</span> <span class="n">PaLM</span><span class="p">,</span> <span class="n">PredibaseLLM</span><span class="p">,</span> <span class="n">Replicate</span><span class="p">,</span> <span class="n">Xinference</span>
 
 <span class="n">root_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)))</span>
 <span class="n">version_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_path</span><span class="p">,</span> <span class="s1">&#39;VERSION&#39;</span><span class="p">)</span>
@@ -234,11 +236,32 @@
     <span class="n">__version__</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
 <span class="n">embedding_models</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;openai&#39;</span><span class="p">:</span> <span class="n">OpenAIEmbedding</span><span class="p">(),</span>
+    <span class="s1">&#39;openai&#39;</span><span class="p">:</span> <span class="n">OpenAIEmbedding</span><span class="p">(),</span>  <span class="c1"># default model is OpenAIEmbeddingModelType.TEXT_EMBED_ADA_002</span>
+    <span class="s1">&#39;openai_babbage&#39;</span><span class="p">:</span> <span class="n">OpenAIEmbedding</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">OpenAIEmbeddingModelType</span><span class="o">.</span><span class="n">BABBAGE</span><span class="p">),</span>
+    <span class="s1">&#39;openai_ada&#39;</span><span class="p">:</span> <span class="n">OpenAIEmbedding</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">OpenAIEmbeddingModelType</span><span class="o">.</span><span class="n">ADA</span><span class="p">),</span>
+    <span class="s1">&#39;openai_davinci&#39;</span><span class="p">:</span> <span class="n">OpenAIEmbedding</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">OpenAIEmbeddingModelType</span><span class="o">.</span><span class="n">DAVINCI</span><span class="p">),</span>
+    <span class="s1">&#39;openai_curie&#39;</span><span class="p">:</span> <span class="n">OpenAIEmbedding</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">OpenAIEmbeddingModelType</span><span class="o">.</span><span class="n">CURIE</span><span class="p">),</span>
+    <span class="c1"># you can use your own model in this way.</span>
+    <span class="s1">&#39;huggingface_baai_bge_small&#39;</span><span class="p">:</span> <span class="n">HuggingFaceEmbedding</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;BAAI/bge-small-en-v1.5&quot;</span><span class="p">),</span>
+    <span class="s1">&#39;huggingface_cointegrated_rubert_tiny2&#39;</span><span class="p">:</span> <span class="n">HuggingFaceEmbedding</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;cointegrated/rubert-tiny2&quot;</span><span class="p">),</span>
 <span class="p">}</span>
 
 <span class="n">generator_models</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;openai&#39;</span><span class="p">:</span> <span class="n">OpenAI</span><span class="p">,</span>
+    <span class="s1">&#39;anthropic&#39;</span><span class="p">:</span> <span class="n">Anthropic</span><span class="p">,</span>
+    <span class="s1">&#39;azureopenai&#39;</span><span class="p">:</span> <span class="n">AzureOpenAI</span><span class="p">,</span>
+    <span class="s1">&#39;huggingfacellm&#39;</span><span class="p">:</span> <span class="n">HuggingFaceLLM</span><span class="p">,</span>
+    <span class="s1">&#39;langchainllm&#39;</span><span class="p">:</span> <span class="n">LangChainLLM</span><span class="p">,</span>
+    <span class="s1">&#39;gradientbasemodelllm&#39;</span><span class="p">:</span> <span class="n">GradientBaseModelLLM</span><span class="p">,</span>
+    <span class="s1">&#39;gradientmodeladapterllm&#39;</span><span class="p">:</span> <span class="n">GradientModelAdapterLLM</span><span class="p">,</span>
+    <span class="s1">&#39;litellm&#39;</span><span class="p">:</span> <span class="n">LiteLLM</span><span class="p">,</span>
+    <span class="s1">&#39;llamacpp&#39;</span><span class="p">:</span> <span class="n">LlamaCPP</span><span class="p">,</span>
+    <span class="s1">&#39;openailike&#39;</span><span class="p">:</span> <span class="n">OpenAILike</span><span class="p">,</span>
+    <span class="s1">&#39;openllm&#39;</span><span class="p">:</span> <span class="n">OpenLLM</span><span class="p">,</span>
+    <span class="s1">&#39;palm&#39;</span><span class="p">:</span> <span class="n">PaLM</span><span class="p">,</span>
+    <span class="s1">&#39;predibasellm&#39;</span><span class="p">:</span> <span class="n">PredibaseLLM</span><span class="p">,</span>
+    <span class="s1">&#39;replicate&#39;</span><span class="p">:</span> <span class="n">Replicate</span><span class="p">,</span>
+    <span class="s1">&#39;xinference&#39;</span><span class="p">:</span> <span class="n">Xinference</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="n">rich_format</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">%(filename)s</span><span class="s2">:</span><span class="si">%(lineno)s</span><span class="s2">] &gt;&gt; </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
