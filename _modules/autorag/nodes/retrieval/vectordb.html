@@ -226,13 +226,15 @@
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.retrieval.base</span> <span class="kn">import</span> <span class="n">retrieval_node</span><span class="p">,</span> <span class="n">evenly_distribute_passages</span>
 <span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">validate_corpus_dataset</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
 
 
 <div class="viewcode-block" id="vectordb">
 <a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.vectordb.vectordb">[docs]</a>
 <span class="nd">@retrieval_node</span>
 <span class="k">def</span> <span class="nf">vectordb</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">collection</span><span class="p">:</span> <span class="n">chromadb</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span>
-             <span class="n">embedding_model</span><span class="p">:</span> <span class="n">BaseEmbedding</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
+             <span class="n">embedding_model</span><span class="p">:</span> <span class="n">BaseEmbedding</span><span class="p">,</span>
+             <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    VectorDB retrieval function.</span>
 <span class="sd">    You have to get chroma collection that is already ingested.</span>
@@ -243,6 +245,9 @@
 <span class="sd">    :param top_k: The number of passages to be retrieved.</span>
 <span class="sd">    :param collection: A chroma collection instance that will be used to retrieve passages.</span>
 <span class="sd">    :param embedding_model: An embedding model instance that will be used to embed queries.</span>
+<span class="sd">    :param batch: The number of queries to be processed in parallel.</span>
+<span class="sd">        This is used to prevent API error at the query embedding.</span>
+<span class="sd">        Default is 128.</span>
 
 <span class="sd">    :return: The 2-d list contains a list of passage ids that retrieved from vectordb and 2-d list of its scores.</span>
 <span class="sd">        It will be a length of queries. And each element has a length of top_k.</span>
@@ -253,7 +258,7 @@
     <span class="c1"># run async vector_db_pure function</span>
     <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">vectordb_pure</span><span class="p">(</span><span class="n">input_queries</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">embedding_model</span><span class="p">)</span> <span class="k">for</span> <span class="n">input_queries</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">]</span>
     <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">))</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
     <span class="n">id_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
     <span class="n">score_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span></div>

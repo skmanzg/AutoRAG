@@ -224,18 +224,23 @@
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.generator.base</span> <span class="kn">import</span> <span class="n">generator_node</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
 
 
 <div class="viewcode-block" id="llama_index_llm">
 <a class="viewcode-back" href="../../../../api_spec/autorag.nodes.generator.html#autorag.nodes.generator.llama_index_llm.llama_index_llm">[docs]</a>
 <span class="nd">@generator_node</span>
-<span class="k">def</span> <span class="nf">llama_index_llm</span><span class="p">(</span><span class="n">prompts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">llm</span><span class="p">:</span> <span class="n">BaseLLM</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
+<span class="k">def</span> <span class="nf">llama_index_llm</span><span class="p">(</span><span class="n">prompts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">llm</span><span class="p">:</span> <span class="n">BaseLLM</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Llama Index LLM module.</span>
 <span class="sd">    It gets the LLM instance from llama index, and returns generated text by the input prompt.</span>
 <span class="sd">    It does not generate the right log probs, but it returns the pseudo log probs,</span>
 <span class="sd">    which is not meant to be used for other modules.</span>
 
+<span class="sd">    :param prompts: A list of prompts.</span>
+<span class="sd">    :param llm: A llama index LLM instance.</span>
+<span class="sd">    :param batch: The batch size for llm.</span>
+<span class="sd">        Set low if you face some errors.</span>
 <span class="sd">    :return: A tuple of three elements.</span>
 <span class="sd">        The first element is a list of generated text.</span>
 <span class="sd">        The second element is a list of generated text&#39;s token ids, used tokenizer is GPT2Tokenizer.</span>
@@ -243,7 +248,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">llm</span><span class="o">.</span><span class="n">acomplete</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span> <span class="k">for</span> <span class="n">prompt</span> <span class="ow">in</span> <span class="n">prompts</span><span class="p">]</span>
     <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">))</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
 
     <span class="n">generated_texts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">results</span><span class="p">))</span>
     <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;gpt2&quot;</span><span class="p">,</span> <span class="n">use_fast</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

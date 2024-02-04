@@ -332,6 +332,24 @@ Lower text and remove punctuation, articles and extra whitespace.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.process_batch">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">process_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#process_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.process_batch" title="Link to this definition">#</a></dt>
+<dd><p>Processes tasks in batches asynchronously.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tasks</strong> – A list of no-argument functions or coroutines to be executed.</p></li>
+<li><p><strong>batch_size</strong> – The number of tasks to process in a single batch.
+Default is 64.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of results from the processed tasks.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="autorag.utils.util.replace_value_in_dict">
 <span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">replace_value_in_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#replace_value_in_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.replace_value_in_dict" title="Link to this definition">#</a></dt>
 <dd><p>Replace the value of the certain key in target_dict.
@@ -426,6 +444,7 @@ If there is not targeted key in target_dict, it will return target_dict.</p>
 <li><a class="reference internal" href="#autorag.utils.util.load_summary_file"><code class="docutils literal notranslate"><span class="pre">load_summary_file()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.make_combinations"><code class="docutils literal notranslate"><span class="pre">make_combinations()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.normalize_string"><code class="docutils literal notranslate"><span class="pre">normalize_string()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.process_batch"><code class="docutils literal notranslate"><span class="pre">process_batch()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.replace_value_in_dict"><code class="docutils literal notranslate"><span class="pre">replace_value_in_dict()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.result_to_dataframe"><code class="docutils literal notranslate"><span class="pre">result_to_dataframe()</span></code></a></li>
 </ul>

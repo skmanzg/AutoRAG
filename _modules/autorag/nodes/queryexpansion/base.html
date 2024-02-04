@@ -256,6 +256,12 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
+        <span class="c1"># pop batch from kwargs</span>
+        <span class="k">if</span> <span class="s2">&quot;batch&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">batch</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;batch&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">batch</span> <span class="o">=</span> <span class="mi">16</span>
+
         <span class="c1"># set llm model for query expansion</span>
         <span class="k">if</span> <span class="n">llm_str</span> <span class="ow">in</span> <span class="n">generator_models</span><span class="p">:</span>
             <span class="n">llm</span> <span class="o">=</span> <span class="n">generator_models</span><span class="p">[</span><span class="n">llm_str</span><span class="p">](</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -264,7 +270,7 @@
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;llm_str </span><span class="si">{</span><span class="n">llm_str</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
 
         <span class="c1"># run query expansion function</span>
-        <span class="n">expanded_queries</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">queries</span><span class="o">=</span><span class="n">queries</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">)</span>
+        <span class="n">expanded_queries</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">queries</span><span class="o">=</span><span class="n">queries</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">batch</span><span class="o">=</span><span class="n">batch</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">expanded_queries</span>
 
