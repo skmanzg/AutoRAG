@@ -266,6 +266,23 @@
 
 
 
+<div class="viewcode-block" id="extract_node_strategy">
+<a class="viewcode-back" href="../../api_spec/autorag.html#autorag.deploy.extract_node_strategy">[docs]</a>
+<span class="k">def</span> <span class="nf">extract_node_strategy</span><span class="p">(</span><span class="n">config_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract node strategies with the given config dictionary.</span>
+<span class="sd">    The return value is a dictionary of node type and its strategy.</span>
+
+<span class="sd">    :param config_dict: The yaml configuration dict for the pipeline.</span>
+<span class="sd">        You can load this to access trail_folder/config.yaml.</span>
+<span class="sd">    :return: Key is node_type and value is strategy dict.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">node</span><span class="p">[</span><span class="s1">&#39;node_type&#39;</span><span class="p">]:</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">for</span> <span class="n">node_line</span> <span class="ow">in</span> <span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;node_lines&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_line</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]}</span></div>
+
+
+
 <div class="viewcode-block" id="summary_df_to_yaml">
 <a class="viewcode-back" href="../../api_spec/autorag.html#autorag.deploy.summary_df_to_yaml">[docs]</a>
 <span class="k">def</span> <span class="nf">summary_df_to_yaml</span><span class="p">(</span><span class="n">summary_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">config_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
@@ -282,6 +299,12 @@
     <span class="c1"># summary_df columns : &#39;node_line_name&#39;, &#39;node_type&#39;, &#39;best_module_filename&#39;,</span>
     <span class="c1">#                      &#39;best_module_name&#39;, &#39;best_module_params&#39;, &#39;best_execution_time&#39;</span>
     <span class="n">node_line_names</span> <span class="o">=</span> <span class="n">extract_node_line_names</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span>
+    <span class="n">node_strategies</span> <span class="o">=</span> <span class="n">extract_node_strategy</span><span class="p">(</span><span class="n">config_dict</span><span class="p">)</span>
+    <span class="n">strategy_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s1">&#39;node_type&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">node_strategies</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+        <span class="s1">&#39;strategy&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">node_strategies</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="p">})</span>
+    <span class="n">summary_df</span> <span class="o">=</span> <span class="n">summary_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">strategy_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;node_type&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
     <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;categorical_node_line_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;node_line_name&#39;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="n">node_line_names</span><span class="p">,</span>
                                                               <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">summary_df</span> <span class="o">=</span> <span class="n">summary_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;categorical_node_line_name&#39;</span><span class="p">)</span>
@@ -293,6 +316,7 @@
             <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
                     <span class="s1">&#39;node_type&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;node_type&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;strategy&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;strategy&#39;</span><span class="p">],</span>
                     <span class="s1">&#39;modules&#39;</span><span class="p">:</span> <span class="p">[{</span>
                         <span class="s1">&#39;module_type&#39;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;best_module_name&#39;</span><span class="p">],</span>
                         <span class="o">**</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;best_module_params&#39;</span><span class="p">]</span>
