@@ -137,7 +137,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -236,7 +236,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -244,6 +244,163 @@
         <article role="main">
           <section id="road-to-modular-rag">
 <h1>Road to Modular RAG<a class="headerlink" href="#road-to-modular-rag" title="Link to this heading">#</a></h1>
+<section id="what-is-modular-rag">
+<h2>🤷‍♂️ What is Modular RAG?<a class="headerlink" href="#what-is-modular-rag" title="Link to this heading">#</a></h2>
+<p>In a survey <a class="reference external" href="https://arxiv.org/abs/2312.10997v1">paper</a> about RAG, they propose three paradigms of RAG.</p>
+<p><img alt="RAG paradigms" src="../_images/RAG_paradigms.png" /></p>
+<p>At first, Naive RAG is a simple RAG paradigm.
+It embeds document chunks to Vector DB, and retrieves using a user query, and generates answer with that retrieved document chunks.</p>
+<p>You can build Naive RAG really easy these days.
+All you need is following tutorial of Langchain or LlamaIndex, or other RAG frameworks out there.
+However, there are performance issues with Naive RAG.
+If you ever try Naive RAG, you know the performance can be bad at real use-cases.</p>
+<p>So, here comes the second paradigm, Advanced RAG.
+Advanced RAG supports few pre-retrieval and post-retrieval features, like reranking, query expansion, and so on.
+It is more powerful than Naive RAG, but still it is not perfect.</p>
+<p>The main problem of Advanced RAG is that it still doesn’t have <strong>cycles</strong>. Why are cycles important?</p>
+<p>For example, the LLM model generates answer, but it has hallucination about facts.
+If that answer delivers to the user, the user gets wrong information, and it occurs the bad user experience.
+To prevent this, we need to check the answer’s fatefulness.
+And if there is a hallucination, you can ask generator to re-generate answer or retrieve document chunk again.
+In a DAG paradigm like Naive RAG &amp; Advance RAG, it is impossible to do that because they don’t have cycles.
+And here comes Modular RAG.</p>
+<p>Modular RAG has cycles and modules, so it can decide the next step to deliver the best answer to the user.</p>
+<div class="admonition-want-to-know-more-about-modular-rag admonition">
+<p class="admonition-title">Want to know more about Modular RAG?</p>
+<ul class="simple">
+<li><p>Recommend to read the survey <a class="reference external" href="https://arxiv.org/abs/2312.10997v1">paper</a>.</p></li>
+</ul>
+</div>
+</section>
+<section id="id1">
+<h2>🚀 Road to Modular RAG<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>In this version of <code class="docutils literal notranslate"><span class="pre">AutoRAG</span></code>, we support Advanced RAG only.
+However, we know how Modular RAG is important to RAG pipelines, so we are planning to support Modular RAG ASAP.</p>
+<p>Let me explain our plan to implement Modular RAG.</p>
+<section id="early-version-of-autorag">
+<h3>Early version of AutoRAG<a class="headerlink" href="#early-version-of-autorag" title="Link to this heading">#</a></h3>
+<p><img alt="Advanced RAG" src="../_images/advanced_RAG.png" /></p>
+<p>Here is a simple diagram of Advanced RAG.
+Think each circle as a node.
+User query goes to retriever, retrieves document chunk, and rerank, make prompt and generate answer.</p>
+<p>You can build this kind of pipeline with <code class="docutils literal notranslate"><span class="pre">AutoRAG</span></code> easily from now.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you don’t know yet how to build pipeline and optimize it,
+please see <a class="reference internal" href="../optimization/optimization.html"><span class="std std-doc">optimization</span></a> guide.</p>
+</div>
+</section>
+<section id="policy-node">
+<h3>Policy Node<a class="headerlink" href="#policy-node" title="Link to this heading">#</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This document is about our <em>plan</em>, so it can be changed in the future.
+Also, it is not implemented to <code class="docutils literal notranslate"><span class="pre">AutoRAG</span></code> yet.</p>
+</div>
+<p><img alt="Policy" src="../_images/policy.png" /></p>
+<p>We are planning to add a new node, Policy Node.
+Can you see the little blue node in the diagram?
+That is the policy node.
+It gets a previous result from previous nodes, and decides the next step based on that result.</p>
+<p>In this example, the policy gets prompt, and selects which Generator model is good for generating the final answer.</p>
+</section>
+<section id="merger-node">
+<h3>Merger Node<a class="headerlink" href="#merger-node" title="Link to this heading">#</a></h3>
+<p>There is a limitation of the policy node that it can’t merge the results again.
+Once policy takes its action, it can’t merge the results again without <code class="docutils literal notranslate"><span class="pre">Merger</span> <span class="pre">Node</span></code>.</p>
+<p>With merger node, we can now create <strong>cycles</strong> in the RAG pipeline.</p>
+<p><img alt="Merger" src="../_images/merger.png" /></p>
+<p>Here is a diagram that used Merger node.
+At first, there is a policy that gets retrieved document chunks as input.
+It decides to rerank it, or just compress long document chunks to short passage.
+After that, it must pass to a single prompt maker node.
+And then, here comes <code class="docutils literal notranslate"><span class="pre">Meger</span> <span class="pre">Node</span></code>.
+It gets the result from multiple nodes, and passes it to the next node.
+In this way, prompt maker node gets passages to make prompt, no matter how the policy node decides.</p>
+<p>So, how can make cycle with <code class="docutils literal notranslate"><span class="pre">Merger</span> <span class="pre">Node</span></code>?
+Let me show you an example.</p>
+<p><img alt="Cycle" src="../_images/cycle.png" /></p>
+<p>Pretty good, right?
+The policy in the above diagram decides a reranked result passed to the prompt maker for generation,
+or request retrieve again.
+At merger that located before the retrieval node, it gets the user query and passed to the retrieval node.</p>
+<p>Voilà! We made a cycle in the RAG pipeline.
+But we have a problem implementing this to <code class="docutils literal notranslate"><span class="pre">AutoRAG</span></code>.
+How can we make this to single yaml file?
+How can we make complex Modular RAG pipelines using yaml file alone?</p>
+</section>
+<section id="node-line-for-modular-rag">
+<h3>Node line for Modular RAG<a class="headerlink" href="#node-line-for-modular-rag" title="Link to this heading">#</a></h3>
+<p>The solution is <code class="docutils literal notranslate"><span class="pre">Node</span> <span class="pre">Line</span></code>.
+If you learned about structure of <code class="docutils literal notranslate"><span class="pre">AutoRAG</span></code> config file, you are familiar with <code class="docutils literal notranslate"><span class="pre">Node</span> <span class="pre">Line</span></code>.</p>
+<div class="admonition-what-is-node-line admonition">
+<p class="admonition-title">What is Node Line?</p>
+<p>If you are not familiar with <code class="docutils literal notranslate"><span class="pre">Node</span> <span class="pre">Line</span></code>, please see <a class="reference internal" href="../optimization/optimization.html"><span class="std std-doc">optimization</span></a> guide.</p>
+</div>
+<p>In the Advanced RAG, Node line is like a folder.
+There is no much feature on it, just collection of nodes.</p>
+<p>But think of this way. A single Node line is like a straight line. It is a linear structure.
+It does not have any branches or cycles.</p>
+<p>And the magic happens as policy node and merger node only.
+You can type which node line can be the next step at policy node.
+If the node line is the target of the policy, you must set merger node to merge the results from the node line.</p>
+<p><img alt="Node_line" src="../_images/node_line_modular.png" /></p>
+<p>In the above diagram, I made two node lines to implement the cycle.
+You can write your config yaml file for making the above pipeline like below.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">node_lines</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_line_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node_line_1</span>
+<span class="w">    </span><span class="nt">nodes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">merger</span>
+<span class="w">        </span><span class="nt">pass_value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">retrieval</span>
+<span class="w">        </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">retrieval_recall</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">top_k</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">        </span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bm25</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">passage_reranker</span>
+<span class="w">        </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">reranker_recall</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">top_k</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">        </span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">upr</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">policy</span>
+<span class="w">        </span><span class="nt">target_node_lines</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node_line_1</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node_line_2</span>
+<span class="w">        </span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kf1_policy</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rl_policy</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_line_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node_line_2</span>
+<span class="w">    </span><span class="nt">nodes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prompt_maker</span>
+<span class="w">        </span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fstring</span>
+<span class="w">            </span><span class="nt">prompt</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Answer</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">question:</span><span class="nv"> </span><span class="s">{query}</span><span class="nv"> </span><span class="s">\n\n</span><span class="nv"> </span><span class="s">Passage:</span><span class="nv"> </span><span class="s">{retrieved_contents}&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generator</span>
+<span class="w">        </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">bleu</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">rouge</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">meteor</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
+<span class="w">            </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
+</pre></div>
+</div>
+<p>Looks cool, right?</p>
+</section>
+</section>
+<section id="contact-us">
+<h2>Contact us<a class="headerlink" href="#contact-us" title="Link to this heading">#</a></h2>
+<p>We are tyring hard to make Modular RAG at <code class="docutils literal notranslate"><span class="pre">AutoRAG</span></code> as soon as possible.
+If you are really interested in Modular RAG, feel free to contact us.
+We are welcoming any questions, suggestions, feature requests, feedback, and so on.</p>
+<div class="admonition-contact admonition">
+<p class="admonition-title">Contact</p>
+<ul class="simple">
+<li><p>Github Issue : https://github.com/Marker-Inc-Korea/AutoRAG/issues</p></li>
+<li><p>Discord : https://discord.gg/P4DYXfmSAs</p></li>
+</ul>
+</div>
+</section>
 </section>
 
         </article>
@@ -289,8 +446,35 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Road to Modular RAG</a><ul>
+<li><a class="reference internal" href="#what-is-modular-rag">🤷‍♂️ What is Modular RAG?</a></li>
+<li><a class="reference internal" href="#id1">🚀 Road to Modular RAG</a><ul>
+<li><a class="reference internal" href="#early-version-of-autorag">Early version of AutoRAG</a></li>
+<li><a class="reference internal" href="#policy-node">Policy Node</a></li>
+<li><a class="reference internal" href="#merger-node">Merger Node</a></li>
+<li><a class="reference internal" href="#node-line-for-modular-rag">Node line for Modular RAG</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contact-us">Contact us</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

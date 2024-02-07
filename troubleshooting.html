@@ -311,6 +311,32 @@ When you using OpenAILike model (like VLLM openai server), you can put api_base 
 In this way, you can use both OpenAI model and custom model.</p>
 </div>
 </section>
+<section id="error-while-running-llm">
+<h3>Error while running LLM<a class="headerlink" href="#error-while-running-llm" title="Link to this heading">#</a></h3>
+<p>It is common you face OOM (Out of Memory) error or out of rate limit error while running LLM.
+In this case, we suggest you adjusting batch size.</p>
+<ol class="arabic simple">
+<li><p>Adjust batch size
+You can adjust batch size at our config yaml file.
+All modules that using LLM model can get <code class="docutils literal notranslate"><span class="pre">batch</span></code> as module parameter.</p></li>
+</ol>
+<p>For example, using <code class="docutils literal notranslate"><span class="pre">batch</span></code> at <code class="docutils literal notranslate"><span class="pre">llama_index_llm</span></code> module:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">      </span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
+<span class="w">          </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
+<span class="w">          </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">gpt-3.5-turbo-16k</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">gpt-3.5-turbo-1106</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.5</span><span class="p p-Indicator">]</span>
+<span class="w">          </span><span class="nt">batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+</pre></div>
+</div>
+<p>See? You can put <code class="docutils literal notranslate"><span class="pre">batch</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">llama_index_llm</span></code> module.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We recommend setting batch under 3 when you are using openai model.
+In our experiment, it occurred rate limit error when the batch size was 4.
+(Check out your tier and limit error at <a class="reference external" href="https://platform.openai.com/account/limits">here</a>.)</p>
+</div>
+</section>
 </section>
 </section>
 
@@ -376,6 +402,7 @@ In this way, you can use both OpenAI model and custom model.</p>
 </li>
 <li><a class="reference internal" href="#optimization">Optimization</a><ul>
 <li><a class="reference internal" href="#facing-openai-api-error">Facing OPENAI API error</a></li>
+<li><a class="reference internal" href="#error-while-running-llm">Error while running LLM</a></li>
 </ul>
 </li>
 </ul>
