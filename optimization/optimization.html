@@ -137,7 +137,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -236,7 +236,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -244,7 +244,106 @@
         <article role="main">
           <section id="how-optimization-works">
 <h1>How optimization works<a class="headerlink" href="#how-optimization-works" title="Link to this heading">#</a></h1>
-<p><img alt="Sundae" src="../_images/samsung_sundae.jpeg" /></p>
+<p>Understanding how optimization really works in AutoRAG can be great for writing your own configuration YAML file.
+In this documentation, you can learn about how AutoRAG works under the hood.</p>
+<section id="swapping-modules-in-node">
+<h2>Swapping modules in Node<a class="headerlink" href="#swapping-modules-in-node" title="Link to this heading">#</a></h2>
+<p><img alt="Advanced RAG" src="../_images/advanced_RAG.png" /></p>
+<p>Here is the diagram of the overall AutoRAG pipeline.
+Each node represents a node, and each node’s result passed to the next node.</p>
+<p>But remember, you can set multiple modules and multiple parameters in each node.
+And you get the best result among them.</p>
+<p>For achieving this, AutoRAG first makes all possible combinations of modules and parameters in each node.
+Then, it runs the pipeline with each combination and gets the result.
+Finally, it selects the best result among them with the given strategies.</p>
+<p>Let me show you an example.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
+<span class="w">  </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">openai</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">gpt-3.5-turbo-16k</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">gpt-3.5-turbo-1106</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.5</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>In this YAML file, there is a llama_index_llm module and parameters in it.
+AutoRAG automatically generates combinations of each parameter.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">combinations</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;module_type&#39;</span><span class="p">:</span> <span class="s1">&#39;llama_index_llm&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;llm&#39;</span><span class="p">:</span> <span class="s1">&#39;openai&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="s1">&#39;gpt-3.5-turbo-16k&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">0.5</span>
+    <span class="p">},</span> <span class="p">{</span>
+        <span class="s1">&#39;module_type&#39;</span><span class="p">:</span> <span class="s1">&#39;llama_index_llm&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;llm&#39;</span><span class="p">:</span> <span class="s1">&#39;openai&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="s1">&#39;gpt-3.5-turbo-16k&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">1.0</span>
+    <span class="p">},</span> <span class="p">{</span>
+        <span class="s1">&#39;module_type&#39;</span><span class="p">:</span> <span class="s1">&#39;llama_index_llm&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;llm&#39;</span><span class="p">:</span> <span class="s1">&#39;openai&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="s1">&#39;gpt-3.5-turbo-16k&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">1.5</span>
+    <span class="p">},</span> <span class="p">{</span>
+        <span class="s1">&#39;module_type&#39;</span><span class="p">:</span> <span class="s1">&#39;llama_index_llm&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;llm&#39;</span><span class="p">:</span> <span class="s1">&#39;openai&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="s1">&#39;gpt-3.5-turbo-1106&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">0.5</span>
+    <span class="p">},</span> <span class="p">{</span>
+        <span class="s1">&#39;module_type&#39;</span><span class="p">:</span> <span class="s1">&#39;llama_index_llm&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;llm&#39;</span><span class="p">:</span> <span class="s1">&#39;openai&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="s1">&#39;gpt-3.5-turbo-1106&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">1.0</span>
+    <span class="p">},</span> <span class="p">{</span>
+        <span class="s1">&#39;module_type&#39;</span><span class="p">:</span> <span class="s1">&#39;llama_index_llm&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;llm&#39;</span><span class="p">:</span> <span class="s1">&#39;openai&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="s1">&#39;gpt-3.5-turbo-1106&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">1.5</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>See all the combinations?
+Now, AutoRAG runs each combination of modules and parameters one by one.
+You can see the results in the <code class="docutils literal notranslate"><span class="pre">summary.csv</span></code> file.</p>
+</section>
+<section id="pass-the-best-result-to-the-next-node">
+<h2>Pass the best result to the next node<a class="headerlink" href="#pass-the-best-result-to-the-next-node" title="Link to this heading">#</a></h2>
+<p>The best result from the previous node is passed to the next node.
+It means that the next node uses the best result from the previous node as input.</p>
+<p>In this way, each node does not have to know how the input result is generated.
+Think it as one of Markov Chain, which only needs the previous state to generate the next state.
+The node itself does not need to know the whole pipeline or the previous states.</p>
+<p>Why we choose this method?
+We know that the previous node result affects the next node result, and it is not always guarantee the best result.
+For example, if the node choice was B and the next was A. But it can be possible that the best is A - A combination.</p>
+<p>However, testing all combinations with all nodes can cause too many combinations and retries.
+Our goal is to find the optimal pipeline, not ‘the best pipeline’ for the given time and resources.</p>
+</section>
+<section id="evaluate-nodes-that-can-t-evaluate">
+<h2>Evaluate Nodes that can’t evaluate<a class="headerlink" href="#evaluate-nodes-that-can-t-evaluate" title="Link to this heading">#</a></h2>
+<p>Some nodes, like <code class="docutils literal notranslate"><span class="pre">query_expansion</span></code> or <code class="docutils literal notranslate"><span class="pre">prompt_maker</span></code> can’t be evaluated directly.
+If you want to evaluate these nodes directly, you have to build ground truth values for it.
+Like ‘ground truth of expanded query’ or ‘ground truth of prompt.’</p>
+<p>And it is a hard job. You know, making retrieval gt and generation gt is still hard.</p>
+<p>So we use evaluation of the next node.
+In general, <code class="docutils literal notranslate"><span class="pre">retrieval</span></code> node comes after <code class="docutils literal notranslate"><span class="pre">query_expansion</span></code>.
+At <code class="docutils literal notranslate"><span class="pre">query_expansion</span></code> strategy, you can specify the <code class="docutils literal notranslate"><span class="pre">retrieval</span></code> modules for evaluation.
+In evaluation process, we retrieve the documents using the modules you specified,
+and evaluate the <code class="docutils literal notranslate"><span class="pre">query_expansion</span></code> node with the retrieved documents.</p>
+<p>Similar with <code class="docutils literal notranslate"><span class="pre">prompt_maker</span></code> and <code class="docutils literal notranslate"><span class="pre">generation</span></code> node.
+We evaluate <code class="docutils literal notranslate"><span class="pre">prompt_maker</span></code> node with the <code class="docutils literal notranslate"><span class="pre">generation</span></code> node’s result.</p>
+<p>You might be wonder that this method is valid.
+Think of this way.
+In the node, we already find the best result among the combinations.
+And its combination contain <code class="docutils literal notranslate"><span class="pre">the</span> <span class="pre">next</span> <span class="pre">node</span></code> setups.
+In the next node, we will test all combinations of the next node.
+So, its result will be at least the same as the best result from the previous node.
+And probably, the most case you can get a better result than the best result from the previous node.</p>
+</section>
+<section id="more-optimization-strategies">
+<h2>More optimization strategies<a class="headerlink" href="#more-optimization-strategies" title="Link to this heading">#</a></h2>
+<p>AutoRAG is an alpha version, and there are a lot of possible optimization methods we can develop in the future.
+We are ready to develop more optimization strategies, and we are open to your suggestions or feedback.</p>
+</section>
 </section>
 
         </article>
@@ -290,8 +389,30 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">How optimization works</a><ul>
+<li><a class="reference internal" href="#swapping-modules-in-node">Swapping modules in Node</a></li>
+<li><a class="reference internal" href="#pass-the-best-result-to-the-next-node">Pass the best result to the next node</a></li>
+<li><a class="reference internal" href="#evaluate-nodes-that-can-t-evaluate">Evaluate Nodes that can’t evaluate</a></li>
+<li><a class="reference internal" href="#more-optimization-strategies">More optimization strategies</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
