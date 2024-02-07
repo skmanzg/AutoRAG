@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Installation" href="install.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Installation and Setup" href="install.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>AutoRAG documentation</title>
@@ -159,12 +159,15 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation and Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">TroubleShooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_model.html">Configure LLM &amp; Embedding models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data Creation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data_creation/tutorial.html">Start creating your own evaluation data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_creation/data_format.html">Dataset Format</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Optimization</span></p>
 <ul>
@@ -173,6 +176,10 @@
 <p class="caption" role="heading"><span class="caption-text">Available Modules</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules/index.html">Available Module List</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmap</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="roadmap/modular_rag.html">Road to Modular RAG</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -237,6 +244,46 @@
         <article role="main">
           <section id="autorag-documentation">
 <h1>AutoRAG documentation<a class="headerlink" href="#autorag-documentation" title="Link to this heading">#</a></h1>
+<p>RAG AutoML tool for automatically finds an optimal RAG pipeline for your data.</p>
+<section id="why-autorag">
+<h2>🤷‍♂️ Why AutoRAG?<a class="headerlink" href="#why-autorag" title="Link to this heading">#</a></h2>
+<p>There are numerous RAG pipelines and modules out there,
+but you don’t know what pipeline is great for “your own data” and “your own use-case.”
+Making and evaluating all RAG modules is very time-consuming and hard to do.
+But without it, you will never know which RAG pipeline is the best for your own use-case.</p>
+<p>That’s where <strong>AutoRAG</strong> comes in.</p>
+</section>
+<section id="how-can-autorag-helps">
+<h2>🤸‍♂️ How can AutoRAG helps?<a class="headerlink" href="#how-can-autorag-helps" title="Link to this heading">#</a></h2>
+<p>AutoRAG is a tool for finding optimal RAG pipeline for “your data.”
+You can evaluate various RAG modules automatically with your own evaluation data,
+and find the best RAG pipeline for your own use-case.</p>
+<p>AutoRAG supports</p>
+<ul class="simple">
+<li><p><strong>Data Creation</strong>: Create RAG evaluation data with your own raw documents.</p></li>
+<li><p><strong>Optimization</strong>: Automatically run experiments to find the best RAG pipeline for your own data.</p></li>
+<li><p><strong>Deployment</strong>: Deploy the best RAG pipeline with single yaml file. Supports FastAPI server as well.</p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h2>🏃‍♂️ Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">AutoRAG</span></code></p>
+<p>In our documentation, we will guide you through the process of <a class="reference external" href="install.md">installation</a> and <a class="reference external" href="tutorial.md">tutorial</a> for AutoRAG starter.
+After you find your first RAG pipeline with AutoRAG, you can learn how to read result files at <a href="#id1"><span class="problematic" id="id2">`here &lt;&gt;`__</span></a>.</p>
+<p>And do you want to get the ultimate performance RAG pipeline?
+Learn how make great evaluation dataset with your own raw documents at <a href="#id1"><span class="problematic" id="id3">`here &lt;&gt;`__</span></a>.</p>
+<p>Also, you can learn how to set various experiment configurations at <a class="reference external" href="optimization/optimization.md">optimization</a> guide.</p>
+<p>Of course, you can use your own local LLM or embedding model with AutoRAG. Go to <a class="reference external" href="local_model.md">here</a> to learn how to use your own model with AutoRAG.</p>
+<p>If you face any trouble? Check out our <a class="reference external" href="troubleshooting.md">troubleshooting</a> guide.
+Also, feel free to ask your question at our <a class="reference external" href="https://github.com/Marker-Inc-Korea/AutoRAG/issues">github issue</a> or <a class="reference external" href="https://discord.gg/P4DYXfmSAs">Discord</a> channel.</p>
+</section>
+<section id="ecosystem">
+<h2>👨‍👩‍👧‍👦 Ecosystem<a class="headerlink" href="#ecosystem" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Github Repo : <a class="reference external" href="https://github.com/Marker-Inc-Korea/AutoRAG">https://github.com/Marker-Inc-Korea/AutoRAG</a></p></li>
+<li><p>PyPI : <a class="reference external" href="https://pypi.org/project/AutoRAG/">https://pypi.org/project/AutoRAG/</a></p></li>
+<li><p>Discord : <a class="reference external" href="https://discord.gg/P4DYXfmSAs">https://discord.gg/P4DYXfmSAs</a></p></li>
+</ul>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -247,6 +294,9 @@
 </div>
 <div class="toctree-wrapper compound">
 </div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
 </section>
 
         </article>
@@ -259,7 +309,7 @@
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Installation</div>
+                <div class="title">Installation and Setup</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -295,6 +345,12 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">AutoRAG documentation</a><ul>
+<li><a class="reference internal" href="#why-autorag">🤷‍♂️ Why AutoRAG?</a></li>
+<li><a class="reference internal" href="#how-can-autorag-helps">🤸‍♂️ How can AutoRAG helps?</a></li>
+<li><a class="reference internal" href="#getting-started">🏃‍♂️ Getting Started</a></li>
+<li><a class="reference internal" href="#ecosystem">👨‍👩‍👧‍👦 Ecosystem</a><ul>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

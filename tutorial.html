@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Start creating your own evaluation data" href="data_creation/tutorial.html" /><link rel="prev" title="Installation" href="install.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="TroubleShooting" href="troubleshooting.html" /><link rel="prev" title="Installation and Setup" href="install.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>Tutorial - AutoRAG documentation</title>
@@ -137,7 +137,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -159,12 +159,15 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation and Setup</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">TroubleShooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local_model.html">Configure LLM &amp; Embedding models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data Creation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data_creation/tutorial.html">Start creating your own evaluation data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_creation/data_format.html">Dataset Format</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Optimization</span></p>
 <ul>
@@ -173,6 +176,10 @@
 <p class="caption" role="heading"><span class="caption-text">Available Modules</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules/index.html">Available Module List</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmap</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="roadmap/modular_rag.html">Road to Modular RAG</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -229,7 +236,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -237,6 +244,138 @@
         <article role="main">
           <section id="tutorial">
 <h1>Tutorial<a class="headerlink" href="#tutorial" title="Link to this heading">#</a></h1>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Before start this tutorial, make sure you installed AutoRAG.
+To install it, please check <a class="reference internal" href="install.html"><span class="std std-doc">Installation</span></a>.</p>
+</div>
+<section id="prepare-evaluation-dataset">
+<h2>Prepare Evaluation Dataset<a class="headerlink" href="#prepare-evaluation-dataset" title="Link to this heading">#</a></h2>
+<p>First, you have to prepare an evaluation dataset for your RAG pipeline.
+Making a good evaluation dataset is the key to getting a good RAG pipeline.
+So, you need to focus on the quality of your evaluation dataset.
+Once you have it, the optimal RAG pipeline can be found using AutoRAG easily.</p>
+<p>So, for users who want to make a good evaluation dataset,
+we provide a detailed guide at <a class="reference internal" href="data_creation/tutorial.html"><span class="std std-doc">here</span></a>.</p>
+<p>For users who want to use a pre-made evaluation dataset,
+we provide example datasets at <a class="reference internal" href="#"><span class="xref myst">here</span></a>.</p>
+<p>Also, you can check out sample datasets at <a class="reference external" href="https://huggingface.co/collections/MarkrAI/autorag-evaluation-datasets-65c0ee87d673dcc686bd14b8">huggingface</a>.
+You can download it manually using huggingface datasets library.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Don’t forget to split train and test dataset.
+It is common mistake to not split dataset, but it will occur overfitting issue.
+We highly recommend you to optimize RAG pipeline with train dataset, and evaluate whole pipeline with test dataset later.</p>
+</div>
+<p>After you prepare your evaluation dataset, please keep in mind the path to your dataset.</p>
+<div class="admonition-note-dataset-format admonition">
+<p class="admonition-title">Note: Dataset Format</p>
+<p>Make sure there are two evaluation datasets, qa dataset and corpus dataset.
+And you must save it as parquet format.
+If you don’t know about specific columns and data types, check out the <a class="reference internal" href="#"><span class="xref myst">Data Format</span></a> section.</p>
+</div>
+</section>
+<section id="find-optimal-rag-pipeline">
+<h2>Find Optimal RAG Pipeline<a class="headerlink" href="#find-optimal-rag-pipeline" title="Link to this heading">#</a></h2>
+<p>Let’s find an optimal RAG pipeline with AutoRAG!
+After you prepare your evaluation dataset, you need to have a config yaml file.
+There are few pre-made config yaml files at <a class="reference internal" href="#"><span class="xref myst">here</span></a>.
+We highly recommend using pre-made config yaml files for starter.
+Download <code class="docutils literal notranslate"><span class="pre">starter.yaml</span></code> file to your local environment, and you are ready to go.</p>
+<div class="admonition-write-custom-config-yaml-file admonition">
+<p class="admonition-title">Write custom config yaml file</p>
+<p>If you want to write your own custom config yaml file for detailed configuration and experiment,
+check out the <a class="reference internal" href="#"><code class="xref myst docutils literal notranslate"></code></a> section.</p>
+</div>
+<p>Run below code at CLI, then AutoRAG automatically evaluate your dataset and find the best RAG pipeline for your dataset.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autorag<span class="w"> </span>evaluate<span class="w"> </span>--config<span class="w"> </span>your/path/to/default_config.yaml<span class="w"> </span>--qa_data_path<span class="w"> </span>your/path/to/qa.parquet<span class="w"> </span>--corpus_data_path<span class="w"> </span>your/path/to/corpus.parquet
+</pre></div>
+</div>
+<p>Or you can use python code like below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.evaluator</span> <span class="kn">import</span> <span class="n">Evaluator</span>
+
+<span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">qa_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/qa.parquet&#39;</span><span class="p">,</span> <span class="n">corpus_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/corpus.parquet&#39;</span><span class="p">)</span>
+<span class="n">evaluator</span><span class="o">.</span><span class="n">start_trial</span><span class="p">(</span><span class="s1">&#39;your/path/to/config.yaml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once it is done, you can see several files and folders created in your current directory.<br />
+These files and folders contain all information about the evaluation results and the best RAG pipeline for your data.</p>
+<p align="center">
+	<img src="./_static/project_folder_example.png" alt="Example of project folder structure">
+</p>
+<p>The First thing you can see might be a folder named after number, which is 3 in the above image.
+This is the trial folder that contains all results that you run above.
+The number is the trial number, and you can check when you run the evaluation at <code class="docutils literal notranslate"><span class="pre">trial.json</span></code> file.</p>
+<p>And the most important file is <code class="docutils literal notranslate"><span class="pre">summary.csv</span></code> files.
+You can check out which module and parameters are the best for your dataset.
+And there are lots of details inside node line and node folders.
+You can find out more information about folder structure and result files at <a class="reference internal" href="#"><span class="xref myst">here</span></a>.</p>
+</section>
+<section id="extract-pipeline-and-evaluate-test-dataset">
+<h2>Extract pipeline and evaluate test dataset<a class="headerlink" href="#extract-pipeline-and-evaluate-test-dataset" title="Link to this heading">#</a></h2>
+<p>Now, it’s time to evaluate test dataset with a found RAG pipeline. For this, you can extract the optimal pipeline and save it to new config yaml file.</p>
+<p>You can use the below code.
+Remind that your trial folder is in the directory you run the <code class="docutils literal notranslate"><span class="pre">Evaluator</span></code>.
+And the trial folder name is number, like 0, 1, 2, 3, and so on.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.deploy</span> <span class="kn">import</span> <span class="n">extract_best_config</span>
+
+<span class="n">pipeline_dict</span> <span class="o">=</span> <span class="n">extract_best_config</span><span class="p">(</span><span class="n">trial_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/trial_folder&#39;</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/pipeline.yaml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can check out your pipeline yaml file at <code class="docutils literal notranslate"><span class="pre">your/path/to/pipeline.yaml</span></code>.
+And then, run evaluation with test dataset again.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Run evaluation to another folder.
+Running evaluation with another dataset in same folder can cause serious malfunction.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autorag<span class="w"> </span>evaluate<span class="w"> </span>--config<span class="w"> </span>your/path/to/pipeline.yaml<span class="w"> </span>--qa_data_path<span class="w"> </span>your/path/to/qa_test.parquet<span class="w"> </span>--corpus_data_path<span class="w"> </span>your/path/to/corpus_test.parquet
+</pre></div>
+</div>
+<p>It will evaluate your test dataset with the found RAG pipeline.</p>
+</section>
+<section id="deploy-your-optimal-rag-pipeline">
+<h2>Deploy your optimal RAG pipeline<a class="headerlink" href="#deploy-your-optimal-rag-pipeline" title="Link to this heading">#</a></h2>
+<p>You can use a found optimal RAG pipeline right away with extracted yaml file.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.deploy</span> <span class="kn">import</span> <span class="n">Runner</span>
+
+<span class="n">runner</span> <span class="o">=</span> <span class="n">Runner</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="s1">&#39;your/path/to/pipeline.yaml&#39;</span><span class="p">)</span>
+<span class="n">runner</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;your question&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or you can run this pipeline as an API server.
+Check out API endpoint at <a class="reference internal" href="#"><span class="xref myst">here</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.deploy</span> <span class="kn">import</span> <span class="n">Runner</span>
+
+<span class="n">runner</span> <span class="o">=</span> <span class="n">Runner</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="s1">&#39;your/path/to/pipeline.yaml&#39;</span><span class="p">)</span>
+<span class="n">runner</span><span class="o">.</span><span class="n">run_api_server</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autorag<span class="w"> </span>run_api<span class="w"> </span>--config_path<span class="w"> </span>your/path/to/pipeline.yaml<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+</pre></div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Why don’t you share your work and evaluation results with others?
+You can simply share your yaml file, or <code class="docutils literal notranslate"><span class="pre">summary.csv</span></code> file.
+With that, you can share whole RAG pipeline and evaluation results to others.</p>
+<p>Feel free to share your work at our <a class="reference external" href="https://discord.gg/P4DYXfmSAs">Discord</a> channel!</p>
+</div>
+<p>And that’s it!
+You successfully found the optimal RAG pipeline for your dataset and deployed it.
+Now, you can make your custom config file, write better config yaml file,
+and evaluate it again and again for better result.</p>
+<p>Or just launch new RAG product with your saved time with AutoRAG!</p>
+<div class="admonition-next-step admonition">
+<p class="admonition-title">Next Step</p>
+<ul class="simple">
+<li><p>Learn about evaluation data creation at <a class="reference internal" href="data_creation/tutorial.html"><span class="std std-doc">here</span></a></p></li>
+<li><p>Learn how to use result files more effectively at <a class="reference internal" href="data_creation/data_format.html"><span class="std std-doc">here</span></a></p></li>
+<li><p>Learn how AutoRAG find the optimal RAG pipeline at <a class="reference internal" href="optimization/optimization.html"><span class="std std-doc">here</span></a></p></li>
+<li><p>Write your custom config yaml file at <a class="reference internal" href="#optimization/custom_config.md"><span class="xref myst">here</span></a></p></li>
+</ul>
+</div>
+</section>
 </section>
 
         </article>
@@ -244,12 +383,12 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="data_creation/tutorial.html">
+          <a class="next-page" href="troubleshooting.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Start creating your own evaluation data</div>
+                <div class="title">TroubleShooting</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -260,7 +399,7 @@
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Installation</div>
+                <div class="title">Installation and Setup</div>
                 
               </div>
             </a>
@@ -282,8 +421,30 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Tutorial</a><ul>
+<li><a class="reference internal" href="#prepare-evaluation-dataset">Prepare Evaluation Dataset</a></li>
+<li><a class="reference internal" href="#find-optimal-rag-pipeline">Find Optimal RAG Pipeline</a></li>
+<li><a class="reference internal" href="#extract-pipeline-and-evaluate-test-dataset">Extract pipeline and evaluate test dataset</a></li>
+<li><a class="reference internal" href="#deploy-your-optimal-rag-pipeline">Deploy your optimal RAG pipeline</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
