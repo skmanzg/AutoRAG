@@ -406,6 +406,9 @@
         <span class="n">question_tensor</span> <span class="o">=</span> <span class="n">question_tensor</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
     <span class="n">question_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">repeat_interleave</span><span class="p">(</span><span class="n">question_tensor</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="s1">&#39;cuda&#39;</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
     <span class="n">sharded_nll_list</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># calculate log likelihood</span>
