@@ -298,8 +298,8 @@
              <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    VectorDB retrieval function.</span>
-<span class="sd">    You have to get chroma collection that is already ingested.</span>
-<span class="sd">    You have to get embedding model that is already used in ingest.</span>
+<span class="sd">    You have to get a chroma collection that is already ingested.</span>
+<span class="sd">    You have to get an embedding model that is already used in ingesting.</span>
 
 <span class="sd">    :param queries: 2-d list of query strings.</span>
 <span class="sd">        Each element of the list is a query strings of each row.</span>
@@ -368,8 +368,10 @@
     <span class="n">contents</span> <span class="o">=</span> <span class="n">corpus_data</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
     <span class="c1"># embed corpus</span>
-    <span class="n">embedded_contents</span> <span class="o">=</span> <span class="n">embedding_model</span><span class="o">.</span><span class="n">_get_text_embeddings</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
-    <span class="n">collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span> <span class="n">embeddings</span><span class="o">=</span><span class="n">embedded_contents</span><span class="p">)</span></div>
+    <span class="n">batch</span> <span class="o">=</span> <span class="mi">128</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">),</span> <span class="n">batch</span><span class="p">):</span>
+        <span class="n">embedded_contents</span> <span class="o">=</span> <span class="n">embedding_model</span><span class="o">.</span><span class="n">_get_text_embeddings</span><span class="p">(</span><span class="n">contents</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch</span><span class="p">])</span>
+        <span class="n">collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch</span><span class="p">],</span> <span class="n">embeddings</span><span class="o">=</span><span class="n">embedded_contents</span><span class="p">)</span></div>
 
 </pre></div>
         </article>
