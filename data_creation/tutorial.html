@@ -137,7 +137,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -161,6 +161,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation and Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../structure.html">Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">TroubleShooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../local_model.html">Configure LLM &amp; Embedding models</a></li>
 </ul>
@@ -172,10 +173,46 @@
 <p class="caption" role="heading"><span class="caption-text">Optimization</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../optimization/optimization.html">How optimization works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization/folder_structure.html">Folder Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization/custom_config.html">Make custom config yaml file</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Available Modules</span></p>
+<p class="caption" role="heading"><span class="caption-text">Nodes &amp; Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../modules/index.html">Available Module List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nodes/index.html">Available List</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/query_expansion/query_expansion.html"><strong>1. Query Expansion</strong></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 1. Query Expansion</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/query_expansion/query_decompose.html">Query Decompose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/query_expansion/hyde.html">HyDE</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/retrieval/retrieval.html">2. Retrieval</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 2. Retrieval</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/bm25.html">BM25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/vectordb.html">Vectordb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_cc.html">Hybrid - cc</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/upr.html">UPR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/tart.html">TART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/monot5.html">MonoT5</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/passage_compressor/tree_summarize.html">Tree Summarize</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/prompt_maker/prompt_maker.html">5. Prompt Maker</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 5. Prompt Maker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/prompt_maker/fstring.html">F-String</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/generator/generator.html">6. Generator</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/generator/llama_index_llm.html">llama_index LLM</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deploy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../deploy/api_endpoint.html">API endpoint</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Roadmap</span></p>
 <ul>
@@ -183,17 +220,17 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../api_spec/modules.html">autorag</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of autorag</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../api_spec/autorag.html">autorag package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of autorag package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_spec/modules.html">autorag</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of autorag</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api_spec/autorag.html">autorag package</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of autorag package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api_spec/autorag.data.html">autorag.data package</a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../api_spec/autorag.evaluate.html">autorag.evaluate package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of autorag.evaluate package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_spec/autorag.evaluate.html">autorag.evaluate package</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of autorag.evaluate package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../api_spec/autorag.evaluate.metric.html">autorag.evaluate.metric package</a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../api_spec/autorag.nodes.html">autorag.nodes package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of autorag.nodes package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../api_spec/autorag.nodes.html">autorag.nodes package</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of autorag.nodes package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../api_spec/autorag.nodes.generator.html">autorag.nodes.generator package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api_spec/autorag.nodes.passagecompressor.html">autorag.nodes.passagecompressor package</a></li>
-<li class="toctree-l4 has-children"><a class="reference internal" href="../api_spec/autorag.nodes.passagereranker.html">autorag.nodes.passagereranker package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of autorag.nodes.passagereranker package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4 has-children"><a class="reference internal" href="../api_spec/autorag.nodes.passagereranker.html">autorag.nodes.passagereranker package</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of autorag.nodes.passagereranker package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="../api_spec/autorag.nodes.passagereranker.tart.html">autorag.nodes.passagereranker.tart package</a></li>
 </ul>
 </li>
@@ -236,7 +273,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -244,6 +281,105 @@
         <article role="main">
           <section id="start-creating-your-own-evaluation-data">
 <h1>Start creating your own evaluation data<a class="headerlink" href="#start-creating-your-own-evaluation-data" title="Link to this heading">#</a></h1>
+<section id="index">
+<h2>Index<a class="headerlink" href="#index" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#overview"><span class="xref myst">Overview</span></a></p></li>
+<li><p><a class="reference internal" href="#make-corpus-data-from-raw-documents"><span class="xref myst">Raw data to Corpus data</span></a></p></li>
+<li><p><a class="reference internal" href="#make-qa-data-from-corpus-data"><span class="xref myst">Corpus data to Qa data</span></a></p></li>
+<li><p><a class="reference internal" href="#use-custom-data-creation-function"><span class="xref myst">Create Custom Function</span></a></p></li>
+</ol>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>For the evaluation of RAGs we need data, but in most cases we have little or no satisfactory data.</p>
+<p>However, since the advent of LLM, creating synthetic data has become one of the good solutions to this problem.</p>
+<p>The following guide covers how to use LLM to create data in a form that AutoRAG can use.</p>
+<hr class="docutils" />
+<p><img alt="Data Creation" src="../_images/data_creation.png" /></p>
+<p>AutoRAG aims to work with Python’s ‘primitive data types’ for scalability and convenience.</p>
+<p>Therefore, to use AutoRAG, you need to convert your raw data into <code class="docutils literal notranslate"><span class="pre">corpus</span> <span class="pre">data</span></code>  and <code class="docutils literal notranslate"><span class="pre">qa</span> <span class="pre">data</span></code> to our <a class="reference internal" href="data_format.html"><span class="std std-doc">data format</span></a>.</p>
+</section>
+<section id="make-corpus-data-from-raw-documents">
+<h2>Make corpus data from raw documents<a class="headerlink" href="#make-corpus-data-from-raw-documents" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Load your raw data to texts with loaders such as lama_index, LangChain, etc.</p></li>
+<li><p>Chunk the texts into passages. Use Langchain, LlamaIndex, etc.</p></li>
+<li><p>Make it into corpus data using util’s datatype converter (based on llama_index).</p></li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The format for corpus data can be found <a class="reference internal" href="data_format.html#corpus-dataset"><span class="std std-ref">corpus data format</span></a></p>
+</div>
+</section>
+<section id="make-qa-data-from-corpus-data">
+<h2>Make qa data from corpus data<a class="headerlink" href="#make-qa-data-from-corpus-data" title="Link to this heading">#</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The format for qa data can be found <a class="reference internal" href="data_format.html#qa-dataset"><span class="std std-ref">qa data format</span></a></p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">guidance</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">autorag.data.qacreation.simple</span> <span class="kn">import</span> <span class="n">generate_simple_qa_dataset</span><span class="p">,</span> <span class="n">generate_qa_row</span>
+
+<span class="n">corpus_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;path/to/corpus_data&quot;</span><span class="p">)</span>
+<span class="n">llm</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">(</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">)</span>
+<span class="n">qa_dataset</span> <span class="o">=</span> <span class="n">generate_simple_qa_dataset</span><span class="p">(</span><span class="n">corpus_data</span><span class="o">=</span><span class="n">corpus_df</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span> <span class="n">output_filepath</span><span class="o">=</span><span class="s2">&quot;path/to/qa_dataset.parquet&quot;</span><span class="p">,</span> <span class="n">generate_row_function</span><span class="o">=</span><span class="n">generate_qa_row</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">generate_simple_qa_dataset</span></code> is a function designed to generate one <strong>query</strong> and one <strong>generation_gt</strong> per passage of corpus_data.</p>
+<div class="admonition-what-is-passage admonition">
+<p class="admonition-title">What is passage?</p>
+<p>Passage is chunked units from raw data.</p>
+</div>
+</section>
+<section id="use-custom-data-creation-function">
+<h2>Use custom data creation function<a class="headerlink" href="#use-custom-data-creation-function" title="Link to this heading">#</a></h2>
+<p>You can change <code class="docutils literal notranslate"><span class="pre">generate_row_function</span></code>  to a custom function to use different templates.</p>
+<p>The output of <code class="docutils literal notranslate"><span class="pre">generate_row_function</span></code>  should be in the form of a <strong>dictionary</strong>  containing <code class="docutils literal notranslate"><span class="pre">query</span></code>  and <code class="docutils literal notranslate"><span class="pre">generation_gt</span></code>.</p>
+<p>Here is the example of <code class="docutils literal notranslate"><span class="pre">generate_row_function</span></code> using guidance.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">guidance</span>
+<span class="kn">from</span> <span class="nn">guidance</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">gen</span>
+
+<span class="c1"># Example for LLM API  </span>
+<span class="k">def</span> <span class="nf">generate_qa_row</span><span class="p">(</span><span class="n">llm</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span> <span class="n">corpus_data_row</span><span class="p">):</span>
+    <span class="n">temp_llm</span> <span class="o">=</span> <span class="n">llm</span>
+
+    <span class="c1"># make template and synthetic data with guidance </span>
+    <span class="k">with</span> <span class="n">guidance</span><span class="o">.</span><span class="n">user</span><span class="p">():</span>
+        <span class="n">temp_llm</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    You have to found a passage to solve &quot;the problem&quot;. </span>
+<span class="s2">    You need to build a clean and clear set of (problem, passage, answer) in json format </span>
+<span class="s2">    so that you don&#39;t have to ask about &quot;the problem&quot; again.</span>
+<span class="s2">    problem need to end with question mark(&quot;?&quot;).</span>
+<span class="s2">    The process of approaching the answer based on the information of the given passage </span>
+<span class="s2">    must be clearly and neatly displayed in the answer.</span><span class="se">\n</span>
+<span class="s2">    </span><span class="se">\n</span>
+<span class="s2">   &quot;passage&quot;: </span><span class="si">{</span><span class="n">corpus_data_row</span><span class="p">[</span><span class="s2">&quot;contents&quot;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span>
+<span class="s2">   &quot;problem&quot;: </span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="n">guidance</span><span class="o">.</span><span class="n">assistant</span><span class="p">():</span>
+        <span class="n">temp_llm</span> <span class="o">+=</span> <span class="n">gen</span><span class="p">(</span><span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">guidance</span><span class="o">.</span><span class="n">user</span><span class="p">():</span>
+        <span class="n">temp_llm</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        &quot;answer&quot;:</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">guidance</span><span class="o">.</span><span class="n">assistant</span><span class="p">():</span>
+        <span class="n">temp_llm</span> <span class="o">+=</span> <span class="n">gen</span><span class="p">(</span><span class="s1">&#39;generation_gt&#39;</span><span class="p">)</span>
+        
+    <span class="c1"># add metadata in the function</span>
+    <span class="n">corpus_data_row</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;qa_generation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;simple&quot;</span>
+        
+    <span class="c1"># make response dictionary</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">temp_llm</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;generation_gt&quot;</span><span class="p">:</span> <span class="n">temp_llm</span><span class="p">[</span><span class="s2">&quot;generation_gt&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">response</span>
+</pre></div>
+</div>
+</section>
 </section>
 
         </article>
@@ -289,8 +425,31 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Start creating your own evaluation data</a><ul>
+<li><a class="reference internal" href="#index">Index</a></li>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#make-corpus-data-from-raw-documents">Make corpus data from raw documents</a></li>
+<li><a class="reference internal" href="#make-qa-data-from-corpus-data">Make qa data from corpus data</a></li>
+<li><a class="reference internal" href="#use-custom-data-creation-function">Use custom data creation function</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

@@ -160,6 +160,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation and Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../structure.html">Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../troubleshooting.html">TroubleShooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../local_model.html">Configure LLM &amp; Embedding models</a></li>
 </ul>
@@ -171,10 +172,46 @@
 <p class="caption" role="heading"><span class="caption-text">Optimization</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../optimization/optimization.html">How optimization works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../optimization/folder_structure.html">Folder Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../optimization/custom_config.html">Make custom config yaml file</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Available Modules</span></p>
+<p class="caption" role="heading"><span class="caption-text">Nodes &amp; Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/index.html">Available Module List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../nodes/index.html">Available List</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../nodes/query_expansion/query_expansion.html"><strong>1. Query Expansion</strong></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 1. Query Expansion</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/query_expansion/query_decompose.html">Query Decompose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/query_expansion/hyde.html">HyDE</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../nodes/retrieval/retrieval.html">2. Retrieval</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 2. Retrieval</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/retrieval/bm25.html">BM25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/retrieval/vectordb.html">Vectordb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/retrieval/hybrid_cc.html">Hybrid - cc</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../nodes/passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/passage_reranker/upr.html">UPR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/passage_reranker/tart.html">TART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/passage_reranker/monot5.html">MonoT5</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../nodes/passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/passage_compressor/tree_summarize.html">Tree Summarize</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../nodes/prompt_maker/prompt_maker.html">5. Prompt Maker</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 5. Prompt Maker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/prompt_maker/fstring.html">F-String</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../nodes/generator/generator.html">6. Generator</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../nodes/generator/llama_index_llm.html">llama_index LLM</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deploy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../deploy/api_endpoint.html">API endpoint</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Roadmap</span></p>
 <ul>
@@ -182,17 +219,17 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../api_spec/modules.html">autorag</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of autorag</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../api_spec/autorag.html">autorag package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of autorag package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../api_spec/modules.html">autorag</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of autorag</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../api_spec/autorag.html">autorag package</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of autorag package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../../api_spec/autorag.data.html">autorag.data package</a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../../api_spec/autorag.evaluate.html">autorag.evaluate package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of autorag.evaluate package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../../api_spec/autorag.evaluate.html">autorag.evaluate package</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of autorag.evaluate package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../api_spec/autorag.evaluate.metric.html">autorag.evaluate.metric package</a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../../api_spec/autorag.nodes.html">autorag.nodes package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of autorag.nodes package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../../api_spec/autorag.nodes.html">autorag.nodes package</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of autorag.nodes package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../api_spec/autorag.nodes.generator.html">autorag.nodes.generator package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../api_spec/autorag.nodes.passagecompressor.html">autorag.nodes.passagecompressor package</a></li>
-<li class="toctree-l4 has-children"><a class="reference internal" href="../../../../../api_spec/autorag.nodes.passagereranker.html">autorag.nodes.passagereranker package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of autorag.nodes.passagereranker package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4 has-children"><a class="reference internal" href="../../../../../api_spec/autorag.nodes.passagereranker.html">autorag.nodes.passagereranker package</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of autorag.nodes.passagereranker package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="../../../../../api_spec/autorag.nodes.passagereranker.tart.html">autorag.nodes.passagereranker.tart package</a></li>
 </ul>
 </li>

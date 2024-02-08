@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="TroubleShooting" href="troubleshooting.html" /><link rel="prev" title="Installation and Setup" href="install.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Structure" href="structure.html" /><link rel="prev" title="Installation and Setup" href="install.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>Tutorial - AutoRAG documentation</title>
@@ -161,6 +161,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation and Setup</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">TroubleShooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="local_model.html">Configure LLM &amp; Embedding models</a></li>
 </ul>
@@ -172,10 +173,46 @@
 <p class="caption" role="heading"><span class="caption-text">Optimization</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="optimization/optimization.html">How optimization works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization/folder_structure.html">Folder Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization/custom_config.html">Make custom config yaml file</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Available Modules</span></p>
+<p class="caption" role="heading"><span class="caption-text">Nodes &amp; Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules/index.html">Available Module List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes/index.html">Available List</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="nodes/query_expansion/query_expansion.html"><strong>1. Query Expansion</strong></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 1. Query Expansion</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="nodes/query_expansion/query_decompose.html">Query Decompose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/query_expansion/hyde.html">HyDE</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="nodes/retrieval/retrieval.html">2. Retrieval</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 2. Retrieval</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/bm25.html">BM25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/vectordb.html">Vectordb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/hybrid_cc.html">Hybrid - cc</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="nodes/passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/upr.html">UPR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/tart.html">TART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/monot5.html">MonoT5</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="nodes/passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="nodes/passage_compressor/tree_summarize.html">Tree Summarize</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="nodes/prompt_maker/prompt_maker.html">5. Prompt Maker</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 5. Prompt Maker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="nodes/prompt_maker/fstring.html">F-String</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="nodes/generator/generator.html">6. Generator</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="nodes/generator/llama_index_llm.html">llama_index LLM</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Deploy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="deploy/api_endpoint.html">API endpoint</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Roadmap</span></p>
 <ul>
@@ -183,17 +220,17 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="api_spec/modules.html">autorag</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of autorag</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api_spec/autorag.html">autorag package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of autorag package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api_spec/modules.html">autorag</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of autorag</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api_spec/autorag.html">autorag package</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of autorag package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api_spec/autorag.data.html">autorag.data package</a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="api_spec/autorag.evaluate.html">autorag.evaluate package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of autorag.evaluate package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api_spec/autorag.evaluate.html">autorag.evaluate package</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of autorag.evaluate package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="api_spec/autorag.evaluate.metric.html">autorag.evaluate.metric package</a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="api_spec/autorag.nodes.html">autorag.nodes package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of autorag.nodes package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api_spec/autorag.nodes.html">autorag.nodes package</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of autorag.nodes package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="api_spec/autorag.nodes.generator.html">autorag.nodes.generator package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api_spec/autorag.nodes.passagecompressor.html">autorag.nodes.passagecompressor package</a></li>
-<li class="toctree-l4 has-children"><a class="reference internal" href="api_spec/autorag.nodes.passagereranker.html">autorag.nodes.passagereranker package</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of autorag.nodes.passagereranker package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4 has-children"><a class="reference internal" href="api_spec/autorag.nodes.passagereranker.html">autorag.nodes.passagereranker package</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of autorag.nodes.passagereranker package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="api_spec/autorag.nodes.passagereranker.tart.html">autorag.nodes.passagereranker.tart package</a></li>
 </ul>
 </li>
@@ -258,7 +295,7 @@ Once you have it, the optimal RAG pipeline can be found using AutoRAG easily.</p
 <p>So, for users who want to make a good evaluation dataset,
 we provide a detailed guide at <a class="reference internal" href="data_creation/tutorial.html"><span class="std std-doc">here</span></a>.</p>
 <p>For users who want to use a pre-made evaluation dataset,
-we provide example datasets at <a class="reference internal" href="#"><span class="xref myst">here</span></a>.</p>
+we provide example datasets at <a class="reference internal" href="data_creation/data_format.html#samples"><span class="std std-ref">here</span></a>.</p>
 <p>Also, you can check out sample datasets at <a class="reference external" href="https://huggingface.co/collections/MarkrAI/autorag-evaluation-datasets-65c0ee87d673dcc686bd14b8">huggingface</a>.
 You can download it manually using huggingface datasets library.</p>
 <div class="admonition attention">
@@ -272,20 +309,20 @@ We highly recommend you to optimize RAG pipeline with train dataset, and evaluat
 <p class="admonition-title">Note: Dataset Format</p>
 <p>Make sure there are two evaluation datasets, qa dataset and corpus dataset.
 And you must save it as parquet format.
-If you don’t know about specific columns and data types, check out the <a class="reference internal" href="#"><span class="xref myst">Data Format</span></a> section.</p>
+If you don’t know about specific columns and data types, check out the <a class="reference internal" href="data_creation/data_format.html"><span class="std std-doc">Data Format</span></a> section.</p>
 </div>
 </section>
 <section id="find-optimal-rag-pipeline">
 <h2>Find Optimal RAG Pipeline<a class="headerlink" href="#find-optimal-rag-pipeline" title="Link to this heading">#</a></h2>
 <p>Let’s find an optimal RAG pipeline with AutoRAG!
 After you prepare your evaluation dataset, you need to have a config yaml file.
-There are few pre-made config yaml files at <a class="reference internal" href="#"><span class="xref myst">here</span></a>.
+There are few pre-made config yaml files at our GitHub repo <code class="docutils literal notranslate"><span class="pre">sample_config</span></code> folder.
 We highly recommend using pre-made config yaml files for starter.
 Download <code class="docutils literal notranslate"><span class="pre">starter.yaml</span></code> file to your local environment, and you are ready to go.</p>
 <div class="admonition-write-custom-config-yaml-file admonition">
 <p class="admonition-title">Write custom config yaml file</p>
 <p>If you want to write your own custom config yaml file for detailed configuration and experiment,
-check out the <a class="reference internal" href="#"><code class="xref myst docutils literal notranslate"></code></a> section.</p>
+check out the <a class="reference internal" href="optimization/optimization.html"><span class="std std-doc">optimization</span></a> section.</p>
 </div>
 <p>Run below code at CLI, then AutoRAG automatically evaluate your dataset and find the best RAG pipeline for your dataset.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autorag<span class="w"> </span>evaluate<span class="w"> </span>--config<span class="w"> </span>your/path/to/default_config.yaml<span class="w"> </span>--qa_data_path<span class="w"> </span>your/path/to/qa.parquet<span class="w"> </span>--corpus_data_path<span class="w"> </span>your/path/to/corpus.parquet
@@ -309,7 +346,7 @@ The number is the trial number, and you can check when you run the evaluation at
 <p>And the most important file is <code class="docutils literal notranslate"><span class="pre">summary.csv</span></code> files.
 You can check out which module and parameters are the best for your dataset.
 And there are lots of details inside node line and node folders.
-You can find out more information about folder structure and result files at <a class="reference internal" href="#"><span class="xref myst">here</span></a>.</p>
+You can find out more information about folder structure and result files at <a class="reference internal" href="structure.html"><span class="std std-doc">here</span></a>.</p>
 </section>
 <section id="extract-pipeline-and-evaluate-test-dataset">
 <h2>Extract pipeline and evaluate test dataset<a class="headerlink" href="#extract-pipeline-and-evaluate-test-dataset" title="Link to this heading">#</a></h2>
@@ -344,7 +381,7 @@ Running evaluation with another dataset in same folder can cause serious malfunc
 </pre></div>
 </div>
 <p>Or you can run this pipeline as an API server.
-Check out API endpoint at <a class="reference internal" href="#"><span class="xref myst">here</span></a>.</p>
+Check out API endpoint at <a class="reference internal" href="deploy/api_endpoint.html"><span class="std std-doc">here</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.deploy</span> <span class="kn">import</span> <span class="n">Runner</span>
 
 <span class="n">runner</span> <span class="o">=</span> <span class="n">Runner</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="s1">&#39;your/path/to/pipeline.yaml&#39;</span><span class="p">)</span>
@@ -365,14 +402,14 @@ With that, you can share whole RAG pipeline and evaluation results to others.</p
 You successfully found the optimal RAG pipeline for your dataset and deployed it.
 Now, you can make your custom config file, write better config yaml file,
 and evaluate it again and again for better result.</p>
-<p>Or just launch new RAG product with your saved time with AutoRAG!</p>
+<p>Or just launch a new RAG product with your saved time with AutoRAG!</p>
 <div class="admonition-next-step admonition">
 <p class="admonition-title">Next Step</p>
 <ul class="simple">
 <li><p>Learn about evaluation data creation at <a class="reference internal" href="data_creation/tutorial.html"><span class="std std-doc">here</span></a></p></li>
 <li><p>Learn how to use result files more effectively at <a class="reference internal" href="data_creation/data_format.html"><span class="std std-doc">here</span></a></p></li>
 <li><p>Learn how AutoRAG find the optimal RAG pipeline at <a class="reference internal" href="optimization/optimization.html"><span class="std std-doc">here</span></a></p></li>
-<li><p>Write your custom config yaml file at <a class="reference internal" href="#optimization/custom_config.md"><span class="xref myst">here</span></a></p></li>
+<li><p>Write your custom config yaml file at <a class="reference internal" href="optimization/custom_config.html"><span class="std std-doc">here</span></a></p></li>
 </ul>
 </div>
 </section>
@@ -383,12 +420,12 @@ and evaluate it again and again for better result.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="troubleshooting.html">
+          <a class="next-page" href="structure.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">TroubleShooting</div>
+                <div class="title">Structure</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
