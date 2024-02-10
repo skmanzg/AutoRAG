@@ -306,12 +306,20 @@
 <ol class="arabic">
 <li><p><strong>Metrics</strong>:</p>
 <ul class="simple">
-<li><p><strong>Types</strong>: <code class="docutils literal notranslate"><span class="pre">bleu</span></code>, <code class="docutils literal notranslate"><span class="pre">meteor</span></code>, <code class="docutils literal notranslate"><span class="pre">rouge</span></code></p></li>
+<li><p><strong>Types</strong>: <code class="docutils literal notranslate"><span class="pre">bleu</span></code>, <code class="docutils literal notranslate"><span class="pre">meteor</span></code>, <code class="docutils literal notranslate"><span class="pre">rouge</span></code>, <code class="docutils literal notranslate"><span class="pre">sem_score</span></code></p></li>
 </ul>
 <div class="admonition-purpose admonition">
 <p class="admonition-title">Purpose</p>
 <p>These metrics are used to evaluate the performance of language models by comparing model-generated text to ground truth texts.
 We are planning to add more metrics to evaluate generation performance.</p>
+</div>
+<div class="admonition-sem-score admonition">
+<p class="admonition-title">sem_score</p>
+<p>Sem_score is a metric that evaluates the semantic similarity between ground truth and llm generation.
+It is quite simple, but effective to evaluate LLM systems.</p>
+<p>Since it uses embedding model, you can specify the embedding model name at config YAML file.
+Since AutoRAG v0.0.6, we support dictionary at strategy.
+You can check out this feature at the example config.yaml file below.</p>
 </div>
 </li>
 <li><p><strong>Speed Threshold</strong>:</p>
@@ -327,7 +335,11 @@ We are planning to add more metrics to evaluate generation performance.</p>
 <span class="w">  </span><span class="nt">nodes</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generator</span>
 <span class="w">      </span><span class="nt">strategy</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">bleu</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">meteor</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">rouge</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">metrics</span><span class="p">:</span>
+<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bleu</span>
+<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">meteor</span>
+<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sem_score</span>
+<span class="w">             </span><span class="nt">embedding_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
 <span class="w">        </span><span class="nt">speed_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">      </span><span class="nt">modules</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
