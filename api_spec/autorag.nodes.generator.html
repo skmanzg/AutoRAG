@@ -288,76 +288,17 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 </section>
-<section id="module-autorag.nodes.generator.base">
-<span id="autorag-nodes-generator-base-module"></span><h2>autorag.nodes.generator.base module<a class="headerlink" href="#module-autorag.nodes.generator.base" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.generator.base.generator_node">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.generator.base.</span></span><span class="sig-name descname"><span class="pre">generator_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/generator/base.html#generator_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.generator.base.generator_node" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
+<section id="autorag-nodes-generator-base-module">
+<h2>autorag.nodes.generator.base module<a class="headerlink" href="#autorag-nodes-generator-base-module" title="Link to this heading">#</a></h2>
 </section>
-<section id="module-autorag.nodes.generator.llama_index_llm">
-<span id="autorag-nodes-generator-llama-index-llm-module"></span><h2>autorag.nodes.generator.llama_index_llm module<a class="headerlink" href="#module-autorag.nodes.generator.llama_index_llm" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.generator.llama_index_llm.llama_index_llm">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.generator.llama_index_llm.</span></span><span class="sig-name descname"><span class="pre">llama_index_llm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseLLM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/generator/llama_index_llm.html#llama_index_llm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.generator.llama_index_llm.llama_index_llm" title="Link to this definition">#</a></dt>
-<dd><p>Llama Index LLM module.
-It gets the LLM instance from llama index, and returns generated text by the input prompt.
-It does not generate the right log probs, but it returns the pseudo log probs,
-which is not meant to be used for other modules.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>prompts</strong> – A list of prompts.</p></li>
-<li><p><strong>llm</strong> – A llama index LLM instance.</p></li>
-<li><p><strong>batch</strong> – The batch size for llm.
-Set low if you face some errors.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A tuple of three elements.
-The first element is a list of generated text.
-The second element is a list of generated text’s token ids, used tokenizer is GPT2Tokenizer.
-The third element is a list of generated text’s pseudo log probs.</p>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="autorag-nodes-generator-llama-index-llm-module">
+<h2>autorag.nodes.generator.llama_index_llm module<a class="headerlink" href="#autorag-nodes-generator-llama-index-llm-module" title="Link to this heading">#</a></h2>
 </section>
-<section id="module-autorag.nodes.generator.run">
-<span id="autorag-nodes-generator-run-module"></span><h2>autorag.nodes.generator.run module<a class="headerlink" href="#module-autorag.nodes.generator.run" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.generator.run.evaluate_generator_node">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.generator.run.</span></span><span class="sig-name descname"><span class="pre">evaluate_generator_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generation_gt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/generator/run.html#evaluate_generator_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.generator.run.evaluate_generator_node" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.generator.run.run_generator_node">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.generator.run.</span></span><span class="sig-name descname"><span class="pre">run_generator_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_line_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/autorag/nodes/generator/run.html#run_generator_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.generator.run.run_generator_node" title="Link to this definition">#</a></dt>
-<dd><p>Run evaluation and select the best module among generator node results.
-And save the results and summary to generator node directory.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>modules</strong> – Generator modules to run.</p></li>
-<li><p><strong>module_params</strong> – Generator module parameters.
-Including node parameters, which is used for every module in this node.</p></li>
-<li><p><strong>previous_result</strong> – Previous result dataframe.
-Could be prompt maker node’s result.</p></li>
-<li><p><strong>node_line_dir</strong> – This node line’s directory.</p></li>
-<li><p><strong>strategies</strong> – Strategies for generator node.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The best result dataframe.
-It contains previous result columns and generator node’s result columns.</p>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="autorag-nodes-generator-run-module">
+<h2>autorag.nodes.generator.run module<a class="headerlink" href="#autorag-nodes-generator-run-module" title="Link to this heading">#</a></h2>
 </section>
-<section id="module-autorag.nodes.generator">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-autorag.nodes.generator" title="Link to this heading">#</a></h2>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -418,20 +359,10 @@ It contains previous result columns and generator node’s result columns.</p>
             <ul>
 <li><a class="reference internal" href="#">autorag.nodes.generator package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-autorag.nodes.generator.base">autorag.nodes.generator.base module</a><ul>
-<li><a class="reference internal" href="#autorag.nodes.generator.base.generator_node"><code class="docutils literal notranslate"><span class="pre">generator_node()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-autorag.nodes.generator.llama_index_llm">autorag.nodes.generator.llama_index_llm module</a><ul>
-<li><a class="reference internal" href="#autorag.nodes.generator.llama_index_llm.llama_index_llm"><code class="docutils literal notranslate"><span class="pre">llama_index_llm()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-autorag.nodes.generator.run">autorag.nodes.generator.run module</a><ul>
-<li><a class="reference internal" href="#autorag.nodes.generator.run.evaluate_generator_node"><code class="docutils literal notranslate"><span class="pre">evaluate_generator_node()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.nodes.generator.run.run_generator_node"><code class="docutils literal notranslate"><span class="pre">run_generator_node()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-autorag.nodes.generator">Module contents</a></li>
+<li><a class="reference internal" href="#autorag-nodes-generator-base-module">autorag.nodes.generator.base module</a></li>
+<li><a class="reference internal" href="#autorag-nodes-generator-llama-index-llm-module">autorag.nodes.generator.llama_index_llm module</a></li>
+<li><a class="reference internal" href="#autorag-nodes-generator-run-module">autorag.nodes.generator.run module</a></li>
+<li><a class="reference internal" href="#module-contents">Module contents</a></li>
 </ul>
 </li>
 </ul>

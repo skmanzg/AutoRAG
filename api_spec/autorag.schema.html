@@ -288,148 +288,14 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 </section>
-<section id="module-autorag.schema.module">
-<span id="autorag-schema-module-module"></span><h2>autorag.schema.module module<a class="headerlink" href="#module-autorag.schema.module" title="Link to this heading">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="autorag.schema.module.Module">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.schema.module.</span></span><span class="sig-name descname"><span class="pre">Module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/schema/module.html#Module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.schema.module.Module" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="autorag.schema.module.Module.from_dict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#autorag.schema.module.Module" title="autorag.schema.module.Module"><span class="pre">Module</span></a></span></span><a class="reference internal" href="../_modules/autorag/schema/module.html#Module.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.schema.module.Module.from_dict" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="autorag.schema.module.Module.module">
-<span class="sig-name descname"><span class="pre">module</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span></em><a class="headerlink" href="#autorag.schema.module.Module.module" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="autorag.schema.module.Module.module_param">
-<span class="sig-name descname"><span class="pre">module_param</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span></em><a class="headerlink" href="#autorag.schema.module.Module.module_param" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="autorag.schema.module.Module.module_type">
-<span class="sig-name descname"><span class="pre">module_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#autorag.schema.module.Module.module_type" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<section id="autorag-schema-module-module">
+<h2>autorag.schema.module module<a class="headerlink" href="#autorag-schema-module-module" title="Link to this heading">#</a></h2>
 </section>
-<section id="module-autorag.schema.node">
-<span id="autorag-schema-node-module"></span><h2>autorag.schema.node module<a class="headerlink" href="#module-autorag.schema.node" title="Link to this heading">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="autorag.schema.node.Node">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.schema.node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#autorag.schema.module.Module" title="autorag.schema.module.Module"><span class="pre">autorag.schema.module.Module</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/schema/node.html#Node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.schema.node.Node" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="autorag.schema.node.Node.from_dict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#autorag.schema.node.Node" title="autorag.schema.node.Node"><span class="pre">Node</span></a></span></span><a class="reference internal" href="../_modules/autorag/schema/node.html#Node.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.schema.node.Node.from_dict" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="autorag.schema.node.Node.get_param_combinations">
-<span class="sig-name descname"><span class="pre">get_param_combinations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/schema/node.html#Node.get_param_combinations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.schema.node.Node.get_param_combinations" title="Link to this definition">#</a></dt>
-<dd><p>This method returns a combination of module and node parameters, also corresponding modules.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Each module and its module parameters.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple[List[Callable], List[Dict]]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="autorag.schema.node.Node.modules">
-<span class="sig-name descname"><span class="pre">modules</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#autorag.schema.module.Module" title="autorag.schema.module.Module"><span class="pre">Module</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#autorag.schema.node.Node.modules" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="autorag.schema.node.Node.node_params">
-<span class="sig-name descname"><span class="pre">node_params</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span></em><a class="headerlink" href="#autorag.schema.node.Node.node_params" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="autorag.schema.node.Node.node_type">
-<span class="sig-name descname"><span class="pre">node_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#autorag.schema.node.Node.node_type" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="autorag.schema.node.Node.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">previous_result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_line_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/autorag/schema/node.html#Node.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.schema.node.Node.run" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="autorag.schema.node.Node.run_node">
-<span class="sig-name descname"><span class="pre">run_node</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span></em><a class="headerlink" href="#autorag.schema.node.Node.run_node" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="autorag.schema.node.Node.strategy">
-<span class="sig-name descname"><span class="pre">strategy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span></em><a class="headerlink" href="#autorag.schema.node.Node.strategy" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.schema.node.extract_values">
-<span class="sig-prename descclassname"><span class="pre">autorag.schema.node.</span></span><span class="sig-name descname"><span class="pre">extract_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#autorag.schema.node.Node" title="autorag.schema.node.Node"><span class="pre">Node</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/schema/node.html#extract_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.schema.node.extract_values" title="Link to this definition">#</a></dt>
-<dd><p>This function extract values from node’s modules’ module_param.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>node</strong> – The node you want to extract values from.</p></li>
-<li><p><strong>key</strong> – The key of module_param that you want to extract.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The list of extracted values.
-It removes duplicated elements automatically.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.schema.node.extract_values_from_nodes">
-<span class="sig-prename descclassname"><span class="pre">autorag.schema.node.</span></span><span class="sig-name descname"><span class="pre">extract_values_from_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#autorag.schema.node.Node" title="autorag.schema.node.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/schema/node.html#extract_values_from_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.schema.node.extract_values_from_nodes" title="Link to this definition">#</a></dt>
-<dd><p>This function extract values from nodes’ modules’ module_param.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>nodes</strong> – The nodes you want to extract values from.</p></li>
-<li><p><strong>key</strong> – The key of module_param that you want to extract.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The list of extracted values.
-It removes duplicated elements automatically.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.schema.node.module_type_exists">
-<span class="sig-prename descclassname"><span class="pre">autorag.schema.node.</span></span><span class="sig-name descname"><span class="pre">module_type_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#autorag.schema.node.Node" title="autorag.schema.node.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/autorag/schema/node.html#module_type_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.schema.node.module_type_exists" title="Link to this definition">#</a></dt>
-<dd><p>This function check if the module type exists in the nodes.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>nodes</strong> – The nodes you want to check.</p></li>
-<li><p><strong>module_type</strong> – The module type you want to check.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>True if the module type exists in the nodes.</p>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="autorag-schema-node-module">
+<h2>autorag.schema.node module<a class="headerlink" href="#autorag-schema-node-module" title="Link to this heading">#</a></h2>
 </section>
-<section id="module-autorag.schema">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-autorag.schema" title="Link to this heading">#</a></h2>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -490,34 +356,9 @@ It removes duplicated elements automatically.</p>
             <ul>
 <li><a class="reference internal" href="#">autorag.schema package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-autorag.schema.module">autorag.schema.module module</a><ul>
-<li><a class="reference internal" href="#autorag.schema.module.Module"><code class="docutils literal notranslate"><span class="pre">Module</span></code></a><ul>
-<li><a class="reference internal" href="#autorag.schema.module.Module.from_dict"><code class="docutils literal notranslate"><span class="pre">Module.from_dict()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.module.Module.module"><code class="docutils literal notranslate"><span class="pre">Module.module</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.module.Module.module_param"><code class="docutils literal notranslate"><span class="pre">Module.module_param</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.module.Module.module_type"><code class="docutils literal notranslate"><span class="pre">Module.module_type</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-autorag.schema.node">autorag.schema.node module</a><ul>
-<li><a class="reference internal" href="#autorag.schema.node.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a><ul>
-<li><a class="reference internal" href="#autorag.schema.node.Node.from_dict"><code class="docutils literal notranslate"><span class="pre">Node.from_dict()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.node.Node.get_param_combinations"><code class="docutils literal notranslate"><span class="pre">Node.get_param_combinations()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.node.Node.modules"><code class="docutils literal notranslate"><span class="pre">Node.modules</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.node.Node.node_params"><code class="docutils literal notranslate"><span class="pre">Node.node_params</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.node.Node.node_type"><code class="docutils literal notranslate"><span class="pre">Node.node_type</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.node.Node.run"><code class="docutils literal notranslate"><span class="pre">Node.run()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.node.Node.run_node"><code class="docutils literal notranslate"><span class="pre">Node.run_node</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.node.Node.strategy"><code class="docutils literal notranslate"><span class="pre">Node.strategy</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#autorag.schema.node.extract_values"><code class="docutils literal notranslate"><span class="pre">extract_values()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.node.extract_values_from_nodes"><code class="docutils literal notranslate"><span class="pre">extract_values_from_nodes()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.schema.node.module_type_exists"><code class="docutils literal notranslate"><span class="pre">module_type_exists()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-autorag.schema">Module contents</a></li>
+<li><a class="reference internal" href="#autorag-schema-module-module">autorag.schema.module module</a></li>
+<li><a class="reference internal" href="#autorag-schema-node-module">autorag.schema.node module</a></li>
+<li><a class="reference internal" href="#module-contents">Module contents</a></li>
 </ul>
 </li>
 </ul>
