@@ -331,47 +331,11 @@ To change the LLM model type, you can change the <code class="docutils literal n
 <tr class="row-even"><td class="text-center"><p>OpenAI</p></td>
 <td class="text-center"><p>openai</p></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p>Anthropic</p></td>
-<td class="text-center"><p>anthropic</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>AzureOpenAI</p></td>
-<td class="text-center"><p>azureopenai</p></td>
-</tr>
 <tr class="row-odd"><td class="text-center"><p>HuggingFaceLLM</p></td>
 <td class="text-center"><p>huggingfacellm</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p>LangChainLLM</p></td>
-<td class="text-center"><p>langchainllm</p></td>
-</tr>
-<tr class="row-odd"><td class="text-center"><p>GradientBaseModelLLM</p></td>
-<td class="text-center"><p>gradientbasemodelllm</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>GradientModelAdapterLLM</p></td>
-<td class="text-center"><p>gradientmodeladapterllm</p></td>
-</tr>
-<tr class="row-odd"><td class="text-center"><p>LiteLLM</p></td>
-<td class="text-center"><p>litellm</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>LlamaCPP</p></td>
-<td class="text-center"><p>llamacpp</p></td>
-</tr>
-<tr class="row-odd"><td class="text-center"><p>OpenAILike</p></td>
+<tr class="row-even"><td class="text-center"><p>OpenAILike</p></td>
 <td class="text-center"><p>openailike</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>OpenLLM</p></td>
-<td class="text-center"><p>openllm</p></td>
-</tr>
-<tr class="row-odd"><td class="text-center"><p>PaLM</p></td>
-<td class="text-center"><p>palm</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>PredibaseLLM</p></td>
-<td class="text-center"><p>predibasellm</p></td>
-</tr>
-<tr class="row-odd"><td class="text-center"><p>Replicate</p></td>
-<td class="text-center"><p>replicate</p></td>
-</tr>
-<tr class="row-even"><td class="text-center"><p>Xinference</p></td>
-<td class="text-center"><p>xinference</p></td>
 </tr>
 </tbody>
 </table>
@@ -399,8 +363,15 @@ at <a class="reference external" href="https://docs.llamaindex.ai/en/latest/api_
 <p>You can add more LLM models for AutoRAG.
 You can add it by simply calling <code class="docutils literal notranslate"><span class="pre">autorag.generator_models</span></code> and add new key and value.
 For example, if you want to add <code class="docutils literal notranslate"><span class="pre">MockLLM</span></code> model for testing, execute the following code.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>It was major update for LlamaIndex to v0.10.0.
+The integration of llms must be installed to different packages.
+So, before add your model, you should find and install the right package for your model.
+You can find the package at <a class="reference external" href="https://pretty-sodium-5e0.notion.site/ce81b247649a44e4b6b35dfb24af28a6?v=53b3c2ced7bb4c9996b81b83c9f01139">here</a>.</p>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autorag</span>
-<span class="kn">from</span> <span class="nn">llama_index.llms</span> <span class="kn">import</span> <span class="n">MockLLM</span>
+<span class="kn">from</span> <span class="nn">llama_index.legacy.llms</span> <span class="kn">import</span> <span class="n">MockLLM</span>
 
 <span class="n">autorag</span><span class="o">.</span><span class="n">generator_models</span><span class="p">[</span><span class="s1">&#39;mockllm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MockLLM</span>
 </pre></div>
@@ -485,7 +456,7 @@ For example,
 if you want to add <code class="docutils literal notranslate"><span class="pre">[KoSimCSE](https://huggingface.co/BM-K/KoSimCSE-roberta-multitask)</span></code> model for Korean embedding,
 execute the following code.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autorag</span>
-<span class="kn">from</span> <span class="nn">llama_index.embeddings</span> <span class="kn">import</span> <span class="n">HuggingFaceEmbedding</span>
+<span class="kn">from</span> <span class="nn">llama_index.embeddings.huggingface</span> <span class="kn">import</span> <span class="n">HuggingFaceEmbedding</span>
 
 <span class="n">autorag</span><span class="o">.</span><span class="n">generator_models</span><span class="p">[</span><span class="s1">&#39;kosimcse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">HuggingFaceEmbedding</span><span class="p">(</span><span class="s2">&quot;BM-K/KoSimCSE-roberta-multitask&quot;</span><span class="p">)</span>
 </pre></div>

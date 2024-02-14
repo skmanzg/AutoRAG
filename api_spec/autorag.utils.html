@@ -288,14 +288,160 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 </section>
-<section id="autorag-utils-preprocess-module">
-<h2>autorag.utils.preprocess module<a class="headerlink" href="#autorag-utils-preprocess-module" title="Link to this heading">#</a></h2>
+<section id="module-autorag.utils.preprocess">
+<span id="autorag-utils-preprocess-module"></span><h2>autorag.utils.preprocess module<a class="headerlink" href="#module-autorag.utils.preprocess" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.preprocess.cast_corpus_dataset">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.preprocess.</span></span><span class="sig-name descname"><span class="pre">cast_corpus_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/preprocess.html#cast_corpus_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.preprocess.cast_corpus_dataset" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.preprocess.cast_qa_dataset">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.preprocess.</span></span><span class="sig-name descname"><span class="pre">cast_qa_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/preprocess.html#cast_qa_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.preprocess.cast_qa_dataset" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.preprocess.validate_corpus_dataset">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.preprocess.</span></span><span class="sig-name descname"><span class="pre">validate_corpus_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/preprocess.html#validate_corpus_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.preprocess.validate_corpus_dataset" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.preprocess.validate_qa_dataset">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.preprocess.</span></span><span class="sig-name descname"><span class="pre">validate_qa_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/preprocess.html#validate_qa_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.preprocess.validate_qa_dataset" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="autorag-utils-util-module">
-<h2>autorag.utils.util module<a class="headerlink" href="#autorag-utils-util-module" title="Link to this heading">#</a></h2>
+<section id="module-autorag.utils.util">
+<span id="autorag-utils-util-module"></span><h2>autorag.utils.util module<a class="headerlink" href="#module-autorag.utils.util" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.convert_string_to_tuple_in_dict">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">convert_string_to_tuple_in_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#convert_string_to_tuple_in_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.convert_string_to_tuple_in_dict" title="Link to this definition">#</a></dt>
+<dd><p>Recursively converts strings that start with ‘(’ and end with ‘)’ to tuples in a dictionary.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.explode">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">explode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explode_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#explode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.explode" title="Link to this definition">#</a></dt>
+<dd><p>Explode index_values and explode_values.
+The index_values and explode_values must have the same length.
+It will flatten explode_values and keep index_values as a pair.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index_values</strong> – The index values.</p></li>
+<li><p><strong>explode_values</strong> – The exploded values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple of exploded index_values and exploded explode_values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.fetch_contents">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">fetch_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#fetch_contents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.fetch_contents" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.find_best_result_path">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">find_best_result_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#find_best_result_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.find_best_result_path" title="Link to this definition">#</a></dt>
+<dd><p>Find the best result filepath from node directory.
+:param node_dir: The directory of the node.
+:return: The filepath of the best result.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.load_summary_file">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">load_summary_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">summary_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#load_summary_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.load_summary_file" title="Link to this definition">#</a></dt>
+<dd><p>Load summary file from summary_path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>summary_path</strong> – The path of the summary file.</p></li>
+<li><p><strong>dict_columns</strong> – The columns that are dictionary type.
+You must fill this parameter if you want to load summary file properly.
+Default is [‘module_params’].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The summary dataframe.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.make_combinations">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">make_combinations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#make_combinations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.make_combinations" title="Link to this definition">#</a></dt>
+<dd><p>Make combinations from target_dict.
+The target_dict key value must be a string,
+and the value can be list of values or single value.
+If generates all combinations of values from target_dict,
+which means generated dictionaries that contain only one value for each key,
+and all dictionaries will be different from each other.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target_dict</strong> – The target dictionary.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list of generated dictionaries.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.normalize_string">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">normalize_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#normalize_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.normalize_string" title="Link to this definition">#</a></dt>
+<dd><p>Taken from the official evaluation script for v1.1 of the SQuAD dataset.
+Lower text and remove punctuation, articles and extra whitespace.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.process_batch">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">process_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#process_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.process_batch" title="Link to this definition">#</a></dt>
+<dd><p>Processes tasks in batches asynchronously.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tasks</strong> – A list of no-argument functions or coroutines to be executed.</p></li>
+<li><p><strong>batch_size</strong> – The number of tasks to process in a single batch.
+Default is 64.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of results from the processed tasks.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.replace_value_in_dict">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">replace_value_in_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#replace_value_in_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.replace_value_in_dict" title="Link to this definition">#</a></dt>
+<dd><p>Replace the value of the certain key in target_dict.
+If there is not targeted key in target_dict, it will return target_dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_dict</strong> – The target dictionary.</p></li>
+<li><p><strong>key</strong> – The key to replace.</p></li>
+<li><p><strong>replace_value</strong> – The value to replace.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The replaced dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.result_to_dataframe">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">result_to_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#result_to_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.result_to_dataframe" title="Link to this definition">#</a></dt>
+<dd><p>Decorator for converting results to pd.DataFrame.</p>
+</dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<section id="module-autorag.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-autorag.utils" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -348,9 +494,27 @@
             <ul>
 <li><a class="reference internal" href="#">autorag.utils package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#autorag-utils-preprocess-module">autorag.utils.preprocess module</a></li>
-<li><a class="reference internal" href="#autorag-utils-util-module">autorag.utils.util module</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-autorag.utils.preprocess">autorag.utils.preprocess module</a><ul>
+<li><a class="reference internal" href="#autorag.utils.preprocess.cast_corpus_dataset"><code class="docutils literal notranslate"><span class="pre">cast_corpus_dataset()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.preprocess.cast_qa_dataset"><code class="docutils literal notranslate"><span class="pre">cast_qa_dataset()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.preprocess.validate_corpus_dataset"><code class="docutils literal notranslate"><span class="pre">validate_corpus_dataset()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.preprocess.validate_qa_dataset"><code class="docutils literal notranslate"><span class="pre">validate_qa_dataset()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.utils.util">autorag.utils.util module</a><ul>
+<li><a class="reference internal" href="#autorag.utils.util.convert_string_to_tuple_in_dict"><code class="docutils literal notranslate"><span class="pre">convert_string_to_tuple_in_dict()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.explode"><code class="docutils literal notranslate"><span class="pre">explode()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.fetch_contents"><code class="docutils literal notranslate"><span class="pre">fetch_contents()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.find_best_result_path"><code class="docutils literal notranslate"><span class="pre">find_best_result_path()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.load_summary_file"><code class="docutils literal notranslate"><span class="pre">load_summary_file()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.make_combinations"><code class="docutils literal notranslate"><span class="pre">make_combinations()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.normalize_string"><code class="docutils literal notranslate"><span class="pre">normalize_string()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.process_batch"><code class="docutils literal notranslate"><span class="pre">process_batch()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.replace_value_in_dict"><code class="docutils literal notranslate"><span class="pre">replace_value_in_dict()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.result_to_dataframe"><code class="docutils literal notranslate"><span class="pre">result_to_dataframe()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.utils">Module contents</a></li>
 </ul>
 </li>
 </ul>
