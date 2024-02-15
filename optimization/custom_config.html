@@ -378,8 +378,28 @@ So you have to write the tuple like you are writing a tuple in the python code.<
 </section>
 <section id="use-environment-variable-in-the-yaml-file">
 <h2>Use environment variable in the yaml file<a class="headerlink" href="#use-environment-variable-in-the-yaml-file" title="Link to this heading">#</a></h2>
-<p>We are planning to make this feature later.
-See <a class="reference external" href="https://github.com/Marker-Inc-Korea/AutoRAG/issues/131">here</a>.</p>
+<p>It becomes easier to manage the api key or other secrets using environment variables.
+You can use environment variables in the yaml file directly.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">node_lines</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_line_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node_line_1</span>
+<span class="w">    </span><span class="nt">nodes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">retrieval</span>
+<span class="w">        </span><span class="nt">top_k</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">        </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sem_score</span><span class="p p-Indicator">]</span>
+<span class="w">        </span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vectordb</span>
+<span class="w">            </span><span class="nt">embedding_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
+<span class="w">            </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${OPENAI_API_KEY}</span><span class="w"> </span>
+</pre></div>
+</div>
+<p>Look the <code class="docutils literal notranslate"><span class="pre">api_key</span></code> parameter. You can use environment variable directly in the yaml file.</p>
+<p>Use ‘${}’ to use environment variable in the yaml file.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If there is no environment variable, it returns a empty string.
+It can occur unintended action, so you have to set the environment variable before you run the AutoRAG.</p>
+</div>
 </section>
 </section>
 

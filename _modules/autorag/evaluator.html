@@ -303,7 +303,7 @@
 <span class="kn">from</span> <span class="nn">autorag.schema</span> <span class="kn">import</span> <span class="n">Node</span>
 <span class="kn">from</span> <span class="nn">autorag.schema.node</span> <span class="kn">import</span> <span class="n">module_type_exists</span><span class="p">,</span> <span class="n">extract_values_from_nodes</span>
 <span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">cast_qa_dataset</span><span class="p">,</span> <span class="n">cast_corpus_dataset</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">load_summary_file</span><span class="p">,</span> <span class="n">convert_string_to_tuple_in_dict</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">load_summary_file</span><span class="p">,</span> <span class="n">convert_string_to_tuple_in_dict</span><span class="p">,</span> <span class="n">convert_env_in_dict</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AutoRAG&quot;</span><span class="p">)</span>
 
@@ -457,6 +457,7 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;YAML file </span><span class="si">{</span><span class="n">yaml_path</span><span class="si">}</span><span class="s2"> could not be loaded.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
 
         <span class="n">yaml_dict</span> <span class="o">=</span> <span class="n">convert_string_to_tuple_in_dict</span><span class="p">(</span><span class="n">yaml_dict</span><span class="p">)</span>
+        <span class="n">yaml_dict</span> <span class="o">=</span> <span class="n">convert_env_in_dict</span><span class="p">(</span><span class="n">yaml_dict</span><span class="p">)</span>
         <span class="n">node_lines</span> <span class="o">=</span> <span class="n">yaml_dict</span><span class="p">[</span><span class="s1">&#39;node_lines&#39;</span><span class="p">]</span>
         <span class="n">node_line_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">node_line</span> <span class="ow">in</span> <span class="n">node_lines</span><span class="p">:</span>
