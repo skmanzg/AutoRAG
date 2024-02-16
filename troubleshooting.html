@@ -378,6 +378,14 @@ In our experiment, it occurred rate limit error when the batch size was 4.
 (Check out your tier and limit error at <a class="reference external" href="https://platform.openai.com/account/limits">here</a>.)</p>
 </div>
 </section>
+<section id="the-length-or-row-is-different-from-the-original-data">
+<h3>The length or row is different from the original data<a class="headerlink" href="#the-length-or-row-is-different-from-the-original-data" title="Link to this heading">#</a></h3>
+<p>When the length of result is different from the original data, it is often caused by the index.</p>
+<p>You must reset the index of your dataset before running AutoRAG.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 
@@ -444,6 +452,7 @@ In our experiment, it occurred rate limit error when the batch size was 4.
 <li><a class="reference internal" href="#optimization">Optimization</a><ul>
 <li><a class="reference internal" href="#facing-openai-api-error">Facing OPENAI API error</a></li>
 <li><a class="reference internal" href="#error-while-running-llm">Error while running LLM</a></li>
+<li><a class="reference internal" href="#the-length-or-row-is-different-from-the-original-data">The length or row is different from the original data</a></li>
 </ul>
 </li>
 </ul>
