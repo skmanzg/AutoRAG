@@ -371,9 +371,9 @@ So, before add your model, you should find and install the right package for you
 You can find the package at <a class="reference external" href="https://pretty-sodium-5e0.notion.site/ce81b247649a44e4b6b35dfb24af28a6?v=53b3c2ced7bb4c9996b81b83c9f01139">here</a>.</p>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autorag</span>
-<span class="kn">from</span> <span class="nn">llama_index.legacy.llms</span> <span class="kn">import</span> <span class="n">MockLLM</span>
+<span class="kn">from</span> <span class="nn">llama_index.llms.vllm</span> <span class="kn">import</span> <span class="n">Vllm</span>
 
-<span class="n">autorag</span><span class="o">.</span><span class="n">generator_models</span><span class="p">[</span><span class="s1">&#39;mockllm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MockLLM</span>
+<span class="n">autorag</span><span class="o">.</span><span class="n">generator_models</span><span class="p">[</span><span class="s1">&#39;vllm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Vllm</span>
 </pre></div>
 </div>
 <p>Then you can use <code class="docutils literal notranslate"><span class="pre">mockllm</span></code> at config yaml file.</p>
