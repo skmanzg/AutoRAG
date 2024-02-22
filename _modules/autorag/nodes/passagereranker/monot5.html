@@ -194,6 +194,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_reranker/upr.html">UPR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_reranker/tart.html">TART</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_reranker/monot5.html">MonoT5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_reranker/koreranker.html">Ko-reranker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../nodes/passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -282,11 +283,10 @@
         </div>
         <article role="main">
           <h1>Source code for autorag.nodes.passagereranker.monot5</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">asyncio</span>
-
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">T5Tokenizer</span><span class="p">,</span> <span class="n">T5ForConditionalGeneration</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.passagereranker.base</span> <span class="kn">import</span> <span class="n">passage_reranker_node</span>
@@ -324,6 +324,7 @@
         <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rerank a list of contents based on their relevance to a query using MonoT5.</span>
+
 <span class="sd">    :param queries: The list of queries to use for reranking</span>
 <span class="sd">    :param contents_list: The list of lists of contents to rerank</span>
 <span class="sd">    :param scores_list: The list of lists of scores retrieved from the initial ranking</span>
@@ -348,6 +349,7 @@
     <span class="n">token_true_id</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">convert_tokens_to_ids</span><span class="p">(</span><span class="n">token_true</span><span class="p">)</span>
     <span class="c1"># Determine the device to run the model on (GPU if available, otherwise CPU)</span>
     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     <span class="c1"># Run async mono_t5_rerank_pure function</span>
     <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">mono_t5_pure</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">token_false_id</span><span class="p">,</span> <span class="n">token_true_id</span><span class="p">)</span> \
              <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">)]</span>
@@ -367,6 +369,7 @@
         <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rerank a list of contents based on their relevance to a query using MonoT5.</span>
+
 <span class="sd">    :param query: The query to use for reranking</span>
 <span class="sd">    :param contents: The list of contents to rerank</span>
 <span class="sd">    :param scores: The list of scores retrieved from the initial ranking</span>
@@ -378,7 +381,6 @@
 <span class="sd">    :param token_true_id: The id of the token used by the model to represent a true prediction</span>
 <span class="sd">    :return: tuple of lists containing the reranked contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
     <span class="c1"># Format the input for the model by combining each content with the query</span>
     <span class="n">input_texts</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Query: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s1"> Document: </span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">contents</span><span class="p">]</span>

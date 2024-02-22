@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="BM25" href="bm25.html" /><link rel="prev" title="HyDE" href="../query_expansion/hyde.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="4. Passage_Compressor" href="../passage_compressor/passage_compressor.html" /><link rel="prev" title="MonoT5" href="monot5.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>2. Retrieval - AutoRAG documentation</title>
+        <title>Ko-reranker - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -184,18 +184,18 @@
 <li class="toctree-l2"><a class="reference internal" href="../query_expansion/hyde.html">HyDE</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">2. Retrieval</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 2. Retrieval</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="bm25.html">BM25</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vectordb.html">Vectordb</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hybrid_rrf.html">Hybrid - rrf</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hybrid_cc.html">Hybrid - cc</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../retrieval/retrieval.html">2. Retrieval</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 2. Retrieval</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../retrieval/bm25.html">BM25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../retrieval/vectordb.html">Vectordb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../retrieval/hybrid_cc.html">Hybrid - cc</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/upr.html">UPR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/tart.html">TART</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/monot5.html">MonoT5</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/koreranker.html">Ko-reranker</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="passage_reranker.html">3. Passage_Reranker</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="upr.html">UPR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tart.html">TART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monot5.html">MonoT5</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Ko-reranker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -284,80 +284,22 @@
           </label>
         </div>
         <article role="main">
-          <section id="retrieval">
-<h1>2. Retrieval<a class="headerlink" href="#retrieval" title="Link to this heading">#</a></h1>
-<section id="definition">
-<h2>🔎 <strong>Definition</strong><a class="headerlink" href="#definition" title="Link to this heading">#</a></h2>
-<p>The retrieval process involves using queries to fetch relevant content, identifiers (IDs), and scores from a corpus. This is a fundamental operation in RAG, where the aim is to find the most relevant information based on the user’s query.</p>
-</section>
-<section id="parameters">
-<h2>🔢 <strong>Parameters</strong><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
-<section id="overview">
-<h3><strong>Overview</strong><a class="headerlink" href="#overview" title="Link to this heading">#</a></h3>
-<p>This document serves as a guide for configuring parameters, strategies, and the YAML file for various nodes within a system.</p>
-</section>
-<section id="node-parameters">
-<h3><strong>Node Parameters</strong><a class="headerlink" href="#node-parameters" title="Link to this heading">#</a></h3>
-<p><strong>Top_k</strong></p>
+          <section id="ko-reranker">
+<h1>Ko-reranker<a class="headerlink" href="#ko-reranker" title="Link to this heading">#</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">ko-reranker</span></code> module is a reranker based on <strong>korean</strong>.
+More details can be found <a class="reference external" href="https://huggingface.co/Dongjin-kr/ko-reranker">here</a>.</p>
+<section id="module-parameters">
+<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><strong>Description</strong>: The <code class="docutils literal notranslate"><span class="pre">top_k</span></code> parameter is utilized at the node level to define the top ‘k’ results to be retrieved from corpus.</p></li>
+<li><p><strong>Not Applicable (N/A):</strong> There are no direct module parameters specified for the <code class="docutils literal notranslate"><span class="pre">ko-reranker</span></code> module.</p></li>
 </ul>
 </section>
-<section id="strategy-parameters">
-<h3><strong>Strategy Parameters</strong><a class="headerlink" href="#strategy-parameters" title="Link to this heading">#</a></h3>
-<ol class="arabic">
-<li><p><strong>Metrics</strong>:</p>
-<ul class="simple">
-<li><p><strong>Types</strong>: <code class="docutils literal notranslate"><span class="pre">retrieval_f1</span></code>, <code class="docutils literal notranslate"><span class="pre">retrieval_recall</span></code>, <code class="docutils literal notranslate"><span class="pre">retrieval_precision</span></code></p></li>
-</ul>
-<div class="admonition-purpose admonition">
-<p class="admonition-title">Purpose</p>
-<p>These metrics are used to evaluate the effectiveness of the retrieval process, measuring the accuracy, recall, and precision of the retrieved content.</p>
-</div>
-</li>
-<li><p><strong>Speed Threshold</strong>:</p>
-<ul class="simple">
-<li><p><strong>Description</strong>: <code class="docutils literal notranslate"><span class="pre">speed_threshold</span></code> is applied across all nodes, ensuring that any method exceeding the average processing time for a query is not utilized.</p></li>
-</ul>
-</li>
-</ol>
-</section>
-<section id="example-config-yaml-file">
-<h3>Example config.yaml file<a class="headerlink" href="#example-config-yaml-file" title="Link to this heading">#</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_line_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">retrieve_node_line</span><span class="w">  </span><span class="c1"># Arbitrary node line name</span>
-<span class="w">  </span><span class="nt">nodes</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">retrieval</span>
-<span class="w">      </span><span class="nt">strategy</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">retrieval_f1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">retrieval_recall</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">retrieval_precision</span><span class="p p-Indicator">]</span>
-<span class="w">        </span><span class="nt">speed_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">      </span><span class="nt">top_k</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">      </span><span class="nt">modules</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bm25</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vectordb</span>
-<span class="w">          </span><span class="nt">embedding_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid_rrf</span>
-<span class="w">          </span><span class="nt">target_modules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(&#39;bm25&#39;, &#39;vectordb&#39;)</span>
-<span class="w">          </span><span class="nt">rrf_k</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">10</span><span class="p p-Indicator">]</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid_cc</span>
-<span class="w">          </span><span class="nt">target_modules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(&#39;bm25&#39;, &#39;vectordb&#39;)</span>
-<span class="w">          </span><span class="nt">weights</span><span class="p">:</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(0.5, 0.5)</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(0.3, 0.7)</span>
-<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(0.7, 0.3)</span>
+<section id="example-config-yaml">
+<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">#</a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">koreranker</span>
 </pre></div>
 </div>
-<section id="supported-modules">
-<h4>Supported Modules<a class="headerlink" href="#supported-modules" title="Link to this heading">#</a></h4>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="bm25.html">BM25</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vectordb.html">Vectordb</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hybrid_rrf.html">Hybrid - rrf</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hybrid_cc.html">Hybrid - cc</a></li>
-</ul>
-</div>
-</section>
-</section>
 </section>
 </section>
 
@@ -366,23 +308,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="bm25.html">
+          <a class="next-page" href="../passage_compressor/passage_compressor.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">BM25</div>
+                <div class="title">4. Passage_Compressor</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../query_expansion/hyde.html">
+          <a class="prev-page" href="monot5.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">HyDE</div>
+                <div class="title">MonoT5</div>
                 
               </div>
             </a>
@@ -416,18 +358,9 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">2. Retrieval</a><ul>
-<li><a class="reference internal" href="#definition">🔎 <strong>Definition</strong></a></li>
-<li><a class="reference internal" href="#parameters">🔢 <strong>Parameters</strong></a><ul>
-<li><a class="reference internal" href="#overview"><strong>Overview</strong></a></li>
-<li><a class="reference internal" href="#node-parameters"><strong>Node Parameters</strong></a></li>
-<li><a class="reference internal" href="#strategy-parameters"><strong>Strategy Parameters</strong></a></li>
-<li><a class="reference internal" href="#example-config-yaml-file">Example config.yaml file</a><ul>
-<li><a class="reference internal" href="#supported-modules">Supported Modules</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">Ko-reranker</a><ul>
+<li><a class="reference internal" href="#module-parameters"><strong>Module Parameters</strong></a></li>
+<li><a class="reference internal" href="#example-config-yaml"><strong>Example config.yaml</strong></a></li>
 </ul>
 </li>
 </ul>

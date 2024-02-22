@@ -195,6 +195,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/upr.html">UPR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/tart.html">TART</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/monot5.html">MonoT5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/koreranker.html">Ko-reranker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -354,23 +355,26 @@ registered hooks while the latter silently ignores them.</p>
 <dd><p>Rerank a list of contents based on their relevance to a query using Tart.
 TART is a reranker based on TART (<a class="reference external" href="https://github.com/facebookresearch/tart">https://github.com/facebookresearch/tart</a>).
 You can rerank the passages with the instruction using TARTReranker.
-The default model is facebook/tart-full-flan-t5-xl.
-:param queries: The list of queries to use for reranking
-:param contents_list: The list of lists of contents to rerank
-:param scores_list: The list of lists of scores retrieved from the initial ranking
-:param ids_list: The list of lists of ids retrieved from the initial ranking
-:param top_k: The number of passages to be retrieved
-:param instruction: The instruction for reranking.</p>
-<blockquote>
-<div><dl class="simple">
-<dt>Note: default instruction is “Find passage to answer given question”</dt><dd><p>The default instruction from the TART paper is being used.
-If you want to use a different instruction, you can change the instruction through this parameter</p>
-</dd>
-</dl>
-</div></blockquote>
+The default model is facebook/tart-full-flan-t5-xl.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>tuple of lists containing the reranked contents, ids, and scores</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queries</strong> – The list of queries to use for reranking</p></li>
+<li><p><strong>contents_list</strong> – The list of lists of contents to rerank</p></li>
+<li><p><strong>scores_list</strong> – The list of lists of scores retrieved from the initial ranking</p></li>
+<li><p><strong>ids_list</strong> – The list of lists of ids retrieved from the initial ranking</p></li>
+<li><p><strong>top_k</strong> – The number of passages to be retrieved</p></li>
+<li><p><strong>instruction</strong> – <p>The instruction for reranking.
+Note: default instruction is “Find passage to answer given question”</p>
+<blockquote>
+<div><p>The default instruction from the TART paper is being used.
+If you want to use a different instruction, you can change the instruction through this parameter</p>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of lists containing the reranked contents, ids, and scores</p>
 </dd>
 </dl>
 </dd></dl>
@@ -378,17 +382,25 @@ If you want to use a different instruction, you can change the instruction throu
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.nodes.passagereranker.tart.tart.tart_pure">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.tart.tart.</span></span><span class="sig-name descname"><span class="pre">tart_pure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instruction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/tart/tart.html#tart_pure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.tart.tart.tart_pure" title="Link to this definition">#</a></dt>
-<dd><p>Rerank a list of contents based on their relevance to a query using Tart.
-:param query: The query to use for reranking
-:param contents: The list of contents to rerank
-:param scores: The list of scores retrieved from the initial ranking
-:param ids: The list of ids retrieved from the initial ranking
-:param top_k: The number of passages to be retrieved
-:param model: The Tart model to use for reranking
-:param tokenizer: The tokenizer to use for the model
-:param instruction: The instruction for reranking.
-:param device: The device to run the model on (GPU if available, otherwise CPU)
-:return: tuple of lists containing the reranked contents, ids, and scores</p>
+<dd><p>Rerank a list of contents based on their relevance to a query using Tart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> – The query to use for reranking</p></li>
+<li><p><strong>contents</strong> – The list of contents to rerank</p></li>
+<li><p><strong>scores</strong> – The list of scores retrieved from the initial ranking</p></li>
+<li><p><strong>ids</strong> – The list of ids retrieved from the initial ranking</p></li>
+<li><p><strong>top_k</strong> – The number of passages to be retrieved</p></li>
+<li><p><strong>model</strong> – The Tart model to use for reranking</p></li>
+<li><p><strong>tokenizer</strong> – The tokenizer to use for the model</p></li>
+<li><p><strong>instruction</strong> – The instruction for reranking.</p></li>
+<li><p><strong>device</strong> – The device to run the model on (GPU if available, otherwise CPU)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of lists containing the reranked contents, ids, and scores</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
