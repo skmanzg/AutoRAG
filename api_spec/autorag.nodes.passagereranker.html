@@ -378,6 +378,16 @@ Therefore, it will be received as ‘_’ instead of ‘/’.</p>
 </dd></dl>
 
 </section>
+<section id="module-autorag.nodes.passagereranker.pass_reranker">
+<span id="autorag-nodes-passagereranker-pass-reranker-module"></span><h2>autorag.nodes.passagereranker.pass_reranker module<a class="headerlink" href="#module-autorag.nodes.passagereranker.pass_reranker" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.pass_reranker.pass_reranker">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.pass_reranker.</span></span><span class="sig-name descname"><span class="pre">pass_reranker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/pass_reranker.html#pass_reranker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.pass_reranker.pass_reranker" title="Link to this definition">#</a></dt>
+<dd><p>Do not perform reranking.
+Return the given top-k passages as is.</p>
+</dd></dl>
+
+</section>
 <section id="module-autorag.nodes.passagereranker.run">
 <span id="autorag-nodes-passagereranker-run-module"></span><h2>autorag.nodes.passagereranker.run module<a class="headerlink" href="#module-autorag.nodes.passagereranker.run" title="Link to this heading">#</a></h2>
 <dl class="py function">
@@ -539,6 +549,10 @@ The suffix prompt provides a cue or a closing instruction to the language model,
 <li><a class="reference internal" href="#module-autorag.nodes.passagereranker.monot5">autorag.nodes.passagereranker.monot5 module</a><ul>
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.monot5.mono_t5_pure"><code class="docutils literal notranslate"><span class="pre">mono_t5_pure()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.monot5.monot5"><code class="docutils literal notranslate"><span class="pre">monot5()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.passagereranker.pass_reranker">autorag.nodes.passagereranker.pass_reranker module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.pass_reranker.pass_reranker"><code class="docutils literal notranslate"><span class="pre">pass_reranker()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.passagereranker.run">autorag.nodes.passagereranker.run module</a><ul>

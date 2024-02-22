@@ -324,10 +324,17 @@
 <span class="w">      </span><span class="nt">speed_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">    </span><span class="nt">top_k</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
 <span class="w">    </span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pass_reranker</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tart</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monot5</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">upr</span>
 </pre></div>
+</div>
+<div class="admonition-what-is-pass-reranker admonition">
+<p class="admonition-title">What is pass_reranker?</p>
+<p>Its purpose is to test the performance that ‘not using’ any passage reranker module.
+Because it can be the better option that not using passage reranker node.
+So with this module, you can automatically test the performance without using any passage reranker module.</p>
 </div>
 <section id="supported-modules">
 <h4>Supported Modules<a class="headerlink" href="#supported-modules" title="Link to this heading">#</a></h4>

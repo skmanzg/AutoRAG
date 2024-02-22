@@ -324,6 +324,17 @@ And then, retrieve passages using hypothetical passage as a query.
 <dd></dd></dl>
 
 </section>
+<section id="module-autorag.nodes.queryexpansion.pass_query_expansion">
+<span id="autorag-nodes-queryexpansion-pass-query-expansion-module"></span><h2>autorag.nodes.queryexpansion.pass_query_expansion module<a class="headerlink" href="#module-autorag.nodes.queryexpansion.pass_query_expansion" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.queryexpansion.pass_query_expansion.pass_query_expansion">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.queryexpansion.pass_query_expansion.</span></span><span class="sig-name descname"><span class="pre">pass_query_expansion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/queryexpansion/pass_query_expansion.html#pass_query_expansion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.queryexpansion.pass_query_expansion.pass_query_expansion" title="Link to this definition">#</a></dt>
+<dd><p>Do not perform query expansion.
+Return with the same queries.
+The dimension will be 2-d list, and the column name will be ‘queries’.</p>
+</dd></dl>
+
+</section>
 <section id="module-autorag.nodes.queryexpansion.query_decompose">
 <span id="autorag-nodes-queryexpansion-query-decompose-module"></span><h2>autorag.nodes.queryexpansion.query_decompose module<a class="headerlink" href="#module-autorag.nodes.queryexpansion.query_decompose" title="Link to this heading">#</a></h2>
 <dl class="py function">
@@ -484,6 +495,10 @@ In this case, it would be qa data.</p></li>
 <li><a class="reference internal" href="#module-autorag.nodes.queryexpansion.hyde">autorag.nodes.queryexpansion.hyde module</a><ul>
 <li><a class="reference internal" href="#autorag.nodes.queryexpansion.hyde.hyde"><code class="docutils literal notranslate"><span class="pre">hyde()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.queryexpansion.hyde.hyde_pure"><code class="docutils literal notranslate"><span class="pre">hyde_pure()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.queryexpansion.pass_query_expansion">autorag.nodes.queryexpansion.pass_query_expansion module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.queryexpansion.pass_query_expansion.pass_query_expansion"><code class="docutils literal notranslate"><span class="pre">pass_query_expansion()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.queryexpansion.query_decompose">autorag.nodes.queryexpansion.query_decompose module</a><ul>

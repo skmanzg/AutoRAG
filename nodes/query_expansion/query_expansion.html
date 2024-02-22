@@ -349,6 +349,7 @@ Therefore, in strategy, we set the parameters necessary for retrieval and evalua
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vectordb</span>
 <span class="w">            </span><span class="nt">embedding_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
 <span class="w">      </span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pass_query_expansion</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query_decompose</span>
 <span class="w">          </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
 <span class="w">          </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">]</span>
@@ -356,6 +357,12 @@ Therefore, in strategy, we set the parameters necessary for retrieval and evalua
 <span class="w">          </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
 <span class="w">          </span><span class="nt">max_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
 </pre></div>
+</div>
+<div class="admonition-what-is-pass-query-expansion admonition">
+<p class="admonition-title">What is pass_query_expansion?</p>
+<p>Its purpose is to test the performance that ‘not using’ any query expansion module.
+Because it can be the better option that not using query expansion node.
+So with this module, you can automatically test the performance of the retrieval without using any query expansion module.</p>
 </div>
 <section id="supported-modules">
 <h4>Supported Modules<a class="headerlink" href="#supported-modules" title="Link to this heading">#</a></h4>

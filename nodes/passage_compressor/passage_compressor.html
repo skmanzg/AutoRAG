@@ -331,10 +331,17 @@
 <span class="w">      </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">retrieval_token_f1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">retrieval_token_recall</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">retrieval_token_precision</span><span class="p p-Indicator">]</span>
 <span class="w">      </span><span class="nt">speed_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">    </span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pass_compressor</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tree_summarize</span>
 <span class="w">        </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
 <span class="w">        </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpt-3.5-turbo-16k</span>
 </pre></div>
+</div>
+<div class="admonition-what-is-pass-compressor admonition">
+<p class="admonition-title">What is pass_compressor?</p>
+<p>Its purpose is to test the performance that ‘not using’ any passage compressor module.
+Because it can be the better option that not using passage compressor node.
+So with this module, you can automatically test the performance without using any passage compressor module.</p>
 </div>
 <section id="supported-modules">
 <h4>Supported Modules<a class="headerlink" href="#supported-modules" title="Link to this heading">#</a></h4>
