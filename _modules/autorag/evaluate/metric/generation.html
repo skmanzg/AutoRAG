@@ -284,12 +284,13 @@
         <article role="main">
           <h1>Source code for autorag.evaluate.metric.generation</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">evaluate</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">sacrebleu</span>
 <span class="kn">from</span> <span class="nn">llama_index.core.embeddings</span> <span class="kn">import</span> <span class="n">BaseEmbedding</span>
+<span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
 
 <span class="kn">from</span> <span class="nn">autorag</span> <span class="kn">import</span> <span class="n">embedding_models</span>
 <span class="kn">from</span> <span class="nn">autorag.evaluate.metric.util</span> <span class="kn">import</span> <span class="n">calculate_cosine_similarity</span>
@@ -311,9 +312,8 @@
 <span class="sd">        :return: A list of computed metric scores.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># make generation_gt and generations to pd dataframe</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;gt&#39;</span><span class="p">:</span> <span class="n">generation_gt</span><span class="p">,</span> <span class="s1">&#39;pred&#39;</span><span class="p">:</span> <span class="n">generations</span><span class="p">})</span>
-        <span class="n">df</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">swifter</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;gt&#39;</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;pred&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">,</span> <span class="n">generations</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">result</span>
 
     <span class="k">return</span> <span class="n">wrapper</span></div>
 
@@ -338,9 +338,8 @@
         <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
             <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">instance</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">predictions</span><span class="o">=</span><span class="p">[</span><span class="n">pred</span><span class="p">],</span> <span class="n">references</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">])[</span><span class="n">key</span><span class="p">],</span> <span class="n">gt</span><span class="p">)))</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;gt&#39;</span><span class="p">:</span> <span class="n">generation_gt</span><span class="p">,</span> <span class="s1">&#39;pred&#39;</span><span class="p">:</span> <span class="n">generations</span><span class="p">})</span>
-    <span class="n">df</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">swifter</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_score</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;gt&#39;</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;pred&#39;</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_score</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">,</span> <span class="n">generations</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
 
 
 
@@ -414,6 +413,84 @@
     <span class="c1"># calculate cosine similarity</span>
     <span class="n">similarity_scores</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">calculate_cosine_similarity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pred_embedding</span><span class="p">),</span> <span class="n">gt_embeddings</span><span class="p">))</span>
     <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">similarity_scores</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="g_eval">
+<a class="viewcode-back" href="../../../../api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.g_eval">[docs]</a>
+<span class="nd">@generation_metric</span>
+<span class="k">def</span> <span class="nf">g_eval</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">pred</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+           <span class="n">metrics</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+           <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;gpt-4-0125-preview&#39;</span><span class="p">,</span>
+           <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate G-Eval score.</span>
+<span class="sd">    G-eval is a metric that uses high-performance LLM model to evaluate generation performance.</span>
+<span class="sd">    It evaluates the generation result by coherence, consistency, fluency, and relevance.</span>
+<span class="sd">    It uses only &#39;openai&#39; model, and we recommend to use gpt-4 for evaluation accuracy.</span>
+
+<span class="sd">    :param generation_gt: A list of ground truth.</span>
+<span class="sd">    :param pred: Model generation.</span>
+<span class="sd">    :param metrics: A list of metrics to use for evaluation.</span>
+<span class="sd">        Default is all metrics, which is [&#39;coherence&#39;, &#39;consistency&#39;, &#39;fluency&#39;, &#39;relevance&#39;].</span>
+<span class="sd">    :param model: OpenAI model name.</span>
+<span class="sd">        Default is &#39;gpt-4-0125-preview&#39;.</span>
+<span class="sd">    :return: G-Eval score.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">available_metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;coherence&#39;</span><span class="p">,</span> <span class="s1">&#39;consistency&#39;</span><span class="p">,</span> <span class="s1">&#39;fluency&#39;</span><span class="p">,</span> <span class="s1">&#39;relevance&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">metrics</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">metrics</span> <span class="o">=</span> <span class="n">available_metrics</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;metrics must be a list of string&quot;</span>
+        <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="n">metric</span> <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics</span> <span class="k">if</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">available_metrics</span><span class="p">]</span>
+
+    <span class="n">current_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">prompt_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_path</span><span class="p">,</span> <span class="s1">&#39;g_eval_prompts&#39;</span><span class="p">)</span>
+    <span class="n">g_eval_prompts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;coherence&quot;</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prompt_path</span><span class="p">,</span> <span class="s2">&quot;coh_detailed.txt&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+        <span class="s2">&quot;consistency&quot;</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prompt_path</span><span class="p">,</span> <span class="s2">&quot;con_detailed.txt&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+        <span class="s2">&quot;fluency&quot;</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prompt_path</span><span class="p">,</span> <span class="s2">&quot;flu_detailed.txt&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+        <span class="s2">&quot;relevance&quot;</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prompt_path</span><span class="p">,</span> <span class="s2">&quot;rel_detailed.txt&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+    <span class="p">}</span>
+
+    <span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">g_eval_score</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">gen_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">pred</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">gt</span> <span class="ow">in</span> <span class="n">gen_gt</span><span class="p">:</span>
+            <span class="n">input_prompt</span> <span class="o">=</span> <span class="n">prompt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;{{Document}}&#39;</span><span class="p">,</span> <span class="n">gt</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;{{Summary}}&#39;</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                    <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">input_prompt</span><span class="p">}</span>
+                <span class="p">],</span>
+                <span class="n">logprobs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">top_logprobs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                <span class="n">temperature</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">frequency_penalty</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">presence_penalty</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">stop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;(1-3):&#39;</span> <span class="ow">in</span> <span class="n">prompt</span><span class="p">:</span>
+                <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_g_eval_score</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">max_score</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_g_eval_score</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_g_eval_score</span><span class="p">(</span><span class="n">responses</span><span class="p">,</span> <span class="n">max_score</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">target_tokens</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">):</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_score</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span>
+        <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">responses</span><span class="o">.</span><span class="n">choices</span><span class="p">:</span>
+            <span class="n">first_top_log_probs</span> <span class="o">=</span> <span class="n">choice</span><span class="o">.</span><span class="n">logprobs</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">top_logprobs</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">top_log_prob</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="n">first_top_log_probs</span><span class="p">))):</span>
+                <span class="k">if</span> <span class="n">top_log_prob</span> <span class="ow">in</span> <span class="n">target_tokens</span><span class="p">:</span>
+                    <span class="n">target_tokens</span><span class="p">[</span><span class="n">top_log_prob</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">5</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">target_tokens</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">target_tokens</span><span class="o">.</span><span class="n">get</span><span class="p">))</span>
+
+    <span class="n">g_eval_scores</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">g_eval_score</span><span class="p">(</span><span class="n">g_eval_prompts</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">generation_gt</span><span class="p">,</span> <span class="n">pred</span><span class="p">),</span> <span class="n">metrics</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">g_eval_scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">g_eval_scores</span><span class="p">)</span></div>
 
 </pre></div>
         </article>

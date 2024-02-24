@@ -307,7 +307,7 @@
 <ol class="arabic">
 <li><p><strong>Metrics</strong>:</p>
 <ul class="simple">
-<li><p><strong>Types</strong>: <code class="docutils literal notranslate"><span class="pre">bleu</span></code>, <code class="docutils literal notranslate"><span class="pre">meteor</span></code>, <code class="docutils literal notranslate"><span class="pre">rouge</span></code>, <code class="docutils literal notranslate"><span class="pre">sem_score</span></code></p></li>
+<li><p><strong>Types</strong>: <code class="docutils literal notranslate"><span class="pre">bleu</span></code>, <code class="docutils literal notranslate"><span class="pre">meteor</span></code>, <code class="docutils literal notranslate"><span class="pre">rouge</span></code>, <code class="docutils literal notranslate"><span class="pre">sem_score</span></code>, <code class="docutils literal notranslate"><span class="pre">g_eval</span></code></p></li>
 </ul>
 <div class="admonition-purpose admonition">
 <p class="admonition-title">Purpose</p>
@@ -341,6 +341,9 @@ You can check out this feature at the example config.yaml file below.</p>
 <span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">meteor</span>
 <span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sem_score</span>
 <span class="w">             </span><span class="nt">embedding_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
+<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">g_eval</span>
+<span class="w">             </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">consistency</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">fluency</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">relevance</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">coherence</span><span class="p p-Indicator">]</span>
+<span class="w">             </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpt-4</span>
 <span class="w">        </span><span class="nt">speed_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">      </span><span class="nt">modules</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
