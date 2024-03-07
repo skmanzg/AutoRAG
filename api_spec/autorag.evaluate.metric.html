@@ -368,19 +368,49 @@ Because it can be a multiple ground truth.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.evaluate.metric.generation.rouge">
-<span class="sig-prename descclassname"><span class="pre">autorag.evaluate.metric.generation.</span></span><span class="sig-name descname"><span class="pre">rouge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generation_gt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/evaluate/metric/generation.html#rouge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluate.metric.generation.rouge" title="Link to this definition">#</a></dt>
-<dd><p>Compute rouge score for generation.</p>
+<span class="sig-prename descclassname"><span class="pre">autorag.evaluate.metric.generation.</span></span><span class="sig-name descname"><span class="pre">rouge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generation_gt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rouge_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'rougeL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_stemmer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_summaries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/evaluate/metric/generation.html#rouge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluate.metric.generation.rouge" title="Link to this definition">#</a></dt>
+<dd><blockquote>
+<div><p>Compute rouge score for generation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>generation_gt</strong> – A list of ground truth.
+<dt class="field-odd">param generation_gt<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of ground truth.
 Must be 2-d list of string.
-Because it can be a multiple ground truth.</p></li>
-<li><p><strong>generations</strong> – A list of generations that LLM generated.</p></li>
-</ul>
+Because it can be a multiple ground truth.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">param generations<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of generations that LLM generated.</p>
+</dd>
+<dt class="field-odd">param rouge_type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A rouge type to use for evaluation.
+Default is ‘RougeL’.
+Choose between rouge1, rouge2, rougeL, and rougeLSum.
+- rouge1: unigram (1-gram) based scoring.
+- rouge2: bigram (2-gram) based scoring.
+- rougeL: Longest Common Subsequence based scoring.
+- rougeLSum: splits text using “</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt>“</dt><dd><dl class="field-list simple">
+<dt class="field-odd">param use_stemmer<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Bool indicating whether Porter stemmer should be used to
+strip word suffixes to improve matching. This arg is used in the
+DefaultTokenizer, but other tokenizers might or might not choose to
+use this. Default is False.</p>
+</dd>
+<dt class="field-even">param split_summaries<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whether to add newlines between sentences for rougeLsum.
+Default is False.</p>
+</dd>
+<dt class="field-odd">param batch<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The batch size for processing.
+Default is your cpu count.</p>
+</dd>
+<dt class="field-even">return<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list of computed metric scores.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>

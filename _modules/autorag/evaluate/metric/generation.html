@@ -284,7 +284,8 @@
         </div>
         <article role="main">
           <h1>Source code for autorag.evaluate.metric.generation</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">functools</span>
+<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
@@ -292,9 +293,12 @@
 <span class="kn">import</span> <span class="nn">sacrebleu</span>
 <span class="kn">from</span> <span class="nn">llama_index.core.embeddings</span> <span class="kn">import</span> <span class="n">BaseEmbedding</span>
 <span class="kn">from</span> <span class="nn">openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">from</span> <span class="nn">rouge_score</span> <span class="kn">import</span> <span class="n">tokenizers</span>
+<span class="kn">from</span> <span class="nn">rouge_score.rouge_scorer</span> <span class="kn">import</span> <span class="n">RougeScorer</span>
 
 <span class="kn">from</span> <span class="nn">autorag</span> <span class="kn">import</span> <span class="n">embedding_models</span>
 <span class="kn">from</span> <span class="nn">autorag.evaluate.metric.util</span> <span class="kn">import</span> <span class="n">calculate_cosine_similarity</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
 
 
 <div class="viewcode-block" id="generation_metric">
@@ -376,7 +380,11 @@
 
 <div class="viewcode-block" id="rouge">
 <a class="viewcode-back" href="../../../../api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.rouge">[docs]</a>
-<span class="k">def</span> <span class="nf">rouge</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">rouge</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+          <span class="n">rouge_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;rougeL&#39;</span><span class="p">,</span>
+          <span class="n">use_stemmer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+          <span class="n">split_summaries</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+          <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute rouge score for generation.</span>
 
@@ -384,10 +392,34 @@
 <span class="sd">            Must be 2-d list of string.</span>
 <span class="sd">            Because it can be a multiple ground truth.</span>
 <span class="sd">    :param generations: A list of generations that LLM generated.</span>
+<span class="sd">    :param rouge_type: A rouge type to use for evaluation.</span>
+<span class="sd">        Default is &#39;RougeL&#39;.</span>
+<span class="sd">        Choose between rouge1, rouge2, rougeL, and rougeLSum.</span>
+<span class="sd">        - rouge1: unigram (1-gram) based scoring.</span>
+<span class="sd">        - rouge2: bigram (2-gram) based scoring.</span>
+<span class="sd">        - rougeL: Longest Common Subsequence based scoring.</span>
+<span class="sd">        - rougeLSum: splits text using &quot;\n&quot;</span>
+<span class="sd">    :param use_stemmer: Bool indicating whether Porter stemmer should be used to</span>
+<span class="sd">        strip word suffixes to improve matching. This arg is used in the</span>
+<span class="sd">        DefaultTokenizer, but other tokenizers might or might not choose to</span>
+<span class="sd">        use this. Default is False.</span>
+<span class="sd">    :param split_summaries: Whether to add newlines between sentences for rougeLsum.</span>
+<span class="sd">        Default is False.</span>
+<span class="sd">    :param batch: The batch size for processing.</span>
+<span class="sd">        Default is your cpu count.</span>
 <span class="sd">    :return: A list of computed metric scores.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rouge_instance</span> <span class="o">=</span> <span class="n">evaluate</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;rouge&quot;</span><span class="p">)</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">huggingface_evaluate</span><span class="p">(</span><span class="n">rouge_instance</span><span class="p">,</span> <span class="s1">&#39;rougeL&#39;</span><span class="p">,</span> <span class="n">generation_gt</span><span class="p">,</span> <span class="n">generations</span><span class="p">)</span>
+    <span class="n">rouge_instance</span> <span class="o">=</span> <span class="n">RougeScorer</span><span class="p">(</span><span class="n">rouge_types</span><span class="o">=</span><span class="p">[</span><span class="n">rouge_type</span><span class="p">],</span> <span class="n">use_stemmer</span><span class="o">=</span><span class="n">use_stemmer</span><span class="p">,</span>
+                                 <span class="n">split_summaries</span><span class="o">=</span><span class="n">split_summaries</span><span class="p">,</span>
+                                 <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizers</span><span class="o">.</span><span class="n">DefaultTokenizer</span><span class="p">(</span><span class="n">use_stemmer</span><span class="p">))</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">pred</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">rouge_instance</span><span class="o">.</span><span class="n">score_multi</span><span class="p">(</span><span class="n">targets</span><span class="o">=</span><span class="n">gt</span><span class="p">,</span> <span class="n">prediction</span><span class="o">=</span><span class="n">pred</span><span class="p">)[</span><span class="n">rouge_type</span><span class="p">]</span><span class="o">.</span><span class="n">fmeasure</span>
+
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">compute</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span> <span class="k">for</span> <span class="n">gt</span><span class="p">,</span> <span class="n">pred</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">,</span> <span class="n">generations</span><span class="p">)]</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
+
     <span class="k">del</span> <span class="n">rouge_instance</span>
     <span class="k">return</span> <span class="n">result</span></div>
 
