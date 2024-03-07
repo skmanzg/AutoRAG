@@ -368,7 +368,9 @@
 <span class="sd">    :return: A list of computed metric scores.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">meteor_instance</span> <span class="o">=</span> <span class="n">evaluate</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;meteor&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">huggingface_evaluate</span><span class="p">(</span><span class="n">meteor_instance</span><span class="p">,</span> <span class="s1">&#39;meteor&#39;</span><span class="p">,</span> <span class="n">generation_gt</span><span class="p">,</span> <span class="n">generations</span><span class="p">)</span></div>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">huggingface_evaluate</span><span class="p">(</span><span class="n">meteor_instance</span><span class="p">,</span> <span class="s1">&#39;meteor&#39;</span><span class="p">,</span> <span class="n">generation_gt</span><span class="p">,</span> <span class="n">generations</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">meteor_instance</span>
+    <span class="k">return</span> <span class="n">result</span></div>
 
 
 
@@ -385,7 +387,9 @@
 <span class="sd">    :return: A list of computed metric scores.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rouge_instance</span> <span class="o">=</span> <span class="n">evaluate</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;rouge&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">huggingface_evaluate</span><span class="p">(</span><span class="n">rouge_instance</span><span class="p">,</span> <span class="s1">&#39;rougeL&#39;</span><span class="p">,</span> <span class="n">generation_gt</span><span class="p">,</span> <span class="n">generations</span><span class="p">)</span></div>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">huggingface_evaluate</span><span class="p">(</span><span class="n">rouge_instance</span><span class="p">,</span> <span class="s1">&#39;rougeL&#39;</span><span class="p">,</span> <span class="n">generation_gt</span><span class="p">,</span> <span class="n">generations</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">rouge_instance</span>
+    <span class="k">return</span> <span class="n">result</span></div>
 
 
 

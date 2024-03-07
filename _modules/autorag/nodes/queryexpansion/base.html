@@ -339,13 +339,10 @@
 
         <span class="c1"># run query expansion function</span>
         <span class="n">expanded_queries</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">queries</span><span class="o">=</span><span class="n">queries</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">batch</span><span class="o">=</span><span class="n">batch</span><span class="p">)</span>
-
+        <span class="k">del</span> <span class="n">llm</span>
         <span class="k">return</span> <span class="n">expanded_queries</span>
 
     <span class="k">return</span> <span class="n">wrapper</span></div>
-
-
-
 
 </pre></div>
         </article>
