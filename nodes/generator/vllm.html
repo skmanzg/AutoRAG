@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="F-String" href="fstring.html" /><link rel="prev" title="Tree Summarize" href="../passage_compressor/tree_summarize.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="API endpoint" href="../../deploy/api_endpoint.html" /><link rel="prev" title="llama_index LLM" href="llama_index_llm.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>5. Prompt Maker - AutoRAG documentation</title>
+        <title>vllm - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -202,13 +202,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../passage_compressor/tree_summarize.html">Tree Summarize</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">5. Prompt Maker</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 5. Prompt Maker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="fstring.html">F-String</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../prompt_maker/prompt_maker.html">5. Prompt Maker</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 5. Prompt Maker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../prompt_maker/fstring.html">F-String</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../generator/generator.html">6. Generator</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../generator/llama_index_llm.html">llama_index LLM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../generator/vllm.html">vllm</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="generator.html">6. Generator</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="llama_index_llm.html">llama_index LLM</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">vllm</a></li>
 </ul>
 </li>
 </ul>
@@ -286,74 +286,39 @@
           </label>
         </div>
         <article role="main">
-          <section id="prompt-maker">
-<h1>5. Prompt Maker<a class="headerlink" href="#prompt-maker" title="Link to this heading">#</a></h1>
-<section id="definition">
-<h2>🔎 <strong>Definition</strong><a class="headerlink" href="#definition" title="Link to this heading">#</a></h2>
-<p><strong>Prompt Maker</strong> is a module that makes a prompt from user query and retrieved contents.</p>
+          <section id="vllm">
+<h1>vllm<a class="headerlink" href="#vllm" title="Link to this heading">#</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">vllm</span></code> module is generator that using <a class="reference external" href="https://blog.vllm.ai/2023/06/20/vllm.html">vllm</a>.</p>
+<section id="why-use-vllm-module">
+<h2>Why use vllm module?<a class="headerlink" href="#why-use-vllm-module" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">vllm</span></code> can generate new texts really fast. Its speed is more than 10x faster than a huggingface transformers library.</p>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">vllm</span></code> model with <a class="reference internal" href="llama_index_llm.html"><span class="std std-doc">llama_index_llm module</span></a>, but it is really slow because LlamaIndex
+does not optimize for processing many prompts at once.</p>
+<p>So, we decide to make a standalone module for vllm, for faster generation speed.</p>
 </section>
-<section id="parameters">
-<h2>🔢 <strong>Parameters</strong><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
-<section id="overview">
-<h3><strong>Overview</strong>:<a class="headerlink" href="#overview" title="Link to this heading">#</a></h3>
-<p>This document serves as a guide for configuring parameters, strategies, and the config YAML file for various nodes within a system.</p>
-</section>
-<section id="node-parameters">
-<h3><strong>Node Parameters</strong><a class="headerlink" href="#node-parameters" title="Link to this heading">#</a></h3>
+<section id="module-parameters">
+<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><strong>None</strong></p></li>
+<li><p><strong>llm</strong>: You can type your ‘model name’ at here. For example, <code class="docutils literal notranslate"><span class="pre">facebook/opt-125m</span></code>
+or <code class="docutils literal notranslate"><span class="pre">mistralai/Mistral-7B-Instruct-v0.2</span></code>.</p></li>
+<li><p><strong>max_tokens</strong>: The maximum number of tokens to generate.</p></li>
+<li><p><strong>temperature</strong>: The temperature of the sampling. Higher temperature means more randomness.</p></li>
+<li><p><strong>top_p</strong>: Float that controls the cumulative probability of the top tokens to consider. Must be in (0, 1]. Set to 1
+to consider all tokens.</p></li>
+<li><p>And all parameters
+from <a class="reference external" href="https://github.com/vllm-project/vllm/blob/main/vllm/entrypoints/llm.py#L14">LLM initialization</a>
+and <a class="reference external" href="https://github.com/vllm-project/vllm/blob/main/vllm/sampling_params.py#L25">Sampling Params</a>.</p></li>
 </ul>
 </section>
-<section id="strategy">
-<h3><strong>Strategy</strong><a class="headerlink" href="#strategy" title="Link to this heading">#</a></h3>
-<p><strong>Performance Evaluation</strong>: Like the query_expansion node, the Prompt Maker node’s performance cannot be measured by the result alone.
-So, we evaluate the prompt, which is the result of the Prompt Maker node, using the generator (LLM).
-Therefore, the strategy sets the parameters needed to evaluate the answer of the generator (LLM).</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Please refer to the parameter of <a class="reference internal" href="../generator/generator.html"><span class="std std-doc">Generator Node</span></a> for more details.</p>
-</div>
-<section id="id1">
-<h4><strong>Parameters</strong>:<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
-<ol class="arabic simple">
-<li><p><strong>Metrics</strong>: Metrics such as <code class="docutils literal notranslate"><span class="pre">bleu</span></code>,<code class="docutils literal notranslate"><span class="pre">meteor</span></code>, and <code class="docutils literal notranslate"><span class="pre">rouge</span></code> are used to evaluate the performance of the prompt maker process through its impact on generator (llm) outcomes.</p></li>
-<li><p><strong>Speed Threshold</strong>: <code class="docutils literal notranslate"><span class="pre">speed_threshold</span></code> is applied across all nodes, ensuring that any method exceeding the average processing time for a query is not utilized.</p></li>
-<li><p><strong>Generator Modules</strong>: The prompt maker node can utilize all modules and module parameters from the generator node, including:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="../generator/llama_index_llm.html"><span class="std std-doc">llama_index_llm</span></a>: with <code class="docutils literal notranslate"><span class="pre">llm</span></code> and additional llm parameters</p></li>
-</ul>
-</li>
-</ol>
-</section>
-</section>
-<section id="example-config-yaml-file">
-<h3>Example config.yaml file<a class="headerlink" href="#example-config-yaml-file" title="Link to this heading">#</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">node_lines</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_line_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">post_retrieve_node_line</span><span class="w">  </span><span class="c1"># Arbitrary node line name</span>
-<span class="w">  </span><span class="nt">nodes</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prompt_maker</span>
-<span class="w">      </span><span class="nt">strategy</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">bleu</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">meteor</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">rouge</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sem_score</span><span class="p p-Indicator">]</span>
-<span class="w">        </span><span class="nt">speed_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">        </span><span class="nt">generator_modules</span><span class="p">:</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
-<span class="w">            </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
-<span class="w">            </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">gpt-3.5-turbo-16k</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">gpt-3.5-turbo-1106</span><span class="p p-Indicator">]</span>
-<span class="w">      </span><span class="nt">modules</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fstring</span>
-<span class="w">          </span><span class="nt">prompt</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Tell</span><span class="nv"> </span><span class="s">me</span><span class="nv"> </span><span class="s">something</span><span class="nv"> </span><span class="s">about</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">question:</span><span class="nv"> </span><span class="s">{query}</span><span class="nv"> </span><span class="s">\n\n</span><span class="nv"> </span><span class="s">{retrieved_contents}&quot;</span><span class="p p-Indicator">,</span>
-<span class="w">                   </span><span class="s">&quot;Question:</span><span class="nv"> </span><span class="s">{query}</span><span class="nv"> </span><span class="s">\n</span><span class="nv"> </span><span class="s">Something</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">read:</span><span class="nv"> </span><span class="s">{retrieved_contents}</span><span class="nv"> </span><span class="s">\n</span><span class="nv"> </span><span class="s">What&#39;s</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">answer?&quot;</span><span class="p p-Indicator">]</span>
+<section id="example-config-yaml">
+<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">#</a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
+<span class="w">    </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mistralai/Mistral-7B-Instruct-v0.2</span>
+<span class="w">    </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">0.1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">max_tokens</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512</span>
 </pre></div>
 </div>
-<section id="supported-modules">
-<h4>Supported Modules<a class="headerlink" href="#supported-modules" title="Link to this heading">#</a></h4>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="fstring.html">F-String</a></li>
-</ul>
-</div>
-</section>
-</section>
 </section>
 </section>
 
@@ -362,23 +327,23 @@ Therefore, the strategy sets the parameters needed to evaluate the answer of the
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="fstring.html">
+          <a class="next-page" href="../../deploy/api_endpoint.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">F-String</div>
+                <div class="title">API endpoint</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../passage_compressor/tree_summarize.html">
+          <a class="prev-page" href="llama_index_llm.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Tree Summarize</div>
+                <div class="title">llama_index LLM</div>
                 
               </div>
             </a>
@@ -412,21 +377,10 @@ Therefore, the strategy sets the parameters needed to evaluate the answer of the
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">5. Prompt Maker</a><ul>
-<li><a class="reference internal" href="#definition">🔎 <strong>Definition</strong></a></li>
-<li><a class="reference internal" href="#parameters">🔢 <strong>Parameters</strong></a><ul>
-<li><a class="reference internal" href="#overview"><strong>Overview</strong>:</a></li>
-<li><a class="reference internal" href="#node-parameters"><strong>Node Parameters</strong></a></li>
-<li><a class="reference internal" href="#strategy"><strong>Strategy</strong></a><ul>
-<li><a class="reference internal" href="#id1"><strong>Parameters</strong>:</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#example-config-yaml-file">Example config.yaml file</a><ul>
-<li><a class="reference internal" href="#supported-modules">Supported Modules</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">vllm</a><ul>
+<li><a class="reference internal" href="#why-use-vllm-module">Why use vllm module?</a></li>
+<li><a class="reference internal" href="#module-parameters"><strong>Module Parameters</strong></a></li>
+<li><a class="reference internal" href="#example-config-yaml"><strong>Example config.yaml</strong></a></li>
 </ul>
 </li>
 </ul>
