@@ -195,6 +195,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nodes/passage_reranker/tart.html">TART</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nodes/passage_reranker/monot5.html">MonoT5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nodes/passage_reranker/koreranker.html">Ko-reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nodes/passage_reranker/cohere.html">cohere_reranker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../nodes/passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -323,6 +324,7 @@
         <span class="s1">&#39;pass_reranker&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;autorag.nodes.passagereranker&#39;</span><span class="p">,</span> <span class="s1">&#39;pass_reranker&#39;</span><span class="p">),</span>
         <span class="s1">&#39;pass_query_expansion&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;autorag.nodes.queryexpansion&#39;</span><span class="p">,</span> <span class="s1">&#39;pass_query_expansion&#39;</span><span class="p">),</span>
         <span class="s1">&#39;pass_compressor&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;autorag.nodes.passagecompressor&#39;</span><span class="p">,</span> <span class="s1">&#39;pass_compressor&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;cohere_reranker&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;autorag.nodes.passagereranker&#39;</span><span class="p">,</span> <span class="s1">&#39;cohere_reranker&#39;</span><span class="p">),</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">dynamically_find_function</span><span class="p">(</span><span class="n">module_name</span><span class="p">,</span> <span class="n">support_modules</span><span class="p">)</span></div>
 

@@ -194,6 +194,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/tart.html">TART</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/monot5.html">MonoT5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/koreranker.html">Ko-reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/cohere.html">cohere_reranker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -468,6 +469,13 @@
 </li>
         </ul></li>
         <li>
+    autorag.nodes.generator.vllm
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.generator.html#module-autorag.nodes.generator.vllm">module</a>
+</li>
+        </ul></li>
+        <li>
     autorag.nodes.passagecompressor
 
         <ul>
@@ -517,12 +525,21 @@
 </li>
         </ul></li>
         <li>
+    autorag.nodes.passagereranker.cohere
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.cohere">module</a>
+</li>
+        </ul></li>
+        <li>
     autorag.nodes.passagereranker.koreranker
 
         <ul>
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.koreranker">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagereranker.monot5
 
@@ -530,8 +547,6 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.monot5">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagereranker.pass_reranker
 
@@ -807,13 +822,17 @@
 </li>
         <li><a href="api_spec/autorag.utils.html#autorag.utils.preprocess.cast_qa_dataset">cast_qa_dataset() (in module autorag.utils.preprocess)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.base.cast_queries">cast_queries() (in module autorag.nodes.retrieval.base)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_cc.cc_pure">cc_pure() (in module autorag.nodes.retrieval.hybrid_cc)</a>
 </li>
         <li><a href="api_spec/autorag.html#autorag.web.chat_box">chat_box() (in module autorag.web)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.cohere.cohere_rerank_pure">cohere_rerank_pure() (in module autorag.nodes.passagereranker.cohere)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.cohere.cohere_reranker">cohere_reranker() (in module autorag.nodes.passagereranker.cohere)</a>
 </li>
         <li><a href="api_spec/autorag.utils.html#autorag.utils.util.convert_env_in_dict">convert_env_in_dict() (in module autorag.utils.util)</a>
 </li>
@@ -833,6 +852,8 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.nodes.generator.html#autorag.nodes.generator.vllm.destroy_vllm_instance">destroy_vllm_instance() (in module autorag.nodes.generator.vllm)</a>
+</li>
         <li><a href="api_spec/autorag.html#autorag.support.dynamically_find_function">dynamically_find_function() (in module autorag.support)</a>
 </li>
     </ul></td>
@@ -1035,6 +1056,8 @@
 </li>
         <li><a href="api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.run.make_retrieval_callable_params">make_retrieval_callable_params() (in module autorag.nodes.queryexpansion.run)</a>
 </li>
+        <li><a href="api_spec/autorag.nodes.generator.html#autorag.nodes.generator.vllm.make_vllm_instance">make_vllm_instance() (in module autorag.nodes.generator.vllm)</a>
+</li>
         <li><a href="api_spec/autorag.html#autorag.strategy.measure_speed">measure_speed() (in module autorag.strategy)</a>
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.meteor">meteor() (in module autorag.evaluate.metric.generation)</a>
@@ -1099,6 +1122,8 @@
 </li>
           <li><a href="api_spec/autorag.nodes.generator.html#module-autorag.nodes.generator.run">autorag.nodes.generator.run</a>
 </li>
+          <li><a href="api_spec/autorag.nodes.generator.html#module-autorag.nodes.generator.vllm">autorag.nodes.generator.vllm</a>
+</li>
           <li><a href="api_spec/autorag.nodes.passagecompressor.html#module-autorag.nodes.passagecompressor">autorag.nodes.passagecompressor</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagecompressor.html#module-autorag.nodes.passagecompressor.base">autorag.nodes.passagecompressor.base</a>
@@ -1112,6 +1137,8 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker">autorag.nodes.passagereranker</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.base">autorag.nodes.passagereranker.base</a>
+</li>
+          <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.cohere">autorag.nodes.passagereranker.cohere</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.koreranker">autorag.nodes.passagereranker.koreranker</a>
 </li>
@@ -1408,13 +1435,15 @@
 </li>
         <li><a href="api_spec/autorag.utils.html#autorag.utils.preprocess.validate_qa_dataset">validate_qa_dataset() (in module autorag.utils.preprocess)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.vectordb.vectordb">vectordb() (in module autorag.nodes.retrieval.vectordb)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.vectordb.vectordb_ingest">vectordb_ingest() (in module autorag.nodes.retrieval.vectordb)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.vectordb.vectordb_pure">vectordb_pure() (in module autorag.nodes.retrieval.vectordb)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.generator.html#autorag.nodes.generator.vllm.vllm">vllm() (in module autorag.nodes.generator.vllm)</a>
 </li>
     </ul></td>
   </tr></table>

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>autorag.nodes.queryexpansion.pass_query_expansion - AutoRAG documentation</title>
+        <title>autorag.nodes.passagereranker.cohere - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -285,22 +285,91 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for autorag.nodes.queryexpansion.pass_query_expansion</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+          <h1>Source code for autorag.nodes.passagereranker.cohere</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">autorag.nodes.queryexpansion.base</span> <span class="kn">import</span> <span class="n">query_expansion_node</span>
+<span class="kn">import</span> <span class="nn">cohere</span>
+<span class="kn">from</span> <span class="nn">cohere</span> <span class="kn">import</span> <span class="n">RerankResponseResultsItem</span>
+
+<span class="kn">from</span> <span class="nn">autorag.nodes.passagereranker.base</span> <span class="kn">import</span> <span class="n">passage_reranker_node</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
 
 
-<div class="viewcode-block" id="pass_query_expansion">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.pass_query_expansion.pass_query_expansion">[docs]</a>
-<span class="nd">@query_expansion_node</span>
-<span class="k">def</span> <span class="nf">pass_query_expansion</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+<div class="viewcode-block" id="cohere_reranker">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.cohere.cohere_reranker">[docs]</a>
+<span class="nd">@passage_reranker_node</span>
+<span class="k">def</span> <span class="nf">cohere_reranker</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                    <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                    <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span>
+                    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;rerank-multilingual-v2.0&quot;</span><span class="p">,</span>
+                    <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Do not perform query expansion.</span>
-<span class="sd">    Return with the same queries.</span>
-<span class="sd">    The dimension will be 2-d list, and the column name will be &#39;queries&#39;.</span>
+<span class="sd">    Rerank a list of contents with Cohere rerank models.</span>
+<span class="sd">    You can get the API key from https://cohere.com/rerank and set it in the environment variable COHERE_API_KEY.</span>
+
+<span class="sd">    :param queries: The list of queries to use for reranking</span>
+<span class="sd">    :param contents_list: The list of lists of contents to rerank</span>
+<span class="sd">    :param scores_list: The list of lists of scores retrieved from the initial ranking</span>
+<span class="sd">    :param ids_list: The list of lists of ids retrieved from the initial ranking</span>
+<span class="sd">    :param top_k: The number of passages to be retrieved</span>
+<span class="sd">    :param batch: The number of queries to be processed in a batch</span>
+<span class="sd">    :param model: The model name for Cohere rerank.</span>
+<span class="sd">        You can choose between &quot;rerank-multilingual-v2.0&quot; and &quot;rerank-english-v2.0&quot;.</span>
+<span class="sd">        Default is &quot;rerank-multilingual-v2.0&quot;.</span>
+<span class="sd">    :param api_key: The API key for Cohere rerank.</span>
+<span class="sd">        You can set it in the environment variable COHERE_API_KEY.</span>
+<span class="sd">        Or, you can directly set it on the config YAML file using this parameter.</span>
+<span class="sd">        Default is env variable &quot;COHERE_API_KEY&quot;.</span>
+<span class="sd">    :return: Tuple of lists containing the reranked contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">queries</span><span class="p">))</span></div>
+    <span class="n">api_key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;COHERE_API_KEY&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">api_key</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">api_key</span>
+    <span class="k">if</span> <span class="n">api_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Please set the API key for Cohere rerank in the environment variable COHERE_API_KEY &quot;</span>
+                       <span class="s2">&quot;or directly set it on the config YAML file.&quot;</span><span class="p">)</span>
+
+    <span class="n">cohere_client</span> <span class="o">=</span> <span class="n">cohere</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">api_key</span><span class="p">)</span>
+
+    <span class="c1"># Run async cohere_rerank_pure function</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">cohere_rerank_pure</span><span class="p">(</span><span class="n">cohere_client</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">top_k</span><span class="p">)</span> <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">ids</span> <span class="ow">in</span>
+             <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">)]</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
+    <span class="n">content_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+    <span class="n">id_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+    <span class="n">score_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+
+    <span class="k">del</span> <span class="n">cohere_client</span>
+
+    <span class="k">return</span> <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span></div>
+
+
+
+<div class="viewcode-block" id="cohere_rerank_pure">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.cohere.cohere_rerank_pure">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">cohere_rerank_pure</span><span class="p">(</span><span class="n">cohere_client</span><span class="p">:</span> <span class="n">cohere</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                             <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                             <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rerank a list of contents with Cohere rerank models.</span>
+
+<span class="sd">    :param cohere_client: The Cohere AsyncClient to use for reranking</span>
+<span class="sd">    :param model: The model name for Cohere rerank</span>
+<span class="sd">    :param query: The query to use for reranking</span>
+<span class="sd">    :param documents: The list of contents to rerank</span>
+<span class="sd">    :param ids: The list of ids corresponding to the documents</span>
+<span class="sd">    :param top_k: The number of passages to be retrieved</span>
+<span class="sd">    :return: Tuple of lists containing the reranked contents, ids, and scores</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rerank_results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">cohere_client</span><span class="o">.</span><span class="n">rerank</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="n">top_k</span><span class="p">,</span>
+                                                <span class="n">return_documents</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RerankResponseResultsItem</span><span class="p">]</span> <span class="o">=</span> <span class="n">rerank_results</span><span class="o">.</span><span class="n">results</span>
+    <span class="n">reranked_scores</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">relevance_score</span><span class="p">,</span> <span class="n">results</span><span class="p">))</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">results</span><span class="p">))</span>
+    <span class="n">reranked_contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">documents</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">indices</span><span class="p">))</span>
+    <span class="n">reranked_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">indices</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">reranked_contents</span><span class="p">,</span> <span class="n">reranked_ids</span><span class="p">,</span> <span class="n">reranked_scores</span></div>
 
 </pre></div>
         </article>
