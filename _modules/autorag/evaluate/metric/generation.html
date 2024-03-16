@@ -330,7 +330,8 @@
 <div class="viewcode-block" id="huggingface_evaluate">
 <a class="viewcode-back" href="../../../../api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.huggingface_evaluate">[docs]</a>
 <span class="k">def</span> <span class="nf">huggingface_evaluate</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                         <span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+                         <span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                         <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute huggingface evaluate metric.</span>
 
@@ -339,12 +340,13 @@
 <span class="sd">    :param generation_gt: A list of ground truth.</span>
 <span class="sd">        Must be 2-d list of string.</span>
 <span class="sd">    :param generations: A list of generations that LLM generated.</span>
+<span class="sd">    :param kwargs: The additional arguments for metric function.</span>
 <span class="sd">    :return: The list of scores.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">compute_score</span><span class="p">(</span><span class="n">gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">pred</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">instance</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">predictions</span><span class="o">=</span><span class="p">[</span><span class="n">pred</span><span class="p">],</span> <span class="n">references</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">])[</span><span class="n">key</span><span class="p">],</span> <span class="n">gt</span><span class="p">)))</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">instance</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">predictions</span><span class="o">=</span><span class="p">[</span><span class="n">pred</span><span class="p">],</span> <span class="n">references</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)[</span><span class="n">key</span><span class="p">],</span> <span class="n">gt</span><span class="p">)))</span>
 
     <span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">compute_score</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">,</span> <span class="n">generations</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">result</span></div>
@@ -354,17 +356,20 @@
 <div class="viewcode-block" id="bleu">
 <a class="viewcode-back" href="../../../../api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.bleu">[docs]</a>
 <span class="nd">@generation_metric</span>
-<span class="k">def</span> <span class="nf">bleu</span><span class="p">(</span><span class="n">gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">pred</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">bleu</span><span class="p">(</span><span class="n">gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">pred</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute bleu score for generation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">sacrebleu</span><span class="o">.</span><span class="n">sentence_bleu</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">gt</span><span class="p">)</span><span class="o">.</span><span class="n">score</span></div>
+    <span class="k">return</span> <span class="n">sacrebleu</span><span class="o">.</span><span class="n">sentence_bleu</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">gt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">score</span></div>
 
 
 
 <div class="viewcode-block" id="meteor">
 <a class="viewcode-back" href="../../../../api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.meteor">[docs]</a>
-<span class="k">def</span> <span class="nf">meteor</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">meteor</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+           <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+           <span class="n">beta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
+           <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute meteor score for generation.</span>
 
@@ -372,10 +377,18 @@
 <span class="sd">            Must be 2-d list of string.</span>
 <span class="sd">            Because it can be a multiple ground truth.</span>
 <span class="sd">    :param generations: A list of generations that LLM generated.</span>
+<span class="sd">    :param alpha: Parameter for controlling relative weights of precision and recall.</span>
+<span class="sd">        Default is 0.9.</span>
+<span class="sd">    :param beta: Parameter for controlling shape of penalty as a</span>
+<span class="sd">        function of as a function of fragmentation.</span>
+<span class="sd">        Default is 3.0.</span>
+<span class="sd">    :param gamma: Relative weight assigned to fragmentation penalty.</span>
+<span class="sd">        Default is 0.5.</span>
 <span class="sd">    :return: A list of computed metric scores.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">meteor_instance</span> <span class="o">=</span> <span class="n">evaluate</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;meteor&quot;</span><span class="p">)</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">huggingface_evaluate</span><span class="p">(</span><span class="n">meteor_instance</span><span class="p">,</span> <span class="s1">&#39;meteor&#39;</span><span class="p">,</span> <span class="n">generation_gt</span><span class="p">,</span> <span class="n">generations</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">huggingface_evaluate</span><span class="p">(</span><span class="n">meteor_instance</span><span class="p">,</span> <span class="s1">&#39;meteor&#39;</span><span class="p">,</span> <span class="n">generation_gt</span><span class="p">,</span> <span class="n">generations</span><span class="p">,</span>
+                                  <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">)</span>
     <span class="k">del</span> <span class="n">meteor_instance</span>
     <span class="k">return</span> <span class="n">result</span></div>
 
