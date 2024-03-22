@@ -294,8 +294,9 @@
 <ol class="arabic simple">
 <li><p><a class="reference internal" href="#overview"><span class="xref myst">Overview</span></a></p></li>
 <li><p><a class="reference internal" href="#make-corpus-data-from-raw-documents"><span class="xref myst">Raw data to Corpus data</span></a></p></li>
-<li><p><a class="reference internal" href="#make-qa-data-from-corpus-data"><span class="xref myst">Corpus data to Qa data</span></a></p></li>
-<li><p><a class="reference internal" href="#use-custom-data-creation-function"><span class="xref myst">Create Custom Function</span></a></p></li>
+<li><p><a class="reference internal" href="#make-qa-data-from-corpus-data"><span class="xref myst">Corpus data to QA data</span></a></p></li>
+<li><p><a class="reference internal" href="#use-custom-prompt"><span class="xref myst">Use custom prompt</span></a></p></li>
+<li><p><a class="reference internal" href="#use-multiple-prompts"><span class="xref myst">Use multiple prompts</span></a></p></li>
 </ol>
 </section>
 <section id="overview">
@@ -326,66 +327,77 @@
 <p class="admonition-title">Tip</p>
 <p>The format for qa data can be found <a class="reference internal" href="data_format.html#qa-dataset"><span class="std std-ref">qa data format</span></a></p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">guidance</span> <span class="kn">import</span> <span class="n">models</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">autorag.data.qacreation.simple</span> <span class="kn">import</span> <span class="n">generate_simple_qa_dataset</span><span class="p">,</span> <span class="n">generate_qa_row</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">llama_index.llms.openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">from</span> <span class="nn">autorag.data.qacreation</span> <span class="kn">import</span> <span class="n">generate_qa_llama_index</span>
 
-<span class="n">corpus_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;path/to/corpus_data&quot;</span><span class="p">)</span>
-<span class="n">llm</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">(</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">)</span>
-<span class="n">qa_dataset</span> <span class="o">=</span> <span class="n">generate_simple_qa_dataset</span><span class="p">(</span><span class="n">corpus_data</span><span class="o">=</span><span class="n">corpus_df</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span> <span class="n">output_filepath</span><span class="o">=</span><span class="s2">&quot;path/to/qa_dataset.parquet&quot;</span><span class="p">,</span> <span class="n">generate_row_function</span><span class="o">=</span><span class="n">generate_qa_row</span><span class="p">)</span>
+<span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;content1&#39;</span><span class="p">,</span> <span class="s1">&#39;content2&#39;</span><span class="p">,</span> <span class="s1">&#39;content3&#39;</span><span class="p">]</span>  <span class="c1"># You can load your corpus contents to string list</span>
+<span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;gpt-3.5-turbo&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">generate_qa_llama_index</span><span class="p">(</span><span class="n">llm</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">question_num_per_content</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">generate_simple_qa_dataset</span></code> is a function designed to generate one <strong>query</strong> and one <strong>generation_gt</strong> per passage of corpus_data.</p>
+<p><code class="docutils literal notranslate"><span class="pre">generate_qa_llama_index</span></code> is a function designed to generate <strong>questions</strong> and its <strong>generation_gt</strong> per content.
+You can set the number of questions per content by changing <code class="docutils literal notranslate"><span class="pre">question_num_per_content</span></code> parameter.</p>
 <div class="admonition-what-is-passage admonition">
 <p class="admonition-title">What is passage?</p>
 <p>Passage is chunked units from raw data.</p>
 </div>
 </section>
-<section id="use-custom-data-creation-function">
-<h2>Use custom data creation function<a class="headerlink" href="#use-custom-data-creation-function" title="Link to this heading">#</a></h2>
-<p>You can change <code class="docutils literal notranslate"><span class="pre">generate_row_function</span></code>  to a custom function to use different templates.</p>
-<p>The output of <code class="docutils literal notranslate"><span class="pre">generate_row_function</span></code>  should be in the form of a <strong>dictionary</strong>  containing <code class="docutils literal notranslate"><span class="pre">query</span></code>  and <code class="docutils literal notranslate"><span class="pre">generation_gt</span></code>.</p>
-<p>Here is the example of <code class="docutils literal notranslate"><span class="pre">generate_row_function</span></code> using guidance.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">guidance</span>
-<span class="kn">from</span> <span class="nn">guidance</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">gen</span>
+<section id="use-custom-prompt">
+<h2>Use custom prompt<a class="headerlink" href="#use-custom-prompt" title="Link to this heading">#</a></h2>
+<p>You can use custom prompt to generate qa data.
+The prompt must contains two placeholders:</p>
+<ul class="simple">
+<li><p>{{text}}: The content string</p></li>
+<li><p>{{num_questions}}: The number of questions to generate</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">llama_index.llms.openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">from</span> <span class="nn">autorag.data.qacreation</span> <span class="kn">import</span> <span class="n">generate_qa_llama_index</span>
 
-<span class="c1"># Example for LLM API  </span>
-<span class="k">def</span> <span class="nf">generate_qa_row</span><span class="p">(</span><span class="n">llm</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span> <span class="n">corpus_data_row</span><span class="p">):</span>
-    <span class="n">temp_llm</span> <span class="o">=</span> <span class="n">llm</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Generate question and answer pairs for the given passage.</span>
 
-    <span class="c1"># make template and synthetic data with guidance </span>
-    <span class="k">with</span> <span class="n">guidance</span><span class="o">.</span><span class="n">user</span><span class="p">():</span>
-        <span class="n">temp_llm</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    You have to found a passage to solve &quot;the problem&quot;. </span>
-<span class="s2">    You need to build a clean and clear set of (problem, passage, answer) in json format </span>
-<span class="s2">    so that you don&#39;t have to ask about &quot;the problem&quot; again.</span>
-<span class="s2">    problem need to end with question mark(&quot;?&quot;).</span>
-<span class="s2">    The process of approaching the answer based on the information of the given passage </span>
-<span class="s2">    must be clearly and neatly displayed in the answer.</span><span class="se">\n</span>
-<span class="s2">    </span><span class="se">\n</span>
-<span class="s2">   &quot;passage&quot;: </span><span class="si">{</span><span class="n">corpus_data_row</span><span class="p">[</span><span class="s2">&quot;contents&quot;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span>
-<span class="s2">   &quot;problem&quot;: </span>
-<span class="s2">    &quot;&quot;&quot;</span>
+<span class="s2">Passage:</span>
+<span class="s2">{{text}}</span>
 
-    <span class="k">with</span> <span class="n">guidance</span><span class="o">.</span><span class="n">assistant</span><span class="p">():</span>
-        <span class="n">temp_llm</span> <span class="o">+=</span> <span class="n">gen</span><span class="p">(</span><span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">)</span>
-    <span class="k">with</span> <span class="n">guidance</span><span class="o">.</span><span class="n">user</span><span class="p">():</span>
-        <span class="n">temp_llm</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        &quot;answer&quot;:</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">guidance</span><span class="o">.</span><span class="n">assistant</span><span class="p">():</span>
-        <span class="n">temp_llm</span> <span class="o">+=</span> <span class="n">gen</span><span class="p">(</span><span class="s1">&#39;generation_gt&#39;</span><span class="p">)</span>
-        
-    <span class="c1"># add metadata in the function</span>
-    <span class="n">corpus_data_row</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;qa_generation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;simple&quot;</span>
-        
-    <span class="c1"># make response dictionary</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">temp_llm</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;generation_gt&quot;</span><span class="p">:</span> <span class="n">temp_llm</span><span class="p">[</span><span class="s2">&quot;generation_gt&quot;</span><span class="p">]</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">response</span>
+<span class="s2">Number of questions to generate: {{num_questions}}</span>
+
+<span class="s2">Example:</span>
+<span class="s2">[Q]: What is this?</span>
+<span class="s2">[A]: This is a sample question.</span>
+
+<span class="s2">Result:</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;content1&#39;</span><span class="p">,</span> <span class="s1">&#39;content2&#39;</span><span class="p">,</span> <span class="s1">&#39;content3&#39;</span><span class="p">]</span>  <span class="c1"># You can load your corpus contents to string list</span>
+<span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;gpt-3.5-turbo&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">generate_qa_llama_index</span><span class="p">(</span><span class="n">llm</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">question_num_per_content</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
+</div>
+</section>
+<section id="use-multiple-prompts">
+<h2>Use multiple prompts<a class="headerlink" href="#use-multiple-prompts" title="Link to this heading">#</a></h2>
+<p>If you want to generate different types of question and answer pairs, you can use multiple prompts.
+From now, we support distributing multiple prompts by randomly based on the ratio of each prompt.
+It means that the prompt will be selected by ratio per passage.</p>
+<p>For this, you must provide a dictionary.
+The dictionary must have the key, which is the prompt text file path, and the value which is the ratio of the prompt.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">llama_index.llms.openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">from</span> <span class="nn">autorag.data.qacreation</span> <span class="kn">import</span> <span class="n">generate_qa_llama_index_by_ratio</span>
+
+<span class="n">ratio_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;prompt1.txt&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;prompt2.txt&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;prompt3.txt&#39;</span><span class="p">:</span> <span class="mi">3</span>
+<span class="p">}</span>
+
+<span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;content</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)]</span>  <span class="c1"># You can load your corpus contents to string list</span>
+<span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;gpt-3.5-turbo&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">generate_qa_llama_index_by_ratio</span><span class="p">(</span><span class="n">llm</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">ratio_dict</span><span class="p">,</span> <span class="n">question_num_per_content</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Remeber all prompts must have the placeholders <code class="docutils literal notranslate"><span class="pre">{{text}}</span></code> and <code class="docutils literal notranslate"><span class="pre">{{num_questions}}</span></code>.</p>
 </div>
 </section>
 </section>
@@ -450,7 +462,8 @@
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#make-corpus-data-from-raw-documents">Make corpus data from raw documents</a></li>
 <li><a class="reference internal" href="#make-qa-data-from-corpus-data">Make qa data from corpus data</a></li>
-<li><a class="reference internal" href="#use-custom-data-creation-function">Use custom data creation function</a></li>
+<li><a class="reference internal" href="#use-custom-prompt">Use custom prompt</a></li>
+<li><a class="reference internal" href="#use-multiple-prompts">Use multiple prompts</a></li>
 </ul>
 </li>
 </ul>
