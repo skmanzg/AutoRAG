@@ -227,6 +227,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api_spec/modules.html">autorag</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of autorag</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../api_spec/autorag.html">autorag package</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of autorag package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../api_spec/autorag.data.html">autorag.data package</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of autorag.data package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../api_spec/autorag.data.corpus.html">autorag.data.corpus package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api_spec/autorag.data.qacreation.html">autorag.data.qacreation package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api_spec/autorag.data.utils.html">autorag.data.utils package</a></li>
 </ul>
@@ -314,8 +315,34 @@
 <ol class="arabic simple">
 <li><p>Load your raw data to texts with loaders such as lama_index, LangChain, etc.</p></li>
 <li><p>Chunk the texts into passages. Use Langchain, LlamaIndex, etc.</p></li>
-<li><p>Make it into corpus data using util’s datatype converter (based on llama_index).</p></li>
+<li><p>Make it into corpus data to use converter functions.
+There are converter functions for llama index <code class="docutils literal notranslate"><span class="pre">Document</span></code>, <code class="docutils literal notranslate"><span class="pre">TextNode</span></code>, and Langchain <code class="docutils literal notranslate"><span class="pre">Document</span></code> objects,
+which is <code class="docutils literal notranslate"><span class="pre">llama_document_to_parquet</span></code>, <code class="docutils literal notranslate"><span class="pre">llama_text_node_to_parquet</span></code>, and <code class="docutils literal notranslate"><span class="pre">langchain_document_to_parquet</span></code>.</p></li>
 </ol>
+<ul class="simple">
+<li><p>Use Llama Index</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">llama_index.core</span> <span class="kn">import</span> <span class="n">SimpleDirectoryReader</span>
+<span class="kn">from</span> <span class="nn">llama_index.core.node_parser</span> <span class="kn">import</span> <span class="n">TokenTextSplitter</span>
+<span class="kn">from</span> <span class="nn">autorag.data.corpus</span> <span class="kn">import</span> <span class="n">llama_text_node_to_parquet</span>
+
+<span class="n">documents</span> <span class="o">=</span> <span class="n">SimpleDirectoryReader</span><span class="p">(</span><span class="s1">&#39;your_dir_path&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="n">nodes</span> <span class="o">=</span> <span class="n">TokenTextSplitter</span><span class="p">()</span><span class="o">.</span><span class="n">get_nodes_from_documents</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">chunk_overlap</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+<span class="n">corpus_df</span> <span class="o">=</span> <span class="n">llama_text_node_to_parquet</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;path/to/corpus.parquet&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Use LangChain</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">langchain_community.document_loaders</span> <span class="kn">import</span> <span class="n">DirectoryLoader</span>
+<span class="kn">from</span> <span class="nn">langchain_text_splitters</span> <span class="kn">import</span> <span class="n">RecursiveCharacterTextSplitter</span>
+<span class="kn">from</span> <span class="nn">autorag.data.corpus</span> <span class="kn">import</span> <span class="n">langchain_documents_to_parquet</span>
+
+<span class="n">documents</span> <span class="o">=</span> <span class="n">DirectoryLoader</span><span class="p">(</span><span class="s1">&#39;your_dir_path&#39;</span><span class="p">,</span> <span class="n">glob</span><span class="o">=</span><span class="s1">&#39;**/*.md&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="n">documents</span> <span class="o">=</span> <span class="n">RecursiveCharacterTextSplitter</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">chunk_overlap</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">split_documents</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+<span class="n">corpus_df</span> <span class="o">=</span> <span class="n">langchain_documents_to_parquet</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="s1">&#39;path/to/corpus.parquet&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The format for corpus data can be found <a class="reference internal" href="data_format.html#corpus-dataset"><span class="std std-ref">corpus data format</span></a></p>

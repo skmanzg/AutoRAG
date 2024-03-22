@@ -227,6 +227,7 @@
 <li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">autorag</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of autorag</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="autorag.html">autorag package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of autorag package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3 current has-children"><a class="reference internal" href="autorag.data.html">autorag.data package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of autorag.data package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="autorag.data.corpus.html">autorag.data.corpus package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.data.qacreation.html">autorag.data.qacreation package</a></li>
 <li class="toctree-l4 current current-page"><a class="current reference internal" href="#">autorag.data.utils package</a></li>
 </ul>
@@ -292,32 +293,19 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 </section>
-<section id="module-autorag.data.utils.llamaindex">
-<span id="autorag-data-utils-llamaindex-module"></span><h2>autorag.data.utils.llamaindex module<a class="headerlink" href="#module-autorag.data.utils.llamaindex" title="Link to this heading">#</a></h2>
+<section id="module-autorag.data.utils.util">
+<span id="autorag-data-utils-util-module"></span><h2>autorag.data.utils.util module<a class="headerlink" href="#module-autorag.data.utils.util" title="Link to this heading">#</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="autorag.data.utils.llamaindex.get_file_metadata">
-<span class="sig-prename descclassname"><span class="pre">autorag.data.utils.llamaindex.</span></span><span class="sig-name descname"><span class="pre">get_file_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../_modules/autorag/data/utils/llamaindex.html#get_file_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.data.utils.llamaindex.get_file_metadata" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="autorag.data.utils.util.add_essential_metadata">
+<span class="sig-prename descclassname"><span class="pre">autorag.data.utils.util.</span></span><span class="sig-name descname"><span class="pre">add_essential_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../_modules/autorag/data/utils/util.html#add_essential_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.data.utils.util.add_essential_metadata" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.data.utils.util.get_file_metadata">
+<span class="sig-prename descclassname"><span class="pre">autorag.data.utils.util.</span></span><span class="sig-name descname"><span class="pre">get_file_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../_modules/autorag/data/utils/util.html#get_file_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.data.utils.util.get_file_metadata" title="Link to this definition">#</a></dt>
 <dd><p>Get some handy metadate from filesystem.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>file_path: str: file path in str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.data.utils.llamaindex.llama_documents_to_parquet">
-<span class="sig-prename descclassname"><span class="pre">autorag.data.utils.llamaindex.</span></span><span class="sig-name descname"><span class="pre">llama_documents_to_parquet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">llama_documents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Document</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/data/utils/llamaindex.html#llama_documents_to_parquet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.data.utils.llamaindex.llama_documents_to_parquet" title="Link to this definition">#</a></dt>
-<dd><p>llama_documents to corpus_data
-corpus_data will be saved to filepath(file_dir/filename)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>llama_documents</strong> – List[LlamaDocument]</p></li>
-<li><p><strong>output_filepath</strong> – file_dir must exist, filepath must not exist. file extension must be .parquet</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>corpus_data as pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -385,9 +373,9 @@ corpus_data will be saved to filepath(file_dir/filename)</p>
             <ul>
 <li><a class="reference internal" href="#">autorag.data.utils package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-autorag.data.utils.llamaindex">autorag.data.utils.llamaindex module</a><ul>
-<li><a class="reference internal" href="#autorag.data.utils.llamaindex.get_file_metadata"><code class="docutils literal notranslate"><span class="pre">get_file_metadata()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.data.utils.llamaindex.llama_documents_to_parquet"><code class="docutils literal notranslate"><span class="pre">llama_documents_to_parquet()</span></code></a></li>
+<li><a class="reference internal" href="#module-autorag.data.utils.util">autorag.data.utils.util module</a><ul>
+<li><a class="reference internal" href="#autorag.data.utils.util.add_essential_metadata"><code class="docutils literal notranslate"><span class="pre">add_essential_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.data.utils.util.get_file_metadata"><code class="docutils literal notranslate"><span class="pre">get_file_metadata()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.data.utils">Module contents</a></li>
