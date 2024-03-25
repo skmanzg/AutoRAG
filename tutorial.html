@@ -364,12 +364,31 @@ You can find out more information about folder structure and result files at <a 
 <p class="admonition-title">Want to specify project folder?</p>
 <p>You can specify project directory with <code class="docutils literal notranslate"><span class="pre">--project_dir</span></code> option or project_dir parameter.</p>
 </div>
+<section id="restart-a-trial-if-an-error-occurs-during-the-trial">
+<h3>❗Restart a trial if an error occurs during the trial<a class="headerlink" href="#restart-a-trial-if-an-error-occurs-during-the-trial" title="Link to this heading">#</a></h3>
+<p>If an error occurs during the trial, you can restart the trial.</p>
+<p>If you had issues with the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file, you can modify the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file in the trail folder and run the
+code below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.evaluator</span> <span class="kn">import</span> <span class="n">Evaluator</span>
+
+<span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">qa_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/qa.parquet&#39;</span><span class="p">,</span> <span class="n">corpus_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/corpus.parquet&#39;</span><span class="p">)</span>
+<span class="n">evaluator</span><span class="o">.</span><span class="n">restart_trial</span><span class="p">(</span><span class="n">tiral_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/trial_path&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition-what-if-trial-path-didn-t-also-create-a-first-node-line admonition">
+<p class="admonition-title">What if Trial_Path didn’t also create a First Node Line?</p>
+<p>If the First Node Line folder has not been created in the trial path you want to restart,
+start_trial function will be executed instead of restart_trial.</p>
+<p>Note that a new trial folder will be created, not a new restart result in that Trial Path.</p>
+</div>
+</section>
 </section>
 <section id="extract-pipeline-and-evaluate-test-dataset">
 <h2>Extract pipeline and evaluate test dataset<a class="headerlink" href="#extract-pipeline-and-evaluate-test-dataset" title="Link to this heading">#</a></h2>
-<p>Now, it’s time to evaluate test dataset with a found RAG pipeline. For this, you can extract the optimal pipeline and save it to new config yaml file.</p>
-<p>You can use the below code.
-Remind that your trial folder is in the directory you run the <code class="docutils literal notranslate"><span class="pre">Evaluator</span></code>.
+<p>Now, it’s time to evaluate test dataset with a found RAG pipeline. For this, you can extract the optimal pipeline and
+save it to new config yaml file.</p>
+<p>You can use the below code.</p>
+<p>Remind that your trial folder is in the directory you run the <code class="docutils literal notranslate"><span class="pre">Evaluator</span></code>.
 And the trial folder name is number, like 0, 1, 2, 3, and so on.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.deploy</span> <span class="kn">import</span> <span class="n">extract_best_config</span>
 
@@ -511,7 +530,10 @@ and evaluate it again and again for better result.</p>
             <ul>
 <li><a class="reference internal" href="#">Tutorial</a><ul>
 <li><a class="reference internal" href="#prepare-evaluation-dataset">Prepare Evaluation Dataset</a></li>
-<li><a class="reference internal" href="#find-optimal-rag-pipeline">Find Optimal RAG Pipeline</a></li>
+<li><a class="reference internal" href="#find-optimal-rag-pipeline">Find Optimal RAG Pipeline</a><ul>
+<li><a class="reference internal" href="#restart-a-trial-if-an-error-occurs-during-the-trial">❗Restart a trial if an error occurs during the trial</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#extract-pipeline-and-evaluate-test-dataset">Extract pipeline and evaluate test dataset</a></li>
 <li><a class="reference internal" href="#deploy-your-optimal-rag-pipeline">Deploy your optimal RAG pipeline</a><ul>
 <li><a class="reference internal" href="#run-as-a-cli">1. Run as a CLI</a></li>
