@@ -293,10 +293,11 @@
 <span class="kn">import</span> <span class="nn">chromadb</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">llama_index.core.embeddings</span> <span class="kn">import</span> <span class="n">BaseEmbedding</span>
+<span class="kn">from</span> <span class="nn">llama_index.embeddings.openai</span> <span class="kn">import</span> <span class="n">OpenAIEmbedding</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.retrieval.base</span> <span class="kn">import</span> <span class="n">retrieval_node</span><span class="p">,</span> <span class="n">evenly_distribute_passages</span>
 <span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">validate_corpus_dataset</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span><span class="p">,</span> <span class="n">openai_truncate_by_token</span>
 
 
 <div class="viewcode-block" id="vectordb">
@@ -371,26 +372,27 @@
 
 <div class="viewcode-block" id="vectordb_ingest">
 <a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.vectordb.vectordb_ingest">[docs]</a>
-<span class="k">def</span> <span class="nf">vectordb_ingest</span><span class="p">(</span><span class="n">collection</span><span class="p">:</span> <span class="n">chromadb</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span> <span class="n">corpus_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">embedding_model</span><span class="p">:</span> <span class="n">BaseEmbedding</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">vectordb_ingest</span><span class="p">(</span><span class="n">collection</span><span class="p">:</span> <span class="n">chromadb</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span> <span class="n">corpus_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">embedding_model</span><span class="p">:</span> <span class="n">BaseEmbedding</span><span class="p">,</span>
+                    <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">):</span>
+    <span class="n">embedding_model</span><span class="o">.</span><span class="n">embed_batch_size</span> <span class="o">=</span> <span class="n">batch</span>
     <span class="n">validate_corpus_dataset</span><span class="p">(</span><span class="n">corpus_data</span><span class="p">)</span>
     <span class="n">ids</span> <span class="o">=</span> <span class="n">corpus_data</span><span class="p">[</span><span class="s1">&#39;doc_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-    <span class="n">contents</span> <span class="o">=</span> <span class="n">corpus_data</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
-    <span class="c1"># embed corpus</span>
-    <span class="n">batch</span> <span class="o">=</span> <span class="mi">128</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">),</span> <span class="n">batch</span><span class="p">):</span>
-        <span class="c1"># Query the collection to check if IDs already exist</span>
-        <span class="n">existing_ids_response</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch</span><span class="p">])</span>
-        <span class="n">existing_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">existing_ids_response</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">])</span>  <span class="c1"># Assuming &#39;ids&#39; is the key in the response</span>
+    <span class="c1"># Query the collection to check if IDs already exist</span>
+    <span class="n">existing_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">)[</span><span class="s1">&#39;ids&#39;</span><span class="p">])</span>  <span class="c1"># Assuming &#39;ids&#39; is the key in the response</span>
+    <span class="n">new_passage</span> <span class="o">=</span> <span class="n">corpus_data</span><span class="p">[</span><span class="o">~</span><span class="n">corpus_data</span><span class="p">[</span><span class="s1">&#39;doc_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">existing_ids</span><span class="p">)]</span>
 
-        <span class="c1"># Filter contents and ids for those not existing in the collection</span>
-        <span class="n">new_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">existing_ids</span><span class="p">,</span> <span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch</span><span class="p">]))</span>
-        <span class="n">new_contents</span> <span class="o">=</span> <span class="p">[</span><span class="n">contents</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="nb">id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch</span><span class="p">])</span> <span class="k">if</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">new_ids</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">new_passage</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="n">new_contents</span> <span class="o">=</span> <span class="n">new_passage</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
-        <span class="c1"># Only proceed if there are new contents to embed</span>
-        <span class="k">if</span> <span class="n">new_contents</span><span class="p">:</span>
-            <span class="n">embedded_contents</span> <span class="o">=</span> <span class="n">embedding_model</span><span class="o">.</span><span class="n">_get_text_embeddings</span><span class="p">(</span><span class="n">new_contents</span><span class="p">)</span>
-            <span class="n">collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">new_ids</span><span class="p">,</span> <span class="n">embeddings</span><span class="o">=</span><span class="n">embedded_contents</span><span class="p">)</span></div>
+        <span class="c1"># truncate by token if embedding_model is OpenAIEmbedding</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">embedding_model</span><span class="p">,</span> <span class="n">OpenAIEmbedding</span><span class="p">):</span>
+            <span class="n">openai_embedding_limit</span> <span class="o">=</span> <span class="mi">8191</span>
+            <span class="n">new_contents</span> <span class="o">=</span> <span class="n">openai_truncate_by_token</span><span class="p">(</span><span class="n">new_contents</span><span class="p">,</span> <span class="n">openai_embedding_limit</span><span class="p">,</span> <span class="n">embedding_model</span><span class="o">.</span><span class="n">model_name</span><span class="p">)</span>
+
+        <span class="n">new_ids</span> <span class="o">=</span> <span class="n">new_passage</span><span class="p">[</span><span class="s1">&#39;doc_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">embedded_contents</span> <span class="o">=</span> <span class="n">embedding_model</span><span class="o">.</span><span class="n">get_text_embedding_batch</span><span class="p">(</span><span class="n">new_contents</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">new_ids</span><span class="p">,</span> <span class="n">embeddings</span><span class="o">=</span><span class="n">embedded_contents</span><span class="p">)</span></div>
 
 </pre></div>
         </article>

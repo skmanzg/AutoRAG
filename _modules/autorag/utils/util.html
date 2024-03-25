@@ -299,6 +299,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Collection</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">tiktoken</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AutoRAG&quot;</span><span class="p">)</span>
 
@@ -572,6 +573,23 @@
                               <span class="s2">&quot;Set upsert True if you want to overwrite the file.&quot;</span><span class="p">)</span>
 
     <span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="openai_truncate_by_token">
+<a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.openai_truncate_by_token">[docs]</a>
+<span class="k">def</span> <span class="nf">openai_truncate_by_token</span><span class="p">(</span><span class="n">texts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">token_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                             <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">encoding_for_model</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">truncate_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">limit</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">text</span>
+        <span class="n">truncated_text</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">tokens</span><span class="p">[:</span><span class="n">limit</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">truncated_text</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">truncate_text</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">token_limit</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">),</span> <span class="n">texts</span><span class="p">))</span></div>
 
 </pre></div>
         </article>
