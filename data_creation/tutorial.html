@@ -354,16 +354,21 @@ which is <code class="docutils literal notranslate"><span class="pre">llama_docu
 <p class="admonition-title">Tip</p>
 <p>The format for qa data can be found <a class="reference internal" href="data_format.html#qa-dataset"><span class="std std-ref">qa data format</span></a></p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">llama_index.llms.openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="kn">from</span> <span class="nn">autorag.data.qacreation</span> <span class="kn">import</span> <span class="n">generate_qa_llama_index</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">llama_index.llms.openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">from</span> <span class="nn">autorag.data.qacreation</span> <span class="kn">import</span> <span class="n">generate_qa_llama_index</span><span class="p">,</span> <span class="n">make_single_content_qa</span>
 
-<span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;content1&#39;</span><span class="p">,</span> <span class="s1">&#39;content2&#39;</span><span class="p">,</span> <span class="s1">&#39;content3&#39;</span><span class="p">]</span>  <span class="c1"># You can load your corpus contents to string list</span>
+<span class="n">corpus_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;path/to/corpus.parquet&#39;</span><span class="p">)</span>
 <span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;gpt-3.5-turbo&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">generate_qa_llama_index</span><span class="p">(</span><span class="n">llm</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">question_num_per_content</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">qa_df</span> <span class="o">=</span> <span class="n">make_single_content_qa</span><span class="p">(</span><span class="n">corpus_df</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">generate_qa_llama_index</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span> <span class="n">question_num_per_content</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                               <span class="n">output_filepath</span><span class="o">=</span><span class="s1">&#39;path/to/qa.parquet&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">generate_qa_llama_index</span></code> is a function designed to generate <strong>questions</strong> and its <strong>generation_gt</strong> per content.
 You can set the number of questions per content by changing <code class="docutils literal notranslate"><span class="pre">question_num_per_content</span></code> parameter.</p>
+<p>And the <code class="docutils literal notranslate"><span class="pre">make_single_content_qa</span></code> function is designed to generate <code class="docutils literal notranslate"><span class="pre">qa.parquet</span></code> file using input function.
+It generates ‘single content’ qa data, also known as ‘single-hop’ or ‘single-document’ QA data.
+Which means it uses only one passage per question for answering the question.</p>
 <div class="admonition-what-is-passage admonition">
 <p class="admonition-title">What is passage?</p>
 <p>Passage is chunked units from raw data.</p>
@@ -377,8 +382,10 @@ The prompt must contains two placeholders:</p>
 <li><p>{{text}}: The content string</p></li>
 <li><p>{{num_questions}}: The number of questions to generate</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">llama_index.llms.openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="kn">from</span> <span class="nn">autorag.data.qacreation</span> <span class="kn">import</span> <span class="n">generate_qa_llama_index</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">llama_index.llms.openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">from</span> <span class="nn">autorag.data.qacreation</span> <span class="kn">import</span> <span class="n">generate_qa_llama_index</span><span class="p">,</span> <span class="n">make_single_content_qa</span>
 
 <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">Generate question and answer pairs for the given passage.</span>
@@ -395,9 +402,10 @@ The prompt must contains two placeholders:</p>
 <span class="s2">Result:</span>
 <span class="s2">&quot;&quot;&quot;</span>
 
-<span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;content1&#39;</span><span class="p">,</span> <span class="s1">&#39;content2&#39;</span><span class="p">,</span> <span class="s1">&#39;content3&#39;</span><span class="p">]</span>  <span class="c1"># You can load your corpus contents to string list</span>
+<span class="n">corpus_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;path/to/corpus.parquet&#39;</span><span class="p">)</span>
 <span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;gpt-3.5-turbo&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">generate_qa_llama_index</span><span class="p">(</span><span class="n">llm</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">question_num_per_content</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">qa_df</span> <span class="o">=</span> <span class="n">make_single_content_qa</span><span class="p">(</span><span class="n">corpus_df</span><span class="p">,</span> <span class="n">content_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">qa_creation_func</span><span class="o">=</span><span class="n">generate_qa_llama_index</span><span class="p">,</span>
+                               <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span> <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">question_num_per_content</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -408,8 +416,9 @@ From now, we support distributing multiple prompts by randomly based on the rati
 It means that the prompt will be selected by ratio per passage.</p>
 <p>For this, you must provide a dictionary.
 The dictionary must have the key, which is the prompt text file path, and the value which is the ratio of the prompt.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">llama_index.llms.openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
-<span class="kn">from</span> <span class="nn">autorag.data.qacreation</span> <span class="kn">import</span> <span class="n">generate_qa_llama_index_by_ratio</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">llama_index.llms.openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">from</span> <span class="nn">autorag.data.qacreation</span> <span class="kn">import</span> <span class="n">generate_qa_llama_index_by_ratio</span><span class="p">,</span> <span class="n">make_single_content_qa</span>
 
 <span class="n">ratio_dict</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;prompt1.txt&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -417,9 +426,10 @@ The dictionary must have the key, which is the prompt text file path, and the va
     <span class="s1">&#39;prompt3.txt&#39;</span><span class="p">:</span> <span class="mi">3</span>
 <span class="p">}</span>
 
-<span class="n">contents</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;content</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)]</span>  <span class="c1"># You can load your corpus contents to string list</span>
+<span class="n">corpus_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;path/to/corpus.parquet&#39;</span><span class="p">)</span>
 <span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;gpt-3.5-turbo&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">generate_qa_llama_index_by_ratio</span><span class="p">(</span><span class="n">llm</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">ratio_dict</span><span class="p">,</span> <span class="n">question_num_per_content</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">qa_df</span> <span class="o">=</span> <span class="n">make_single_content_qa</span><span class="p">(</span><span class="n">corpus_df</span><span class="p">,</span> <span class="n">content_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">qa_creation_func</span><span class="o">=</span><span class="n">generate_qa_llama_index_by_ratio</span><span class="p">,</span>
+                               <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span> <span class="n">prompts_ratio</span><span class="o">=</span><span class="n">ratio_dict</span><span class="p">,</span> <span class="n">question_num_per_content</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition warning">
