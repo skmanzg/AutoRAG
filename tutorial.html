@@ -369,6 +369,11 @@ You can find out more information about folder structure and result files at <a 
 <p>If an error occurs during the trial, you can restart the trial.</p>
 <p>If you had issues with the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file, you can modify the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file in the trail folder and run the
 code below.</p>
+<p>Run below code at CLI, then AutoRAG automatically restart evaluate.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autorag<span class="w"> </span>restart_evaluate<span class="w"> </span>--trial_path<span class="w"> </span>your/path/to/trial_folder
+</pre></div>
+</div>
+<p>Or you can use python code like below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.evaluator</span> <span class="kn">import</span> <span class="n">Evaluator</span>
 
 <span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">qa_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/qa.parquet&#39;</span><span class="p">,</span> <span class="n">corpus_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/corpus.parquet&#39;</span><span class="p">)</span>
@@ -390,6 +395,11 @@ save it to new config yaml file.</p>
 <p>You can use the below code.</p>
 <p>Remind that your trial folder is in the directory you run the <code class="docutils literal notranslate"><span class="pre">Evaluator</span></code>.
 And the trial folder name is number, like 0, 1, 2, 3, and so on.</p>
+<p>Run below code at CLI, then AutoRAG automatically extract the optimal pipeline and save it to a new yaml file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autorag<span class="w"> </span>extract_best_config<span class="w"> </span>--trial_path<span class="w"> </span>your/path/to/trial_folder<span class="w"> </span>--output_path<span class="w"> </span>your/path/to/pipeline.yaml
+</pre></div>
+</div>
+<p>Or you can use python code like below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.deploy</span> <span class="kn">import</span> <span class="n">extract_best_config</span>
 
 <span class="n">pipeline_dict</span> <span class="o">=</span> <span class="n">extract_best_config</span><span class="p">(</span><span class="n">trial_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/trial_folder&#39;</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/pipeline.yaml&#39;</span><span class="p">)</span>
