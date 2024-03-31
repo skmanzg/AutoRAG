@@ -341,7 +341,18 @@ You can check out this feature at the example config.yaml file below.</p>
 <li><p><strong>Description</strong>: This optional parameter can be applied to all nodes to ensure that the processing time for a method does not exceed a predefined threshold.</p></li>
 </ul>
 </li>
+<li><p><strong>Token Threshold</strong>:</p>
+<ul class="simple">
+<li><p><strong>Description</strong>: This optional parameter ensures that the average token length of the output (LLM’s generations)
+does not exceed the threshold.</p></li>
+</ul>
+</li>
 </ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When you use <code class="docutils literal notranslate"><span class="pre">llama_index</span></code> module, the tokenizer will be gpt2 automatically.
+Please refer to the <a class="reference external" href="https://github.com/Marker-Inc-Korea/AutoRAG/issues/259">issue</a> for more details.</p>
+</div>
 </section>
 <section id="example-config-yaml-file">
 <h3>Example config.yaml file<a class="headerlink" href="#example-config-yaml-file" title="Link to this heading">#</a></h3>
@@ -358,6 +369,7 @@ You can check out this feature at the example config.yaml file below.</p>
 <span class="w">             </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">consistency</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">fluency</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">relevance</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">coherence</span><span class="p p-Indicator">]</span>
 <span class="w">             </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpt-4</span>
 <span class="w">        </span><span class="nt">speed_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">        </span><span class="nt">token_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4000</span>
 <span class="w">      </span><span class="nt">modules</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
 <span class="w">          </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">openai</span><span class="p p-Indicator">]</span>

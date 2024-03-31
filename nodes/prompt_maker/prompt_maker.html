@@ -324,12 +324,20 @@ Therefore, the strategy sets the parameters needed to evaluate the answer of the
 <p class="admonition-title">Tip</p>
 <p>Please refer to the parameter of <a class="reference internal" href="../generator/generator.html"><span class="std std-doc">Generator Node</span></a> for more details.</p>
 </div>
-<section id="id1">
-<h4><strong>Parameters</strong>:<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<section id="strategy-parameters">
+<h4><strong>Strategy Parameters</strong>:<a class="headerlink" href="#strategy-parameters" title="Link to this heading">#</a></h4>
 <ol class="arabic simple">
 <li><p><strong>Metrics</strong>: Metrics such as <code class="docutils literal notranslate"><span class="pre">bleu</span></code>,<code class="docutils literal notranslate"><span class="pre">meteor</span></code>, and <code class="docutils literal notranslate"><span class="pre">rouge</span></code> are used to evaluate the performance of the prompt maker process through its impact on generator (llm) outcomes.</p></li>
 <li><p><strong>Speed Threshold</strong>: <code class="docutils literal notranslate"><span class="pre">speed_threshold</span></code> is applied across all nodes, ensuring that any method exceeding the average processing time for a query is not utilized.</p></li>
-<li><p><strong>Generator Modules</strong>: The prompt maker node can utilize all modules and module parameters from the generator node, including:</p>
+<li><p><strong>Token Threshold</strong>: <code class="docutils literal notranslate"><span class="pre">token_threshold</span></code> ensuring that output prompt average token length does not exceed the
+threshold.</p></li>
+<li><p><strong>tokenizer</strong>: Since you don’t know what LLM model you will use in the next nodes, you can specify the tokenizer name
+to use in <code class="docutils literal notranslate"><span class="pre">token_threshold</span></code> strategy.
+You can use OpenAI model names or Huggingface model names that support <code class="docutils literal notranslate"><span class="pre">AutoTokenizer</span></code>.
+It will automatically find the tokenizer for the model name you specify.
+Default is ‘gpt2’.</p></li>
+<li><p><strong>Generator Modules</strong>: The prompt maker node can use all modules and module parameters from the generator node,
+including:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../generator/llama_index_llm.html"><span class="std std-doc">llama_index_llm</span></a>: with <code class="docutils literal notranslate"><span class="pre">llm</span></code> and additional llm parameters</p></li>
 </ul>
@@ -346,6 +354,8 @@ Therefore, the strategy sets the parameters needed to evaluate the answer of the
 <span class="w">      </span><span class="nt">strategy</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">bleu</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">meteor</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">rouge</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sem_score</span><span class="p p-Indicator">]</span>
 <span class="w">        </span><span class="nt">speed_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">        </span><span class="nt">token_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">        </span><span class="nt">tokenizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpt-3.5-turbo</span>
 <span class="w">        </span><span class="nt">generator_modules</span><span class="p">:</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
 <span class="w">            </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
@@ -429,7 +439,7 @@ Therefore, the strategy sets the parameters needed to evaluate the answer of the
 <li><a class="reference internal" href="#overview"><strong>Overview</strong>:</a></li>
 <li><a class="reference internal" href="#node-parameters"><strong>Node Parameters</strong></a></li>
 <li><a class="reference internal" href="#strategy"><strong>Strategy</strong></a><ul>
-<li><a class="reference internal" href="#id1"><strong>Parameters</strong>:</a></li>
+<li><a class="reference internal" href="#strategy-parameters"><strong>Strategy Parameters</strong>:</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#example-config-yaml-file">Example config.yaml file</a><ul>
