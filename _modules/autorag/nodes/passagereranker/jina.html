@@ -14,7 +14,7 @@
     <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>autorag.nodes.passagecompressor.tree_summarize - AutoRAG documentation</title>
+        <title>autorag.nodes.passagereranker.jina - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -297,70 +297,94 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for autorag.nodes.passagecompressor.tree_summarize</h1><div class="highlight"><pre>
+          <h1>Source code for autorag.nodes.passagereranker.jina</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">llama_index.core</span> <span class="kn">import</span> <span class="n">PromptTemplate</span>
-<span class="kn">from</span> <span class="nn">llama_index.core.prompts</span> <span class="kn">import</span> <span class="n">PromptType</span>
-<span class="kn">from</span> <span class="nn">llama_index.core.prompts.utils</span> <span class="kn">import</span> <span class="n">is_chat_model</span>
-<span class="kn">from</span> <span class="nn">llama_index.core.response_synthesizers</span> <span class="kn">import</span> <span class="n">TreeSummarize</span>
-<span class="kn">from</span> <span class="nn">llama_index.core.service_context_elements.llm_predictor</span> <span class="kn">import</span> <span class="n">LLMPredictorType</span>
+<span class="kn">import</span> <span class="nn">aiohttp</span>
 
-<span class="kn">from</span> <span class="nn">autorag.nodes.passagecompressor.base</span> <span class="kn">import</span> <span class="n">passage_compressor_node</span>
+<span class="kn">from</span> <span class="nn">autorag.nodes.passagereranker.base</span> <span class="kn">import</span> <span class="n">passage_reranker_node</span>
 <span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
 
+<span class="n">JINA_API_URL</span> <span class="o">=</span> <span class="s2">&quot;https://api.jina.ai/v1/rerank&quot;</span>
 
-<div class="viewcode-block" id="tree_summarize">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagecompressor.html#autorag.nodes.passagecompressor.tree_summarize.tree_summarize">[docs]</a>
-<span class="nd">@passage_compressor_node</span>
-<span class="k">def</span> <span class="nf">tree_summarize</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-                   <span class="n">contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-                   <span class="n">scores</span><span class="p">,</span>
-                   <span class="n">ids</span><span class="p">,</span>
-                   <span class="n">llm</span><span class="p">:</span> <span class="n">LLMPredictorType</span><span class="p">,</span>
-                   <span class="n">prompt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                   <span class="n">chat_prompt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                   <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
-                   <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="jina_reranker">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.jina.jina_reranker">[docs]</a>
+<span class="nd">@passage_reranker_node</span>
+<span class="k">def</span> <span class="nf">jina_reranker</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                  <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                  <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;jina-reranker-v1-base-en&quot;</span><span class="p">,</span>
+                  <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
+                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Recursively merge retrieved texts and summarizes them in a bottom-up fashion.</span>
-<span class="sd">    This function is a wrapper for llama_index.response_synthesizers.TreeSummarize.</span>
-<span class="sd">    For more information, visit https://docs.llamaindex.ai/en/latest/examples/response_synthesizers/tree_summarize.html.</span>
+<span class="sd">    Rerank a list of contents with Jina rerank models.</span>
+<span class="sd">    You can get the API key from https://jina.ai/reranker and set it in the environment variable JINAAI_API_KEY.</span>
 
-<span class="sd">    :param queries: The queries for retrieved passages.</span>
-<span class="sd">    :param contents: The contents of retrieved passages.</span>
-<span class="sd">    :param scores: The scores of retrieved passages.</span>
-<span class="sd">        Do not use in this function, so you can pass an empty list.</span>
-<span class="sd">    :param ids: The ids of retrieved passages.</span>
-<span class="sd">        Do not use in this function, so you can pass an empty list.</span>
-<span class="sd">    :param llm: The llm instance that will be used to summarize.</span>
-<span class="sd">    :param prompt: The prompt template for summarization.</span>
-<span class="sd">        If you want to use chat prompt, you should pass chat_prompt instead.</span>
-<span class="sd">        At prompt, you must specify where to put &#39;context_str&#39; and &#39;query_str&#39;.</span>
-<span class="sd">        Default is None. When it is None, it will use llama index default prompt.</span>
-<span class="sd">    :param chat_prompt: The chat prompt template for summarization.</span>
-<span class="sd">        If you want to use normal prompt, you should pass prompt instead.</span>
-<span class="sd">        At prompt, you must specify where to put &#39;context_str&#39; and &#39;query_str&#39;.</span>
-<span class="sd">        Default is None. When it is None, it will use llama index default chat prompt.</span>
-<span class="sd">    :param batch: The batch size for llm.</span>
-<span class="sd">        Set low if you face some errors.</span>
-<span class="sd">        Default is 16.</span>
-<span class="sd">    :return: The list of compressed texts.</span>
+<span class="sd">    :param queries: The list of queries to use for reranking</span>
+<span class="sd">    :param contents_list: The list of lists of contents to rerank</span>
+<span class="sd">    :param scores_list: The list of lists of scores retrieved from the initial ranking</span>
+<span class="sd">    :param ids_list: The list of lists of ids retrieved from the initial ranking</span>
+<span class="sd">    :param top_k: The number of passages to be retrieved</span>
+<span class="sd">    :param api_key: The API key for Jina rerank.</span>
+<span class="sd">        You can set it in the environment variable JINAAI_API_KEY.</span>
+<span class="sd">        Or, you can directly set it on the config YAML file using this parameter.</span>
+<span class="sd">        Default is env variable &quot;JINAAI_API_KEY&quot;.</span>
+<span class="sd">    :param model: The model name for Cohere rerank.</span>
+<span class="sd">        You can choose between &quot;jina-reranker-v1-base-en&quot; and &quot;jina-colbert-v1-en&quot;.</span>
+<span class="sd">        Default is &quot;jina-reranker-v1-base-en&quot;.</span>
+<span class="sd">    :param batch: The number of queries to be processed in a batch</span>
+<span class="sd">    :return: Tuple of lists containing the reranked contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">prompt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_chat_model</span><span class="p">(</span><span class="n">llm</span><span class="p">):</span>
-        <span class="n">summary_template</span> <span class="o">=</span> <span class="n">PromptTemplate</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">prompt_type</span><span class="o">=</span><span class="n">PromptType</span><span class="o">.</span><span class="n">SUMMARY</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">chat_prompt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">is_chat_model</span><span class="p">(</span><span class="n">llm</span><span class="p">):</span>
-        <span class="n">summary_template</span> <span class="o">=</span> <span class="n">PromptTemplate</span><span class="p">(</span><span class="n">chat_prompt</span><span class="p">,</span> <span class="n">prompt_type</span><span class="o">=</span><span class="n">PromptType</span><span class="o">.</span><span class="n">SUMMARY</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">summary_template</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">summarizer</span> <span class="o">=</span> <span class="n">TreeSummarize</span><span class="p">(</span><span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span>
-                               <span class="n">summary_template</span><span class="o">=</span><span class="n">summary_template</span><span class="p">,</span>
-                               <span class="n">use_async</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">summarizer</span><span class="o">.</span><span class="n">aget_response</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span> <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">api_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">api_key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;JINAAI_API_KEY&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">api_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;API key is not provided.&quot;</span>
+                             <span class="s2">&quot;You can set it as an argument or as an environment variable &#39;JINAAI_API_KEY&#39;&quot;</span><span class="p">)</span>
+
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">jina_reranker_pure</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="n">top_k</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span> <span class="k">for</span>
+             <span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span> <span class="ow">in</span>
+             <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">)]</span>
     <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">results</span></div>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch</span><span class="p">))</span>
+
+    <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">content_result</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">id_result</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">score_result</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="jina_reranker_pure">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.jina.jina_reranker_pure">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">jina_reranker_pure</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                             <span class="n">scores</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                             <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                             <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;jina-reranker-v1-base-en&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">api_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;Accept-Encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;identity&quot;</span><span class="p">})</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">JINA_API_URL</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+                <span class="s2">&quot;documents&quot;</span><span class="p">:</span> <span class="n">contents</span><span class="p">,</span>
+                <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+                <span class="s2">&quot;top_n&quot;</span><span class="p">:</span> <span class="n">top_k</span><span class="p">,</span>
+            <span class="p">},</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">resp</span><span class="p">:</span>
+        <span class="n">resp_json</span> <span class="o">=</span> <span class="k">await</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;results&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">resp_json</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid response from Jina API: </span><span class="si">{</span><span class="n">resp_json</span><span class="p">[</span><span class="s1">&#39;detail&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">resp_json</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">]</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+        <span class="n">score_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;relevance_score&#39;</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+        <span class="n">id_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">ids</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">indices</span><span class="p">))</span>
+        <span class="n">content_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">contents</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">indices</span><span class="p">))</span>
+
+        <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span></div>
 
 </pre></div>
         </article>
