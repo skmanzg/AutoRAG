@@ -14,7 +14,7 @@
     <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>autorag.nodes.retrieval.bm25 - AutoRAG documentation</title>
+        <title>autorag.nodes.passagereranker.sentence_transformer - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -298,153 +298,91 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for autorag.nodes.retrieval.bm25</h1><div class="highlight"><pre>
+          <h1>Source code for autorag.nodes.passagereranker.sentence_transformer</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">rank_bm25</span> <span class="kn">import</span> <span class="n">BM25Okapi</span>
-<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">CrossEncoder</span>
 
-<span class="kn">from</span> <span class="nn">autorag.nodes.retrieval.base</span> <span class="kn">import</span> <span class="n">retrieval_node</span><span class="p">,</span> <span class="n">evenly_distribute_passages</span>
-<span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">validate_corpus_dataset</span>
+<span class="kn">from</span> <span class="nn">autorag.nodes.passagereranker.base</span> <span class="kn">import</span> <span class="n">passage_reranker_node</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
 
 
-<div class="viewcode-block" id="bm25">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.bm25">[docs]</a>
-<span class="nd">@retrieval_node</span>
-<span class="k">def</span> <span class="nf">bm25</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bm25_corpus</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span>
-<span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
+<div class="viewcode-block" id="sentence_transformer_reranker">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker">[docs]</a>
+<span class="nd">@passage_reranker_node</span>
+<span class="k">def</span> <span class="nf">sentence_transformer_reranker</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                                  <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                                  <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span> <span class="n">sentence_transformer_max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span>
+                                  <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cross-encoder/ms-marco-MiniLM-L-2-v2&quot;</span><span class="p">,</span>
+                                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    BM25 retrieval function.</span>
-<span class="sd">    You have to load a pickle file that is already ingested.</span>
+<span class="sd">    Rerank a list of contents based on their relevance to a query using Sentence Transformer model.</span>
 
-<span class="sd">    :param queries: 2-d list of query strings.</span>
-<span class="sd">        Each element of the list is a query strings of each row.</span>
-<span class="sd">    :param top_k: The number of passages to be retrieved.</span>
-<span class="sd">    :param bm25_corpus: A dictionary containing the bm25 corpus, which is doc_id from corpus and tokenized corpus.</span>
-<span class="sd">        Its data structure looks like this:</span>
-
-<span class="sd">        .. Code:: python</span>
-
-<span class="sd">            {</span>
-<span class="sd">                &quot;tokens&quot;: [], # 2d list of tokens</span>
-<span class="sd">                &quot;passage_id&quot;: [], # 2d list of passage_id.</span>
-<span class="sd">            }</span>
-
-<span class="sd">    :return: The 2-d list contains a list of passage ids that retrieved from bm25 and 2-d list of its scores.</span>
-<span class="sd">        It will be a length of queries. And each element has a length of top_k.</span>
+<span class="sd">    :param queries: The list of queries to use for reranking</span>
+<span class="sd">    :param contents_list: The list of lists of contents to rerank</span>
+<span class="sd">    :param scores_list: The list of lists of scores retrieved from the initial ranking</span>
+<span class="sd">    :param ids_list: The list of lists of ids retrieved from the initial ranking</span>
+<span class="sd">    :param top_k: The number of passages to be retrieved</span>
+<span class="sd">    :param batch: The number of queries to be processed in a batch</span>
+<span class="sd">    :param sentence_transformer_max_length: The maximum length of the input text for the Sentence Transformer model</span>
+<span class="sd">    :param model_name: The name of the Sentence Transformer model to use for reranking</span>
+<span class="sd">        Default is &quot;cross-encoder/ms-marco-MiniLM-L-2-v2&quot;</span>
+<span class="sd">    :return: tuple of lists containing the reranked contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># check if bm25_corpus is valid</span>
-    <span class="k">assert</span> <span class="p">(</span><span class="s2">&quot;tokens&quot;</span> <span class="ow">and</span> <span class="s2">&quot;passage_id&quot;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">bm25_corpus</span><span class="o">.</span><span class="n">keys</span><span class="p">())),</span> \
-        <span class="s2">&quot;bm25_corpus must contain tokens and passage_id. Please check you ingested bm25 corpus correctly.&quot;</span>
-    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;gpt2&quot;</span><span class="p">,</span> <span class="n">use_fast</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">bm25_instance</span> <span class="o">=</span> <span class="n">BM25Okapi</span><span class="p">(</span><span class="n">bm25_corpus</span><span class="p">[</span><span class="s2">&quot;tokens&quot;</span><span class="p">])</span>
-    <span class="c1"># run async bm25_pure function</span>
-    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">bm25_pure</span><span class="p">(</span><span class="n">input_queries</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">bm25_instance</span><span class="p">,</span> <span class="n">bm25_corpus</span><span class="p">)</span> <span class="k">for</span> <span class="n">input_queries</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">]</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">CrossEncoder</span><span class="p">(</span>
+        <span class="n">model_name</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="n">sentence_transformer_max_length</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+    <span class="p">)</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">sentence_transformer_reranker_pure</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">)]</span>
     <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">))</span>
-    <span class="n">id_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
-    <span class="n">score_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span></div>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
+    <span class="n">content_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+    <span class="n">id_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+    <span class="n">score_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+
+    <span class="k">del</span> <span class="n">model</span>
+    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span></div>
 
 
 
-<div class="viewcode-block" id="bm25_pure">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.bm25_pure">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">bm25_pure</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">bm25_api</span><span class="p">:</span> <span class="n">BM25Okapi</span><span class="p">,</span> <span class="n">bm25_corpus</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span>
-        <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<div class="viewcode-block" id="sentence_transformer_reranker_pure">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker_pure">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">sentence_transformer_reranker_pure</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">scores</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                                             <span class="n">ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Async BM25 retrieval function.</span>
-<span class="sd">    Its usage is for async retrieval of bm25 row by row.</span>
+<span class="sd">    Rerank a list of contents based on their relevance to a query using Sentence Transformer model.</span>
 
-<span class="sd">    :param queries: A list of query strings.</span>
-<span class="sd">    :param top_k: The number of passages to be retrieved.</span>
-<span class="sd">    :param tokenizer: A tokenizer that will be used to tokenize queries.</span>
-<span class="sd">    :param bm25_api: A bm25 api instance that will be used to retrieve passages.</span>
-<span class="sd">    :param bm25_corpus: A dictionary containing the bm25 corpus, which is doc_id from corpus and tokenized corpus.</span>
-<span class="sd">        Its data structure looks like this:</span>
-
-<span class="sd">        .. Code:: python</span>
-
-<span class="sd">            {</span>
-<span class="sd">                &quot;tokens&quot;: [], # 2d list of tokens</span>
-<span class="sd">                &quot;passage_id&quot;: [], # 2d list of passage_id. Type must be str.</span>
-<span class="sd">            }</span>
-<span class="sd">    :return: The tuple contains a list of passage ids that retrieved from bm25 and its scores.</span>
+<span class="sd">    :param query: The query to use for reranking</span>
+<span class="sd">    :param contents: The list of contents to rerank</span>
+<span class="sd">    :param scores: The list of scores retrieved from the initial ranking</span>
+<span class="sd">    :param ids: The list of ids retrieved from the initial ranking</span>
+<span class="sd">    :param top_k: The number of passages to be retrieved</span>
+<span class="sd">    :param model: The name of the Sentence Transformer model to use for reranking</span>
+<span class="sd">    :return: tuple of lists containing the reranked contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># I don&#39;t make queries operation to async, because queries length might be small, so it will occur overhead.</span>
-    <span class="n">tokenized_queries</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">queries</span><span class="p">)</span><span class="o">.</span><span class="n">input_ids</span>
-    <span class="n">id_result</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">score_result</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">tokenized_queries</span><span class="p">:</span>
-        <span class="n">scores</span> <span class="o">=</span> <span class="n">bm25_api</span><span class="o">.</span><span class="n">get_scores</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-        <span class="n">sorted_scores</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">top_n_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">scores</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="n">top_k</span><span class="p">]</span>
-        <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">bm25_corpus</span><span class="p">[</span><span class="s1">&#39;passage_id&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">top_n_index</span><span class="p">]</span>
-        <span class="n">id_result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
-        <span class="n">score_result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_scores</span><span class="p">[:</span><span class="n">top_k</span><span class="p">])</span>
+    <span class="n">input_texts</span> <span class="o">=</span> <span class="p">[(</span><span class="n">query</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span> <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">contents</span><span class="p">]</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">pred_scores</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sentences</span><span class="o">=</span><span class="n">input_texts</span><span class="p">,</span> <span class="n">apply_softmax</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="c1"># make a total result to top_k</span>
-    <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span> <span class="o">=</span> <span class="n">evenly_distribute_passages</span><span class="p">(</span><span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span><span class="p">,</span> <span class="n">top_k</span><span class="p">)</span>
-    <span class="c1"># sort id_result and score_result by score</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">[(</span><span class="n">_id</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span> <span class="k">for</span> <span class="n">score</span><span class="p">,</span> <span class="n">_id</span> <span class="ow">in</span>
-              <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">score_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">pair</span><span class="p">:</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
-    <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">result</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">id_result</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">score_result</span><span class="p">)</span></div>
+    <span class="n">content_ids_probs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">pred_scores</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
 
+    <span class="c1"># Sort the list of pairs based on the relevance score in descending order</span>
+    <span class="n">sorted_content_ids_probs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">content_ids_probs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+    <span class="c1"># crop with top_k</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">top_k</span><span class="p">:</span>
+        <span class="n">top_k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+    <span class="n">sorted_content_ids_probs</span> <span class="o">=</span> <span class="n">sorted_content_ids_probs</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]</span>
 
-<div class="viewcode-block" id="bm25_ingest">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.bm25_ingest">[docs]</a>
-<span class="k">def</span> <span class="nf">bm25_ingest</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">corpus_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">corpus_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.pkl&#39;</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Corpus path </span><span class="si">{</span><span class="n">corpus_path</span><span class="si">}</span><span class="s2"> is not a pickle file.&quot;</span><span class="p">)</span>
-    <span class="n">validate_corpus_dataset</span><span class="p">(</span><span class="n">corpus_data</span><span class="p">)</span>
-    <span class="n">ids</span> <span class="o">=</span> <span class="n">corpus_data</span><span class="p">[</span><span class="s1">&#39;doc_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">sorted_content_ids_probs</span><span class="p">)</span>
 
-    <span class="c1"># Initialize bm25_corpus</span>
-    <span class="n">bm25_corpus</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-
-    <span class="c1"># Load the BM25 corpus if it exists and get the passage ids</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
-            <span class="n">corpus</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-            <span class="n">bm25_corpus</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
-        <span class="n">duplicated_passage_rows</span> <span class="o">=</span> <span class="n">bm25_corpus</span><span class="p">[</span><span class="n">bm25_corpus</span><span class="p">[</span><span class="s1">&#39;passage_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">ids</span><span class="p">)]</span>
-        <span class="n">new_passage</span> <span class="o">=</span> <span class="n">corpus_data</span><span class="p">[</span><span class="o">~</span><span class="n">corpus_data</span><span class="p">[</span><span class="s1">&#39;doc_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">duplicated_passage_rows</span><span class="p">[</span><span class="s1">&#39;passage_id&#39;</span><span class="p">])]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">new_passage</span> <span class="o">=</span> <span class="n">corpus_data</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">new_passage</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-        <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;gpt2&#39;</span><span class="p">,</span> <span class="n">use_fast</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="n">new_passage</span><span class="o">.</span><span class="n">swifter</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">bm25_tokenize</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;doc_id&#39;</span><span class="p">],</span> <span class="n">tokenizer</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">tokenized_corpus</span><span class="p">,</span> <span class="n">passage_ids</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
-
-        <span class="n">new_bm25_corpus</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-            <span class="s1">&#39;tokens&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">tokenized_corpus</span><span class="p">),</span>
-            <span class="s1">&#39;passage_id&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">passage_ids</span><span class="p">),</span>
-        <span class="p">})</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">bm25_corpus</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-            <span class="n">bm25_corpus_updated</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">bm25_corpus</span><span class="p">,</span> <span class="n">new_bm25_corpus</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">bm25_dict</span> <span class="o">=</span> <span class="n">bm25_corpus_updated</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">bm25_dict</span> <span class="o">=</span> <span class="n">new_bm25_corpus</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">)</span>
-
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">bm25_dict</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="bm25_tokenize">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.bm25_tokenize">[docs]</a>
-<span class="k">def</span> <span class="nf">bm25_tokenize</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">passage_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]:</span>
-    <span class="n">tokenized_queries</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">queries</span><span class="p">)</span><span class="o">.</span><span class="n">input_ids</span>
-    <span class="k">return</span> <span class="n">tokenized_queries</span><span class="p">,</span> <span class="n">passage_id</span></div>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">content_result</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">id_result</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">score_result</span><span class="p">)</span></div>
 
 </pre></div>
         </article>

@@ -12,10 +12,10 @@
         gtag('js', new Date());
         gtag('config', 'G-T8ZKQM6RT9');
     </script>
-    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="jina_reranker" href="jina_reranker.html" /><link rel="prev" title="cohere_reranker" href="cohere.html" />
+    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="4. Passage_Compressor" href="../passage_compressor/passage_compressor.html" /><link rel="prev" title="jina_reranker" href="jina_reranker.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>RankGPT - AutoRAG documentation</title>
+        <title>Sentence Transformer Reranker - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -206,9 +206,9 @@
 <li class="toctree-l2"><a class="reference internal" href="monot5.html">MonoT5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="koreranker.html">Ko-reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cohere.html">cohere_reranker</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">RankGPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rankgpt.html">RankGPT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="jina_reranker.html">jina_reranker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sentence_transformer_reranker.html">Sentence Transformer Reranker</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Sentence Transformer Reranker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -300,33 +300,23 @@
           </label>
         </div>
         <article role="main">
-          <section id="rankgpt">
-<h1>RankGPT<a class="headerlink" href="#rankgpt" title="Link to this heading">#</a></h1>
-<p>The ‘RankGPT’ module is a reranker using <a class="reference external" href="https://github.com/sunnweiwei/RankGPT">RankGPT</a>.
-RankGPT uses GPT or other LLM model to reranking passages based on their relevance to a given query.</p>
+          <section id="sentence-transformer-reranker">
+<h1>Sentence Transformer Reranker<a class="headerlink" href="#sentence-transformer-reranker" title="Link to this heading">#</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">sentence</span> <span class="pre">transformer</span> <span class="pre">reranker</span></code> module is a reranker using sentence transformer model for
+passage reranking.</p>
 <section id="module-parameters">
 <h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">llm</span></code>: Default LLM model is gpt-3.5-turbo-16k, but you can use another LLM model to use RankGPT.
-The usage on the config YAML file for setting custom LLM is the same
-as <a class="reference internal" href="../generator/llama_index_llm.html"><span class="std std-doc">llama_index_llm</span></a> module.
-More details can be found in the <a class="reference internal" href="../../local_model.html"><span class="std std-doc">Local Model</span></a> page.
-Set <code class="docutils literal notranslate"><span class="pre">llm</span></code> as the name of LlamaIndex class name, and write the rest of parameters.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">verbose</span></code>: The verbosity of the RankGPT module. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">batch</span></code>: Batch size. Since this module using LLM model, choose wisely to prevent OOM or token limit error. Default is
-16.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">rankgpt_rerank_prompt</span></code>: The rerank prompt. Default is RankGPT default prompt.</p></li>
+<li><p><strong>batch</strong> : The size of batch. If you have limited CUDA memory, decrease the size of the batch. (default: 64)</p></li>
+<li><p><strong>model_name</strong> : The type of model you want to use for reranking. Default is “cross-encoder/ms-marco-MiniLM-L-2-v2”.</p></li>
+<li><p><strong>sentence_transformer_max_length</strong> : The maximum length of the input text. (default: 512)</p></li>
 </ul>
 </section>
 <section id="example-config-yaml">
 <h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">#</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rankgpt</span>
-<span class="w">    </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
-<span class="w">    </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpt-4</span>
-<span class="w">    </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
-<span class="w">    </span><span class="nt">verbose</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
-<span class="w">    </span><span class="nt">batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sentence_transformer_reranker</span>
+<span class="w">  </span><span class="nt">batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cross-encoder/ms-marco-MiniLM-L-2-v2</span>
 </pre></div>
 </div>
 </section>
@@ -337,23 +327,23 @@ Set <code class="docutils literal notranslate"><span class="pre">llm</span></cod
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="jina_reranker.html">
+          <a class="next-page" href="../passage_compressor/passage_compressor.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">jina_reranker</div>
+                <div class="title">4. Passage_Compressor</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="cohere.html">
+          <a class="prev-page" href="jina_reranker.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">cohere_reranker</div>
+                <div class="title">jina_reranker</div>
                 
               </div>
             </a>
@@ -387,7 +377,7 @@ Set <code class="docutils literal notranslate"><span class="pre">llm</span></cod
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">RankGPT</a><ul>
+<li><a class="reference internal" href="#">Sentence Transformer Reranker</a><ul>
 <li><a class="reference internal" href="#module-parameters"><strong>Module Parameters</strong></a></li>
 <li><a class="reference internal" href="#example-config-yaml"><strong>Example config.yaml</strong></a></li>
 </ul>

@@ -206,6 +206,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/cohere.html">cohere_reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/rankgpt.html">RankGPT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/jina_reranker.html">jina_reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/sentence_transformer_reranker.html">Sentence Transformer Reranker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -574,8 +575,6 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagereranker.base
 
@@ -583,6 +582,8 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.base">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagereranker.cohere
 
@@ -630,6 +631,13 @@
 
         <ul>
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.run">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.nodes.passagereranker.sentence_transformer
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.sentence_transformer">module</a>
 </li>
         </ul></li>
         <li>
@@ -1261,6 +1269,8 @@
 </li>
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.run">autorag.nodes.passagereranker.run</a>
 </li>
+          <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.sentence_transformer">autorag.nodes.passagereranker.sentence_transformer</a>
+</li>
           <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#module-autorag.nodes.passagereranker.tart">autorag.nodes.passagereranker.tart</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#module-autorag.nodes.passagereranker.tart.modeling_enc_t5">autorag.nodes.passagereranker.tart.modeling_enc_t5</a>
@@ -1506,12 +1516,16 @@
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.sem_score">sem_score() (in module autorag.evaluate.metric.generation)</a>
 </li>
-        <li><a href="api_spec/autorag.html#autorag.web.set_initial_state">set_initial_state() (in module autorag.web)</a>
+        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker">sentence_transformer_reranker() (in module autorag.nodes.passagereranker.sentence_transformer)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.set_input_embeddings">set_input_embeddings() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
+        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker_pure">sentence_transformer_reranker_pure() (in module autorag.nodes.passagereranker.sentence_transformer)</a>
+</li>
+        <li><a href="api_spec/autorag.html#autorag.web.set_initial_state">set_initial_state() (in module autorag.web)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.set_input_embeddings">set_input_embeddings() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
+</li>
         <li><a href="api_spec/autorag.html#autorag.web.set_page_config">set_page_config() (in module autorag.web)</a>
 </li>
         <li><a href="api_spec/autorag.html#autorag.web.set_page_header">set_page_header() (in module autorag.web)</a>

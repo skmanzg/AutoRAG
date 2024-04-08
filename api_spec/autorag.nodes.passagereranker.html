@@ -208,6 +208,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/cohere.html">cohere_reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/rankgpt.html">RankGPT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/jina_reranker.html">jina_reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/sentence_transformer_reranker.html">Sentence Transformer Reranker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -631,6 +632,54 @@ You can skip evaluation when you use only one module and a module parameter.</p>
 </dd></dl>
 
 </section>
+<section id="module-autorag.nodes.passagereranker.sentence_transformer">
+<span id="autorag-nodes-passagereranker-sentence-transformer-module"></span><h2>autorag.nodes.passagereranker.sentence_transformer module<a class="headerlink" href="#module-autorag.nodes.passagereranker.sentence_transformer" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.sentence_transformer.</span></span><span class="sig-name descname"><span class="pre">sentence_transformer_reranker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sentence_transformer_max_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">512</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cross-encoder/ms-marco-MiniLM-L-2-v2'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/sentence_transformer.html#sentence_transformer_reranker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker" title="Link to this definition">#</a></dt>
+<dd><p>Rerank a list of contents based on their relevance to a query using Sentence Transformer model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queries</strong> – The list of queries to use for reranking</p></li>
+<li><p><strong>contents_list</strong> – The list of lists of contents to rerank</p></li>
+<li><p><strong>scores_list</strong> – The list of lists of scores retrieved from the initial ranking</p></li>
+<li><p><strong>ids_list</strong> – The list of lists of ids retrieved from the initial ranking</p></li>
+<li><p><strong>top_k</strong> – The number of passages to be retrieved</p></li>
+<li><p><strong>batch</strong> – The number of queries to be processed in a batch</p></li>
+<li><p><strong>sentence_transformer_max_length</strong> – The maximum length of the input text for the Sentence Transformer model</p></li>
+<li><p><strong>model_name</strong> – The name of the Sentence Transformer model to use for reranking
+Default is “cross-encoder/ms-marco-MiniLM-L-2-v2”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of lists containing the reranked contents, ids, and scores</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker_pure">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.sentence_transformer.</span></span><span class="sig-name descname"><span class="pre">sentence_transformer_reranker_pure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/sentence_transformer.html#sentence_transformer_reranker_pure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker_pure" title="Link to this definition">#</a></dt>
+<dd><p>Rerank a list of contents based on their relevance to a query using Sentence Transformer model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> – The query to use for reranking</p></li>
+<li><p><strong>contents</strong> – The list of contents to rerank</p></li>
+<li><p><strong>scores</strong> – The list of scores retrieved from the initial ranking</p></li>
+<li><p><strong>ids</strong> – The list of ids retrieved from the initial ranking</p></li>
+<li><p><strong>top_k</strong> – The number of passages to be retrieved</p></li>
+<li><p><strong>model</strong> – The name of the Sentence Transformer model to use for reranking</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple of lists containing the reranked contents, ids, and scores</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-autorag.nodes.passagereranker.upr">
 <span id="autorag-nodes-passagereranker-upr-module"></span><h2>autorag.nodes.passagereranker.upr module<a class="headerlink" href="#module-autorag.nodes.passagereranker.upr" title="Link to this heading">#</a></h2>
 <dl class="py function">
@@ -807,6 +856,11 @@ The suffix prompt provides a cue or a closing instruction to the language model,
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.passagereranker.run">autorag.nodes.passagereranker.run module</a><ul>
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.run.run_passage_reranker_node"><code class="docutils literal notranslate"><span class="pre">run_passage_reranker_node()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.passagereranker.sentence_transformer">autorag.nodes.passagereranker.sentence_transformer module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker"><code class="docutils literal notranslate"><span class="pre">sentence_transformer_reranker()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker_pure"><code class="docutils literal notranslate"><span class="pre">sentence_transformer_reranker_pure()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.passagereranker.upr">autorag.nodes.passagereranker.upr module</a><ul>
