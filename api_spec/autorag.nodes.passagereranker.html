@@ -208,6 +208,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/cohere.html">cohere_reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/rankgpt.html">RankGPT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/jina_reranker.html">jina_reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/colbert.html">Colbert Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/sentence_transformer_reranker.html">Sentence Transformer Reranker</a></li>
 </ul>
 </li>
@@ -402,6 +403,41 @@ Default is env variable “COHERE_API_KEY”.</p></li>
 </dd>
 </dl>
 </dd></dl>
+
+</section>
+<section id="module-autorag.nodes.passagereranker.colbert">
+<span id="autorag-nodes-passagereranker-colbert-module"></span><h2>autorag.nodes.passagereranker.colbert module<a class="headerlink" href="#module-autorag.nodes.passagereranker.colbert" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.colbert.colbert_reranker">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.colbert.</span></span><span class="sig-name descname"><span class="pre">colbert_reranker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'colbert-ir/colbertv2.0'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/colbert.html#colbert_reranker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.colbert.colbert_reranker" title="Link to this definition">#</a></dt>
+<dd><p>Rerank a list of contents with Colbert rerank models.
+You can get more information about a Colbert model at <a class="reference external" href="https://huggingface.co/colbert-ir/colbertv2.0">https://huggingface.co/colbert-ir/colbertv2.0</a>.
+It uses BERT-based model, so recommend using CUDA gpu for faster reranking.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queries</strong> – The list of queries to use for reranking</p></li>
+<li><p><strong>contents_list</strong> – The list of lists of contents to rerank</p></li>
+<li><p><strong>scores_list</strong> – The list of lists of scores retrieved from the initial ranking</p></li>
+<li><p><strong>ids_list</strong> – The list of lists of ids retrieved from the initial ranking</p></li>
+<li><p><strong>top_k</strong> – The number of passages to be retrieved</p></li>
+<li><p><strong>batch</strong> – The number of queries to be processed in a batch
+Default is 64.</p></li>
+<li><p><strong>model_name</strong> – The model name for Colbert rerank.
+You can choose colbert model for reranking.
+Default is “colbert-ir/colbertv2.0”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple of lists containing the reranked contents, ids, and scores</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.colbert.get_colbert_score">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.colbert.</span></span><span class="sig-name descname"><span class="pre">get_colbert_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/colbert.html#get_colbert_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.colbert.get_colbert_score" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 </section>
 <section id="module-autorag.nodes.passagereranker.jina">
@@ -823,6 +859,11 @@ The suffix prompt provides a cue or a closing instruction to the language model,
 <li><a class="reference internal" href="#module-autorag.nodes.passagereranker.cohere">autorag.nodes.passagereranker.cohere module</a><ul>
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.cohere.cohere_rerank_pure"><code class="docutils literal notranslate"><span class="pre">cohere_rerank_pure()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.cohere.cohere_reranker"><code class="docutils literal notranslate"><span class="pre">cohere_reranker()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.passagereranker.colbert">autorag.nodes.passagereranker.colbert module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.colbert.colbert_reranker"><code class="docutils literal notranslate"><span class="pre">colbert_reranker()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.colbert.get_colbert_score"><code class="docutils literal notranslate"><span class="pre">get_colbert_score()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.passagereranker.jina">autorag.nodes.passagereranker.jina module</a><ul>

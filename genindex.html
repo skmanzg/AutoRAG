@@ -206,6 +206,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/cohere.html">cohere_reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/rankgpt.html">RankGPT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/jina_reranker.html">jina_reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/colbert.html">Colbert Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/sentence_transformer_reranker.html">Sentence Transformer Reranker</a></li>
 </ul>
 </li>
@@ -592,6 +593,13 @@
 </li>
         </ul></li>
         <li>
+    autorag.nodes.passagereranker.colbert
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.colbert">module</a>
+</li>
+        </ul></li>
+        <li>
     autorag.nodes.passagereranker.jina
 
         <ul>
@@ -915,6 +923,8 @@
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.cohere.cohere_reranker">cohere_reranker() (in module autorag.nodes.passagereranker.cohere)</a>
 </li>
+        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.colbert.colbert_reranker">colbert_reranker() (in module autorag.nodes.passagereranker.colbert)</a>
+</li>
         <li><a href="api_spec/autorag.utils.html#autorag.utils.util.convert_env_in_dict">convert_env_in_dict() (in module autorag.utils.util)</a>
 </li>
         <li><a href="api_spec/autorag.utils.html#autorag.utils.util.convert_string_to_tuple_in_dict">convert_string_to_tuple_in_dict() (in module autorag.utils.util)</a>
@@ -1041,12 +1051,14 @@
 </li>
         <li><a href="api_spec/autorag.nodes.generator.html#autorag.nodes.generator.base.generator_node">generator_node() (in module autorag.nodes.generator.base)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.get_encoder">get_encoder() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
+        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.colbert.get_colbert_score">get_colbert_score() (in module autorag.nodes.passagereranker.colbert)</a>
 </li>
-        <li><a href="api_spec/autorag.data.utils.html#autorag.data.utils.util.get_file_metadata">get_file_metadata() (in module autorag.data.utils.util)</a>
+        <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.get_encoder">get_encoder() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.data.utils.html#autorag.data.utils.util.get_file_metadata">get_file_metadata() (in module autorag.data.utils.util)</a>
+</li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.get_hybrid_execution_times">get_hybrid_execution_times() (in module autorag.nodes.retrieval.run)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.get_ids_and_scores">get_ids_and_scores() (in module autorag.nodes.retrieval.run)</a>
@@ -1256,6 +1268,8 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.base">autorag.nodes.passagereranker.base</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.cohere">autorag.nodes.passagereranker.cohere</a>
+</li>
+          <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.colbert">autorag.nodes.passagereranker.colbert</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.jina">autorag.nodes.passagereranker.jina</a>
 </li>
