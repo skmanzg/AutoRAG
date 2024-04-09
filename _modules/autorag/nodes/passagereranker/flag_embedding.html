@@ -14,7 +14,7 @@
     <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>autorag.nodes.passagereranker.rankgpt - AutoRAG documentation</title>
+        <title>autorag.nodes.passagereranker.flag_embedding - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -300,121 +300,91 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for autorag.nodes.passagereranker.rankgpt</h1><div class="highlight"><pre>
+          <h1>Source code for autorag.nodes.passagereranker.flag_embedding</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">llama_index.core.base.llms.types</span> <span class="kn">import</span> <span class="n">ChatMessage</span><span class="p">,</span> <span class="n">ChatResponse</span>
-<span class="kn">from</span> <span class="nn">llama_index.core.llms</span> <span class="kn">import</span> <span class="n">LLM</span>
-<span class="kn">from</span> <span class="nn">llama_index.core.postprocessor.rankGPT_rerank</span> <span class="kn">import</span> <span class="n">RankGPTRerank</span>
-<span class="kn">from</span> <span class="nn">llama_index.core.schema</span> <span class="kn">import</span> <span class="n">NodeWithScore</span><span class="p">,</span> <span class="n">QueryBundle</span><span class="p">,</span> <span class="n">TextNode</span>
-<span class="kn">from</span> <span class="nn">llama_index.core.utils</span> <span class="kn">import</span> <span class="n">print_text</span>
-<span class="kn">from</span> <span class="nn">llama_index.llms.openai</span> <span class="kn">import</span> <span class="n">OpenAI</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">FlagEmbedding</span> <span class="kn">import</span> <span class="n">FlagReranker</span>
 
-<span class="kn">from</span> <span class="nn">autorag</span> <span class="kn">import</span> <span class="n">generator_models</span>
 <span class="kn">from</span> <span class="nn">autorag.nodes.passagereranker.base</span> <span class="kn">import</span> <span class="n">passage_reranker_node</span>
 <span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
 
 
-<div class="viewcode-block" id="rankgpt">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.rankgpt.rankgpt">[docs]</a>
+<div class="viewcode-block" id="flag_embedding_reranker">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.flag_embedding.flag_embedding_reranker">[docs]</a>
 <span class="nd">@passage_reranker_node</span>
-<span class="k">def</span> <span class="nf">rankgpt</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-            <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-            <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">llm</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LLM</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-            <span class="n">rankgpt_rerank_prompt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
+<span class="k">def</span> <span class="nf">flag_embedding_reranker</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                            <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                            <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span> <span class="n">use_fp16</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                            <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;BAAI/bge-reranker-large&quot;</span><span class="p">,</span>
+                            <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Rerank given context paragraphs using RankGPT.</span>
-<span class="sd">    Return pseudo scores, since the actual scores are not available on RankGPT.</span>
+<span class="sd">    Rerank a list of contents based on their relevance to a query using BAAI Reranker model.</span>
 
 <span class="sd">    :param queries: The list of queries to use for reranking</span>
 <span class="sd">    :param contents_list: The list of lists of contents to rerank</span>
 <span class="sd">    :param scores_list: The list of lists of scores retrieved from the initial ranking</span>
 <span class="sd">    :param ids_list: The list of lists of ids retrieved from the initial ranking</span>
 <span class="sd">    :param top_k: The number of passages to be retrieved</span>
-<span class="sd">    :param llm: The LLM model to use for RankGPT rerank.</span>
-<span class="sd">        It is LlamaIndex model.</span>
-<span class="sd">        Default is OpenAI model with gpt-3.5-turbo-16k.</span>
-<span class="sd">    :param verbose: Whether to print intermediate steps.</span>
-<span class="sd">    :param rankgpt_rerank_prompt: The prompt template for RankGPT rerank.</span>
-<span class="sd">        Default is RankGPT&#39;s default prompt.</span>
-<span class="sd">    :param batch: The number of queries to be processed in a batch.</span>
-<span class="sd">    :return: Tuple of lists containing the reranked contents, ids, and scores</span>
+<span class="sd">    :param batch: The number of queries to be processed in a batch</span>
+<span class="sd">    :param use_fp16: Whether to use fp16 for inference</span>
+<span class="sd">    :param model_name: The name of the BAAI Reranker model name.</span>
+<span class="sd">        Default is &quot;BAAI/bge-reranker-large&quot;</span>
+<span class="sd">    :return: tuple of lists containing the reranked contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">query_bundles</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">query</span><span class="p">:</span> <span class="n">QueryBundle</span><span class="p">(</span><span class="n">query_str</span><span class="o">=</span><span class="n">query</span><span class="p">),</span> <span class="n">queries</span><span class="p">))</span>
-    <span class="n">nodes_list</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">NodeWithScore</span><span class="p">(</span><span class="n">node</span><span class="o">=</span><span class="n">TextNode</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">score</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">content_list</span><span class="p">,</span> <span class="n">score_list</span><span class="p">)))</span>
-        <span class="k">for</span> <span class="n">content_list</span><span class="p">,</span> <span class="n">score_list</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">contents_list</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">)]</span>
-    <span class="k">if</span> <span class="n">llm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo-16k&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">llm</span><span class="p">,</span> <span class="n">LLM</span><span class="p">):</span>
-        <span class="n">llm</span> <span class="o">=</span> <span class="n">generator_models</span><span class="p">[</span><span class="n">llm</span><span class="p">](</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="n">reranker</span> <span class="o">=</span> <span class="n">AsyncRankGPTRerank</span><span class="p">(</span><span class="n">top_n</span><span class="o">=</span><span class="n">top_k</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">rankgpt_rerank_prompt</span><span class="o">=</span><span class="n">rankgpt_rerank_prompt</span><span class="p">)</span>
-
-    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">reranker</span><span class="o">.</span><span class="n">async_postprocess_nodes</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span> <span class="k">for</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">ids</span> <span class="ow">in</span>
-             <span class="nb">zip</span><span class="p">(</span><span class="n">nodes_list</span><span class="p">,</span> <span class="n">query_bundles</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">)]</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">FlagReranker</span><span class="p">(</span>
+        <span class="n">model_name</span><span class="p">,</span> <span class="n">use_fp16</span><span class="o">=</span><span class="n">use_fp16</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
+    <span class="p">)</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">flag_embedding_reranker_pure</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">)]</span>
     <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">rerank_result</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
-    <span class="n">content_result</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">rerank_result</span><span class="p">]</span>
-    <span class="n">score_result</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">rerank_result</span><span class="p">]</span>
-    <span class="n">id_result</span> <span class="o">=</span> <span class="p">[</span><span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">rerank_result</span><span class="p">]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
+    <span class="n">content_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+    <span class="n">id_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+    <span class="n">score_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
 
-    <span class="k">del</span> <span class="n">reranker</span>
-    <span class="k">del</span> <span class="n">llm</span>
+    <span class="k">del</span> <span class="n">model</span>
+    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span></div>
 
 
 
-<div class="viewcode-block" id="AsyncRankGPTRerank">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank">[docs]</a>
-<span class="k">class</span> <span class="nc">AsyncRankGPTRerank</span><span class="p">(</span><span class="n">RankGPTRerank</span><span class="p">):</span>
-<div class="viewcode-block" id="AsyncRankGPTRerank.async_run_llm">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.async_run_llm">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">async_run_llm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ChatMessage</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ChatResponse</span><span class="p">:</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">achat</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span></div>
+<div class="viewcode-block" id="flag_embedding_reranker_pure">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.flag_embedding.flag_embedding_reranker_pure">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">flag_embedding_reranker_pure</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">scores</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                                       <span class="n">ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rerank a list of contents based on their relevance to a query using BAAI Reranker model.</span>
 
+<span class="sd">    :param query: The query to use for reranking</span>
+<span class="sd">    :param contents: The list of contents to rerank</span>
+<span class="sd">    :param scores: The list of scores retrieved from the initial ranking</span>
+<span class="sd">    :param ids: The list of ids retrieved from the initial ranking</span>
+<span class="sd">    :param top_k: The number of passages to be retrieved</span>
+<span class="sd">    :param model: BAAI Reranker model.</span>
+<span class="sd">    :return: tuple of lists containing the reranked contents, ids, and scores</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">input_texts</span> <span class="o">=</span> <span class="p">[(</span><span class="n">query</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span> <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">contents</span><span class="p">]</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">pred_scores</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">compute_score</span><span class="p">(</span><span class="n">sentence_pairs</span><span class="o">=</span><span class="n">input_texts</span><span class="p">)</span>
 
-<div class="viewcode-block" id="AsyncRankGPTRerank.async_postprocess_nodes">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.async_postprocess_nodes">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">async_postprocess_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                                      <span class="n">nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NodeWithScore</span><span class="p">],</span>
-                                      <span class="n">query_bundle</span><span class="p">:</span> <span class="n">QueryBundle</span><span class="p">,</span>
-                                      <span class="n">ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                                      <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">NodeWithScore</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-        <span class="k">if</span> <span class="n">ids</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">))]</span>
+    <span class="n">content_ids_probs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">pred_scores</span><span class="p">))</span>
 
-        <span class="n">items</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query_bundle</span><span class="o">.</span><span class="n">query_str</span><span class="p">,</span>
-            <span class="s2">&quot;hits&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">get_content</span><span class="p">()}</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">],</span>
-        <span class="p">}</span>
+    <span class="c1"># Sort the list of pairs based on the relevance score in descending order</span>
+    <span class="n">sorted_content_ids_probs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">content_ids_probs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">messages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_permutation_instruction</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">items</span><span class="p">)</span>
-        <span class="n">permutation</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">async_run_llm</span><span class="p">(</span><span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">permutation</span><span class="o">.</span><span class="n">message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">permutation</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">rerank_ranks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_receive_permutation</span><span class="p">(</span>
-                <span class="n">items</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">permutation</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="n">print_text</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After Reranking, new rank list for nodes: </span><span class="si">{</span><span class="n">rerank_ranks</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># crop with top_k</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">top_k</span><span class="p">:</span>
+        <span class="n">top_k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+    <span class="n">sorted_content_ids_probs</span> <span class="o">=</span> <span class="n">sorted_content_ids_probs</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]</span>
 
-            <span class="n">initial_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NodeWithScore</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">id_results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">sorted_content_ids_probs</span><span class="p">)</span>
 
-            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">rerank_ranks</span><span class="p">:</span>
-                <span class="n">initial_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">NodeWithScore</span><span class="p">(</span><span class="n">node</span><span class="o">=</span><span class="n">nodes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="n">nodes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">id_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ids</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
-            <span class="k">return</span> <span class="n">initial_results</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_n</span><span class="p">],</span> <span class="n">id_results</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_n</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">nodes</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_n</span><span class="p">],</span> <span class="n">ids</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_n</span><span class="p">]</span></div>
-</div>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">content_result</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">id_result</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">score_result</span><span class="p">)</span></div>
 
 </pre></div>
         </article>

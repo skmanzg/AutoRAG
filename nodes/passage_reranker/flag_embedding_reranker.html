@@ -12,10 +12,10 @@
         gtag('js', new Date());
         gtag('config', 'G-T8ZKQM6RT9');
     </script>
-    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="llama_index LLM" href="llama_index_llm.html" /><link rel="prev" title="F-String" href="../prompt_maker/fstring.html" />
+    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="4. Passage_Compressor" href="../passage_compressor/passage_compressor.html" /><link rel="prev" title="Sentence Transformer Reranker" href="sentence_transformer_reranker.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>6. Generator - AutoRAG documentation</title>
+        <title>Flag Embedding Reranker - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -200,17 +200,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../retrieval/hybrid_cc.html">Hybrid - cc</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/upr.html">UPR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/tart.html">TART</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/monot5.html">MonoT5</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/koreranker.html">Ko-reranker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/cohere.html">cohere_reranker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/rankgpt.html">RankGPT</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/jina_reranker.html">jina_reranker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/colbert.html">Colbert Reranker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/sentence_transformer_reranker.html">Sentence Transformer Reranker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../passage_reranker/flag_embedding_reranker.html">Flag Embedding Reranker</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="passage_reranker.html">3. Passage_Reranker</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="upr.html">UPR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tart.html">TART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monot5.html">MonoT5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="koreranker.html">Ko-reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cohere.html">cohere_reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rankgpt.html">RankGPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jina_reranker.html">jina_reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colbert.html">Colbert Reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sentence_transformer_reranker.html">Sentence Transformer Reranker</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Flag Embedding Reranker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -221,9 +221,9 @@
 <li class="toctree-l2"><a class="reference internal" href="../prompt_maker/fstring.html">F-String</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">6. Generator</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="llama_index_llm.html">llama_index LLM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vllm.html">vllm</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../generator/generator.html">6. Generator</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../generator/llama_index_llm.html">llama_index LLM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../generator/vllm.html">vllm</a></li>
 </ul>
 </li>
 </ul>
@@ -302,99 +302,29 @@
           </label>
         </div>
         <article role="main">
-          <section id="generator">
-<h1>6. Generator<a class="headerlink" href="#generator" title="Link to this heading">#</a></h1>
-<section id="definition">
-<h2>🔎 <strong>Definition</strong><a class="headerlink" href="#definition" title="Link to this heading">#</a></h2>
-<p>A node that allows for experimentation with various Large Language Models (LLMs). This node is designed to facilitate the testing and evaluation of different LLMs to determine the most effective model for specific tasks or data sets.</p>
-</section>
-<section id="parameters">
-<h2>🔢 <strong>Parameters</strong><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
-<section id="overview">
-<h3><strong>Overview</strong><a class="headerlink" href="#overview" title="Link to this heading">#</a></h3>
-<p>This document serves as a guide for configuring parameters, strategies, and the config YAML file for various nodes within a system</p>
-</section>
-<section id="node-parameters">
-<h3><strong>Node Parameters</strong><a class="headerlink" href="#node-parameters" title="Link to this heading">#</a></h3>
+          <section id="flag-embedding-reranker">
+<h1>Flag Embedding Reranker<a class="headerlink" href="#flag-embedding-reranker" title="Link to this heading">#</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">flag</span> <span class="pre">embedding</span> <span class="pre">reranker</span></code> module is a reranker using BAAI Reranker model for
+passage reranking.</p>
+<section id="module-parameters">
+<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><strong>None</strong></p></li>
-</ul>
-</section>
-<section id="strategy-parameters">
-<h3><strong>Strategy Parameters</strong><a class="headerlink" href="#strategy-parameters" title="Link to this heading">#</a></h3>
-<ol class="arabic">
-<li><p><strong>Metrics</strong>:</p>
-<ul class="simple">
-<li><p><strong>Types</strong>: <code class="docutils literal notranslate"><span class="pre">bleu</span></code>, <code class="docutils literal notranslate"><span class="pre">meteor</span></code>, <code class="docutils literal notranslate"><span class="pre">rouge</span></code>, <code class="docutils literal notranslate"><span class="pre">sem_score</span></code>, <code class="docutils literal notranslate"><span class="pre">g_eval</span></code>, <code class="docutils literal notranslate"><span class="pre">bert_score</span></code></p></li>
-</ul>
-<div class="admonition-purpose admonition">
-<p class="admonition-title">Purpose</p>
-<p>These metrics are used to evaluate the performance of language models by comparing model-generated text to ground truth texts.
-We are planning to add more metrics to evaluate generation performance.</p>
-</div>
-<div class="admonition-sem-score admonition">
-<p class="admonition-title">sem_score</p>
-<p>Sem_score is a metric that evaluates the semantic similarity between ground truth and llm generation.
-It is quite simple, but effective to evaluate LLM systems.</p>
-<p>Since it uses embedding model, you can specify the embedding model name at config YAML file.
-Since AutoRAG v0.0.6, we support dictionary at strategy.
-You can check out this feature at the example config.yaml file below.</p>
-</div>
-</li>
-<li><p><strong>Speed Threshold</strong>:</p>
-<ul class="simple">
-<li><p><strong>Description</strong>: This optional parameter can be applied to all nodes to ensure that the processing time for a method does not exceed a predefined threshold.</p></li>
+<li><p><strong>batch</strong> : The size of batch. If you have limited CUDA memory, decrease the size of the batch. (default: 64)</p></li>
+<li><p><strong>model_name</strong> : The type of model you want to use for reranking. Default is “BAAI/bge-reranker-large”.</p>
+<ul>
+<li><p>you can check model list at <a class="reference external" href="https://github.com/FlagOpen/FlagEmbedding">here</a></p></li>
 </ul>
 </li>
-<li><p><strong>Token Threshold</strong>:</p>
-<ul class="simple">
-<li><p><strong>Description</strong>: This optional parameter ensures that the average token length of the output (LLM’s generations)
-does not exceed the threshold.</p></li>
+<li><p><strong>use_fp16</strong> : Whether to use fp16 or not. (default: False)</p></li>
 </ul>
-</li>
-</ol>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>When you use <code class="docutils literal notranslate"><span class="pre">llama_index</span></code> module, the tokenizer will be gpt2 automatically.
-Please refer to the <a class="reference external" href="https://github.com/Marker-Inc-Korea/AutoRAG/issues/259">issue</a> for more details.</p>
-</div>
 </section>
-<section id="example-config-yaml-file">
-<h3>Example config.yaml file<a class="headerlink" href="#example-config-yaml-file" title="Link to this heading">#</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_line_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">post_retrieve_node_line</span><span class="w">  </span><span class="c1"># Arbitrary node line name</span>
-<span class="w">  </span><span class="nt">nodes</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generator</span>
-<span class="w">      </span><span class="nt">strategy</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">metrics</span><span class="p">:</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bleu</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">meteor</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sem_score</span>
-<span class="w">             </span><span class="nt">embedding_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">g_eval</span>
-<span class="w">             </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">consistency</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">fluency</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">relevance</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">coherence</span><span class="p p-Indicator">]</span>
-<span class="w">             </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpt-4</span>
-<span class="w">           </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bert_score</span>
-<span class="w">             </span><span class="nt">lang</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">en</span>
-<span class="w">             </span><span class="nt">batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
-<span class="w">        </span><span class="nt">speed_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">        </span><span class="nt">token_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4000</span>
-<span class="w">      </span><span class="nt">modules</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
-<span class="w">          </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">openai</span><span class="p p-Indicator">]</span>
-<span class="w">          </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">gpt-3.5-turbo-16k</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">gpt-3.5-turbo-1106</span><span class="p p-Indicator">]</span>
-<span class="w">          </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.5</span><span class="p p-Indicator">]</span>
+<section id="example-config-yaml">
+<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">#</a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flag_embedding_reranker</span>
+<span class="w">  </span><span class="nt">batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BAAI/bge-reranker-large</span>
 </pre></div>
 </div>
-<section id="supported-modules">
-<h4>Supported Modules<a class="headerlink" href="#supported-modules" title="Link to this heading">#</a></h4>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="llama_index_llm.html">llama_index LLM</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vllm.html">vllm</a></li>
-</ul>
-</div>
-</section>
-</section>
 </section>
 </section>
 
@@ -403,23 +333,23 @@ Please refer to the <a class="reference external" href="https://github.com/Marke
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="llama_index_llm.html">
+          <a class="next-page" href="../passage_compressor/passage_compressor.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">llama_index LLM</div>
+                <div class="title">4. Passage_Compressor</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../prompt_maker/fstring.html">
+          <a class="prev-page" href="sentence_transformer_reranker.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">F-String</div>
+                <div class="title">Sentence Transformer Reranker</div>
                 
               </div>
             </a>
@@ -453,18 +383,9 @@ Please refer to the <a class="reference external" href="https://github.com/Marke
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">6. Generator</a><ul>
-<li><a class="reference internal" href="#definition">🔎 <strong>Definition</strong></a></li>
-<li><a class="reference internal" href="#parameters">🔢 <strong>Parameters</strong></a><ul>
-<li><a class="reference internal" href="#overview"><strong>Overview</strong></a></li>
-<li><a class="reference internal" href="#node-parameters"><strong>Node Parameters</strong></a></li>
-<li><a class="reference internal" href="#strategy-parameters"><strong>Strategy Parameters</strong></a></li>
-<li><a class="reference internal" href="#example-config-yaml-file">Example config.yaml file</a><ul>
-<li><a class="reference internal" href="#supported-modules">Supported Modules</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">Flag Embedding Reranker</a><ul>
+<li><a class="reference internal" href="#module-parameters"><strong>Module Parameters</strong></a></li>
+<li><a class="reference internal" href="#example-config-yaml"><strong>Example config.yaml</strong></a></li>
 </ul>
 </li>
 </ul>
