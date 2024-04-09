@@ -219,6 +219,7 @@
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/prompt_maker/prompt_maker.html">5. Prompt Maker</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 5. Prompt Maker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/prompt_maker/fstring.html">F-String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/prompt_maker/long_context_reorder.html">Long Context Reorder</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/generator/generator.html">6. Generator</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -357,6 +358,56 @@ You must type a prompt or prompt list at config yaml file like this:</p>
 </dd></dl>
 
 </section>
+<section id="module-autorag.nodes.promptmaker.long_context_reorder">
+<span id="autorag-nodes-promptmaker-long-context-reorder-module"></span><h2>autorag.nodes.promptmaker.long_context_reorder module<a class="headerlink" href="#module-autorag.nodes.promptmaker.long_context_reorder" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.promptmaker.long_context_reorder.long_context_reorder">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.promptmaker.long_context_reorder.</span></span><span class="sig-name descname"><span class="pre">long_context_reorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrieved_contents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrieve_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/promptmaker/long_context_reorder.html#long_context_reorder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.promptmaker.long_context_reorder.long_context_reorder" title="Link to this definition">#</a></dt>
+<dd><blockquote>
+<div><p>Models struggle to access significant details found
+in the center of extended contexts. A study
+(<a class="reference external" href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a>) observed that the best
+performance typically arises when crucial data is positioned
+at the start or conclusion of the input context. Additionally,
+as the input context lengthens, performance drops notably, even
+in models designed for long contexts.”.</p>
+<p>nodes:
+- node_type: prompt_maker</p>
+<blockquote>
+<div><p>modules:
+- module_type: long_context_reorder</p>
+<blockquote>
+<div><p>prompt: [Answer this question: {query}</p>
+</div></blockquote>
+</div></blockquote>
+</div></blockquote>
+<dl class="simple">
+<dt>{retrieved_contents},</dt><dd><p>Read the passages carefully and answer this question: {query}</p>
+</dd>
+</dl>
+<p>Passages: {retrieved_contents}]</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">param prompt<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A prompt string.</p>
+</dd>
+<dt class="field-even">param queries<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of query strings.</p>
+</dd>
+<dt class="field-odd">param retrieved_contents<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of retrieved contents.</p>
+</dd>
+<dt class="field-even">param retrieve_scores<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of retrieve scores.</p>
+</dd>
+<dt class="field-odd">return<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Prompts that made by long context reorder.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
 <section id="module-autorag.nodes.promptmaker.run">
 <span id="autorag-nodes-promptmaker-run-module"></span><h2>autorag.nodes.promptmaker.run module<a class="headerlink" href="#module-autorag.nodes.promptmaker.run" title="Link to this heading">#</a></h2>
 <dl class="py function">
@@ -474,6 +525,10 @@ It contains previous result columns and prompt maker’s result columns which is
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.promptmaker.fstring">autorag.nodes.promptmaker.fstring module</a><ul>
 <li><a class="reference internal" href="#autorag.nodes.promptmaker.fstring.fstring"><code class="docutils literal notranslate"><span class="pre">fstring()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.promptmaker.long_context_reorder">autorag.nodes.promptmaker.long_context_reorder module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.promptmaker.long_context_reorder.long_context_reorder"><code class="docutils literal notranslate"><span class="pre">long_context_reorder()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.promptmaker.run">autorag.nodes.promptmaker.run module</a><ul>
