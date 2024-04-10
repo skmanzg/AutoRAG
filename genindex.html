@@ -196,6 +196,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/vectordb.html">Vectordb</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/hybrid_cc.html">Hybrid - cc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/hybrid_rsf.html">Hybrid - rsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -592,8 +593,6 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.cohere">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagereranker.colbert
 
@@ -601,6 +600,8 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.colbert">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagereranker.flag_embedding
 
@@ -802,6 +803,13 @@
 
         <ul>
           <li><a href="api_spec/autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.hybrid_rrf">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.nodes.retrieval.hybrid_rsf
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.hybrid_rsf">module</a>
 </li>
         </ul></li>
         <li>
@@ -1115,6 +1123,8 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rrf.hybrid_rrf">hybrid_rrf() (in module autorag.nodes.retrieval.hybrid_rrf)</a>
 </li>
+        <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rsf.hybrid_rsf">hybrid_rsf() (in module autorag.nodes.retrieval.hybrid_rsf)</a>
+</li>
         <li><a href="api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.hyde.hyde">hyde() (in module autorag.nodes.queryexpansion.hyde)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.hyde.hyde_pure">hyde_pure() (in module autorag.nodes.queryexpansion.hyde)</a>
@@ -1351,6 +1361,8 @@
 </li>
           <li><a href="api_spec/autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.hybrid_rrf">autorag.nodes.retrieval.hybrid_rrf</a>
 </li>
+          <li><a href="api_spec/autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.hybrid_rsf">autorag.nodes.retrieval.hybrid_rsf</a>
+</li>
           <li><a href="api_spec/autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.run">autorag.nodes.retrieval.run</a>
 </li>
           <li><a href="api_spec/autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.vectordb">autorag.nodes.retrieval.vectordb</a>
@@ -1504,11 +1516,13 @@
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.rouge">rouge() (in module autorag.evaluate.metric.generation)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rrf.rrf_calculate">rrf_calculate() (in module autorag.nodes.retrieval.hybrid_rrf)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rrf.rrf_pure">rrf_pure() (in module autorag.nodes.retrieval.hybrid_rrf)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rsf.rsf_pure">rsf_pure() (in module autorag.nodes.retrieval.hybrid_rsf)</a>
 </li>
         <li><a href="api_spec/autorag.html#autorag.deploy.Runner.run">run() (autorag.deploy.Runner method)</a>
 

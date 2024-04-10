@@ -12,7 +12,7 @@
         gtag('js', new Date());
         gtag('config', 'G-T8ZKQM6RT9');
     </script>
-    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="3. Passage_Reranker" href="../passage_reranker/passage_reranker.html" /><link rel="prev" title="Hybrid - rrf" href="hybrid_rrf.html" />
+    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Hybrid - rsf" href="hybrid_rsf.html" /><link rel="prev" title="Hybrid - rrf" href="hybrid_rrf.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
         <title>Hybrid - cc - AutoRAG documentation</title>
@@ -198,6 +198,7 @@
 <li class="toctree-l2"><a class="reference internal" href="vectordb.html">Vectordb</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hybrid_rrf.html">Hybrid - rrf</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Hybrid - cc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid_rsf.html">Hybrid - rsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -310,7 +311,8 @@
 This algorithm allows for the calculation of scores with varying weights between each retrieval, offering a flexible approach to combining retrieval scores.</p>
 <section id="hybird-additional-explanation">
 <h2>❗️Hybird additional explanation<a class="headerlink" href="#hybird-additional-explanation" title="Link to this heading">#</a></h2>
-<p>By default, <code class="docutils literal notranslate"><span class="pre">hybrid_rrf</span></code> and <code class="docutils literal notranslate"><span class="pre">hybrid_cc</span></code> are designed to be used without writing target_module_params. Other modules listed in target_modules must be included in the config file, and hybrid is calculated based on the best of the results from those modules.</p>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">hybrid</span></code> is designed to be used without writing target_module_params. Other modules listed in target_modules
+must be included in the config file, and hybrid is calculated based on the best of the results from those modules.</p>
 <p>Once evaluated to find the optimal pipeline, extracting the pipeline creates a parameter called target_module_params. This helps the hybrid work even if you don’t include other modules, which is useful in test dataset evaluation and deployment situations.</p>
 <p>Also, target_modules and target_module_params must be in the form of a tuple. By default, tuples don’t work in yaml files, but AutoRAG specifically uses them. In the AutoRAG config yaml file, a tuple is a tuple of parameters, as opposed to a List, which is a list of options for a parameter that you can try for optimization. Note that because we are using <code class="docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code>, we have to write tuples as if we were writing them in python.</p>
 <p>So something like <code class="docutils literal notranslate"><span class="pre">('bm25',</span> <span class="pre">'vectordb')</span></code> with quotes will work.</p>
@@ -346,12 +348,12 @@ It is automatically generated when you run the optimization process.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../passage_reranker/passage_reranker.html">
+          <a class="next-page" href="hybrid_rsf.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">3. Passage_Reranker</div>
+                <div class="title">Hybrid - rsf</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>

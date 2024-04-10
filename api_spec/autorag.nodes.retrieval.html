@@ -198,6 +198,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/vectordb.html">Vectordb</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_cc.html">Hybrid - cc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_rsf.html">Hybrid - rsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -508,6 +509,44 @@ For more information, please visit our documentation.</p></li>
 <dd></dd></dl>
 
 </section>
+<section id="module-autorag.nodes.retrieval.hybrid_rsf">
+<span id="autorag-nodes-retrieval-hybrid-rsf-module"></span><h2>autorag.nodes.retrieval.hybrid_rsf module<a class="headerlink" href="#module-autorag.nodes.retrieval.hybrid_rsf" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_rsf.hybrid_rsf">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_rsf.</span></span><span class="sig-name descname"><span class="pre">hybrid_rsf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.5,</span> <span class="pre">0.5)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_rsf.html#hybrid_rsf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_rsf.hybrid_rsf" title="Link to this definition">#</a></dt>
+<dd><p>Hybrid RSF function.
+RSF (Relative Score Fusion) is a method to combine multiple retrieval results based on their relative scores.
+It is uniquer than other retrieval modules, because it does not really execute retrieval,
+but just fuse the results of other retrieval functions.
+So you have to run more than two retrieval modules before running this function.
+And collect ids and scores result from each retrieval module.
+Make it as tuple and input it to this function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ids</strong> – The tuple of ids that you want to fuse.
+The length of this must be the same as the length of scores.</p></li>
+<li><p><strong>scores</strong> – The retrieve scores that you want to fuse.
+The length of this must be the same as the length of ids.</p></li>
+<li><p><strong>top_k</strong> – The number of passages to be retrieved.</p></li>
+<li><p><strong>weights</strong> – Weight for each retrieval result.
+Default is (0.5, 0.5).
+You must set its length as the same as the length of ids and scores.
+Plus, the sum of the weights must be 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The tuple of ids and fused scores that fused by RSF.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_rsf.rsf_pure">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_rsf.</span></span><span class="sig-name descname"><span class="pre">rsf_pure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.5,</span> <span class="pre">0.5)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_rsf.html#rsf_pure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_rsf.rsf_pure" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
 <section id="module-autorag.nodes.retrieval.run">
 <span id="autorag-nodes-retrieval-run-module"></span><h2>autorag.nodes.retrieval.run module<a class="headerlink" href="#module-autorag.nodes.retrieval.run" title="Link to this heading">#</a></h2>
 <dl class="py function">
@@ -730,6 +769,11 @@ Its usage is for async retrieval of vector_db row by row.</p>
 <li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_rrf.hybrid_rrf"><code class="docutils literal notranslate"><span class="pre">hybrid_rrf()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_rrf.rrf_calculate"><code class="docutils literal notranslate"><span class="pre">rrf_calculate()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_rrf.rrf_pure"><code class="docutils literal notranslate"><span class="pre">rrf_pure()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.retrieval.hybrid_rsf">autorag.nodes.retrieval.hybrid_rsf module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_rsf.hybrid_rsf"><code class="docutils literal notranslate"><span class="pre">hybrid_rsf()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_rsf.rsf_pure"><code class="docutils literal notranslate"><span class="pre">rsf_pure()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.retrieval.run">autorag.nodes.retrieval.run module</a><ul>

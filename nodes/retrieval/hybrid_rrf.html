@@ -198,6 +198,7 @@
 <li class="toctree-l2"><a class="reference internal" href="vectordb.html">Vectordb</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Hybrid - rrf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hybrid_cc.html">Hybrid - cc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid_rsf.html">Hybrid - rsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -309,7 +310,8 @@
 The <code class="docutils literal notranslate"><span class="pre">hybrid_rrf</span></code> module is tailored for retrieving passages from multiple sources of information. It utilizes the Reciprocal Rank Fusion (RRF) algorithm to calculate final similarity scores. This calculation is based on the ranking of passages in each retrieval, effectively combining retrieval scores from different sources.</p>
 <section id="hybird-additional-explanation">
 <h2>❗ Hybird additional explanation<a class="headerlink" href="#hybird-additional-explanation" title="Link to this heading">#</a></h2>
-<p>By default, <code class="docutils literal notranslate"><span class="pre">hybrid_rrf</span></code> and <code class="docutils literal notranslate"><span class="pre">hybrid_cc</span></code> are designed to be used without writing target_module_params. Other modules listed in target_modules must be included in the config YAML file, and hybrid is calculated based on the best of the results from those modules.</p>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">hybrid</span></code> is designed to be used without writing target_module_params. Other modules listed in target_modules
+must be included in the config YAML file, and hybrid is calculated based on the best of the results from those modules.</p>
 <p>Once evaluated to find the optimal pipeline, extracting the pipeline creates a parameter called target_module_params. This helps the hybrid work even if you don’t include other modules, which is useful in test dataset evaluation and deployment situations.</p>
 <p>Also, target_modules and target_module_params must be in the form of a tuple. By default, tuples don’t work in yaml files, but AutoRAG specifically uses them. In the AutoRAG config YAML file, a tuple is a tuple of parameters, as opposed to a List, which is a list of options for a parameter that you can try for optimization. Note that because we are using <code class="docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code>, we have to write tuples as if we were writing them in python.</p>
 <p>So something like <code class="docutils literal notranslate"><span class="pre">('bm25',</span> <span class="pre">'vectordb')</span></code> with quotes will work.</p>

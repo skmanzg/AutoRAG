@@ -197,6 +197,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/vectordb.html">Vectordb</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/hybrid_cc.html">Hybrid - cc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/hybrid_rsf.html">Hybrid - rsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../nodes/passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -377,7 +378,7 @@
             <span class="k">del</span> <span class="n">embedding_model</span>
             <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
                 <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hybrid_rrf&quot;</span><span class="p">,</span> <span class="s2">&quot;hybrid_cc&quot;</span><span class="p">]:</span>
+        <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hybrid_rrf&quot;</span><span class="p">,</span> <span class="s2">&quot;hybrid_cc&quot;</span><span class="p">,</span> <span class="s2">&quot;hybrid_rsf&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="s1">&#39;ids&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span> <span class="s1">&#39;scores&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                 <span class="n">ids</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
