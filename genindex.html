@@ -197,6 +197,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/hybrid_cc.html">Hybrid - cc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/hybrid_rsf.html">Hybrid - rsf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/retrieval/hybrid_dbsf.html">Hybrid - dbsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -832,6 +833,13 @@
 </li>
         </ul></li>
         <li>
+    autorag.nodes.retrieval.hybrid_dbsf
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.hybrid_dbsf">module</a>
+</li>
+        </ul></li>
+        <li>
     autorag.nodes.retrieval.hybrid_rrf
 
         <ul>
@@ -996,12 +1004,16 @@
   <h2>D</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.deparallelize">deparallelize() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
+        <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_dbsf.dbsf_min_max_scores">dbsf_min_max_scores() (in module autorag.nodes.retrieval.hybrid_dbsf)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.generator.html#autorag.nodes.generator.vllm.destroy_vllm_instance">destroy_vllm_instance() (in module autorag.nodes.generator.vllm)</a>
+        <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_dbsf.dbsf_pure">dbsf_pure() (in module autorag.nodes.retrieval.hybrid_dbsf)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.deparallelize">deparallelize() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.nodes.generator.html#autorag.nodes.generator.vllm.destroy_vllm_instance">destroy_vllm_instance() (in module autorag.nodes.generator.vllm)</a>
+</li>
         <li><a href="api_spec/autorag.data.qacreation.html#autorag.data.qacreation.llama_index.distribute_list_by_ratio">distribute_list_by_ratio() (in module autorag.data.qacreation.llama_index)</a>
 </li>
         <li><a href="api_spec/autorag.html#autorag.support.dynamically_find_function">dynamically_find_function() (in module autorag.support)</a>
@@ -1151,6 +1163,8 @@
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.huggingface_evaluate">huggingface_evaluate() (in module autorag.evaluate.metric.generation)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_cc.hybrid_cc">hybrid_cc() (in module autorag.nodes.retrieval.hybrid_cc)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_dbsf.hybrid_dbsf">hybrid_dbsf() (in module autorag.nodes.retrieval.hybrid_dbsf)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
@@ -1400,6 +1414,8 @@
 </li>
           <li><a href="api_spec/autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.hybrid_cc">autorag.nodes.retrieval.hybrid_cc</a>
 </li>
+          <li><a href="api_spec/autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.hybrid_dbsf">autorag.nodes.retrieval.hybrid_dbsf</a>
+</li>
           <li><a href="api_spec/autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.hybrid_rrf">autorag.nodes.retrieval.hybrid_rrf</a>
 </li>
           <li><a href="api_spec/autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.hybrid_rsf">autorag.nodes.retrieval.hybrid_rsf</a>
@@ -1567,6 +1583,8 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rrf.rrf_pure">rrf_pure() (in module autorag.nodes.retrieval.hybrid_rrf)</a>
 </li>
+        <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rsf.rsf_min_max_scores">rsf_min_max_scores() (in module autorag.nodes.retrieval.hybrid_rsf)</a>
+</li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rsf.rsf_pure">rsf_pure() (in module autorag.nodes.retrieval.hybrid_rsf)</a>
 </li>
         <li><a href="api_spec/autorag.html#autorag.deploy.Runner.run">run() (autorag.deploy.Runner method)</a>
@@ -1611,6 +1629,8 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.utils.html#autorag.utils.util.save_parquet_safe">save_parquet_safe() (in module autorag.utils.util)</a>
 </li>
+        <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rsf.score_fusion">score_fusion() (in module autorag.nodes.retrieval.hybrid_rsf)</a>
+</li>
         <li><a href="api_spec/autorag.html#autorag.strategy.select_best_average">select_best_average() (in module autorag.strategy)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.select_result_for_hybrid">select_result_for_hybrid() (in module autorag.nodes.retrieval.run)</a>
@@ -1623,10 +1643,10 @@
 </li>
         <li><a href="api_spec/autorag.html#autorag.web.set_initial_state">set_initial_state() (in module autorag.web)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.set_input_embeddings">set_input_embeddings() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.set_input_embeddings">set_input_embeddings() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
+</li>
         <li><a href="api_spec/autorag.html#autorag.web.set_page_config">set_page_config() (in module autorag.web)</a>
 </li>
         <li><a href="api_spec/autorag.html#autorag.web.set_page_header">set_page_header() (in module autorag.web)</a>

@@ -198,6 +198,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/hybrid_cc.html">Hybrid - cc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/hybrid_rsf.html">Hybrid - rsf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/hybrid_dbsf.html">Hybrid - dbsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../nodes/passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -366,7 +367,15 @@
 <a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rsf.rsf_pure">[docs]</a>
 <span class="k">def</span> <span class="nf">rsf_pure</span><span class="p">(</span><span class="n">ids</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
              <span class="n">weights</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
-    <span class="c1"># Initialize min and max scores for scaling</span>
+    <span class="n">min_max_scores</span> <span class="o">=</span> <span class="n">rsf_min_max_scores</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+    <span class="n">top_ids</span><span class="p">,</span> <span class="n">top_scores</span> <span class="o">=</span> <span class="n">score_fusion</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">min_max_scores</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">top_ids</span><span class="p">,</span> <span class="n">top_scores</span></div>
+
+
+
+<div class="viewcode-block" id="rsf_min_max_scores">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rsf.rsf_min_max_scores">[docs]</a>
+<span class="k">def</span> <span class="nf">rsf_min_max_scores</span><span class="p">(</span><span class="n">scores</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">):</span>
     <span class="n">min_max_scores</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">score_list</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scores</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">score_list</span><span class="p">:</span>
@@ -375,8 +384,14 @@
         <span class="n">min_score</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">score_list</span><span class="p">)</span>
         <span class="n">max_score</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">score_list</span><span class="p">)</span>
         <span class="n">min_max_scores</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">min_score</span><span class="p">,</span> <span class="n">max_score</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">min_max_scores</span></div>
 
-    <span class="c1"># Scale scores and apply weights</span>
+
+
+<div class="viewcode-block" id="score_fusion">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rsf.score_fusion">[docs]</a>
+<span class="k">def</span> <span class="nf">score_fusion</span><span class="p">(</span><span class="n">ids</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">min_max_scores</span><span class="p">,</span>
+                 <span class="n">weights</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)):</span>
     <span class="n">scaled_scores</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">score_list</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">weights</span><span class="p">)):</span>
         <span class="n">scaled_score_list</span> <span class="o">=</span> <span class="p">[]</span>

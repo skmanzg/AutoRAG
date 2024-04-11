@@ -12,10 +12,10 @@
         gtag('js', new Date());
         gtag('config', 'G-T8ZKQM6RT9');
     </script>
-    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Query Decompose" href="query_decompose.html" /><link rel="prev" title="Available List" href="../index.html" />
+    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="3. Passage_Reranker" href="../passage_reranker/passage_reranker.html" /><link rel="prev" title="Hybrid - rsf" href="hybrid_rsf.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>1. Query Expansion - AutoRAG documentation</title>
+        <title>Hybrid - dbsf - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -188,18 +188,18 @@
 <p class="caption" role="heading"><span class="caption-text">Nodes &amp; Modules</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Available List</a></li>
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#"><strong>1. Query Expansion</strong></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 1. Query Expansion</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="query_decompose.html">Query Decompose</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hyde.html">HyDE</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../query_expansion/query_expansion.html"><strong>1. Query Expansion</strong></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 1. Query Expansion</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../query_expansion/query_decompose.html">Query Decompose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../query_expansion/hyde.html">HyDE</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../retrieval/retrieval.html">2. Retrieval</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 2. Retrieval</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../retrieval/bm25.html">BM25</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../retrieval/vectordb.html">Vectordb</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../retrieval/hybrid_cc.html">Hybrid - cc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../retrieval/hybrid_rsf.html">Hybrid - rsf</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../retrieval/hybrid_dbsf.html">Hybrid - dbsf</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="retrieval.html">2. Retrieval</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 2. Retrieval</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bm25.html">BM25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vectordb.html">Vectordb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid_rrf.html">Hybrid - rrf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid_cc.html">Hybrid - cc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hybrid_rsf.html">Hybrid - rsf</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Hybrid - dbsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -310,97 +310,56 @@
           </label>
         </div>
         <article role="main">
-          <section id="query-expansion">
-<h1><strong>1. Query Expansion</strong><a class="headerlink" href="#query-expansion" title="Link to this heading">#</a></h1>
-<section id="definition">
-<h2>🔎 <strong>Definition</strong><a class="headerlink" href="#definition" title="Link to this heading">#</a></h2>
-<p>Query expansion is the process of expanding a query without using it for immediate retrieval.
-The goal is to improve the relevance of the search results by including variations of the query terms.</p>
-</section>
-<section id="benefits">
-<h2>🤸 <strong>Benefits</strong><a class="headerlink" href="#benefits" title="Link to this heading">#</a></h2>
+          <section id="hybrid-dbsf">
+<h1>Hybrid - dbsf<a class="headerlink" href="#hybrid-dbsf" title="Link to this heading">#</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">hybrid-dbsf</span></code> module is designed to retrieve passages from multiple retrievals.</p>
+<section id="what-is-dbsf">
+<h2>What is dbsf?<a class="headerlink" href="#what-is-dbsf" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><strong>Improved Response to Varied Queries</strong>: Through query expansion, It’ll be better able to respond to different types of queries.</p></li>
-<li><p><strong>Increased RAG Accuracy</strong>: By retrieving more relevant data through expanded queries, the accuracy of the generated output is significantly improved.</p></li>
+<li><p>Distribution-based Score
+Fusion <a class="reference external" href="https://medium.com/plain-simple-software/distribution-based-score-fusion-dbsf-a-new-approach-to-vector-search-ranking-f87c37488b18">(Mazzecchi: blog post)</a></p></li>
 </ul>
+<p>DBSF (Distribution-Based Score Fusion) is an algorithm that normalizes search scores from different encoders by
+considering the distribution tails of each embedding, using MinMax scaling with custom feature ranges.</p>
 </section>
-<section id="parameters">
-<h2>🔢 <strong>Parameters</strong><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
-<section id="overview">
-<h3><strong>Overview</strong>:<a class="headerlink" href="#overview" title="Link to this heading">#</a></h3>
-<p>This document serves as a guide for configuring parameters, strategies, and the YAML file.</p>
+<section id="hybird-additional-explanation">
+<h2>❗️Hybird additional explanation<a class="headerlink" href="#hybird-additional-explanation" title="Link to this heading">#</a></h2>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">hybrid</span></code> is designed to be used without writing target_module_params. Other modules listed in target_modules
+must be included in the config file, and hybrid is calculated based on the best of the results from those modules.</p>
+<p>Once evaluated to find the optimal pipeline, extracting the pipeline creates a parameter called target_module_params.
+This helps the hybrid work even if you don’t include other modules, which is useful in test dataset evaluation and
+deployment situations.</p>
+<p>Also, target_modules and target_module_params must be in the form of a tuple. By default, tuples don’t work in yaml
+files, but AutoRAG specifically uses them. In the AutoRAG config yaml file, a tuple is a tuple of parameters, as opposed
+to a List, which is a list of options for a parameter that you can try for optimization. Note that because we are
+using <code class="docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code>, we have to write tuples as if we were writing them in python.</p>
+<p>So something like <code class="docutils literal notranslate"><span class="pre">('bm25',</span> <span class="pre">'vectordb')</span></code> with quotes will work.</p>
 </section>
-<section id="node-parameters">
-<h3><strong>Node Parameters</strong><a class="headerlink" href="#node-parameters" title="Link to this heading">#</a></h3>
+<section id="module-parameters">
+<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><strong>Not Applicable (N/A):</strong> There are no direct node parameters specified for the query expansion node.</p></li>
+<li><p><strong>Parameters</strong>: <code class="docutils literal notranslate"><span class="pre">target_modules</span></code>, <code class="docutils literal notranslate"><span class="pre">weights</span></code>, <code class="docutils literal notranslate"><span class="pre">target_module_params</span></code></p></li>
+<li><p><strong>Purpose</strong>: This module combines different retrieval modules (target_modules) and applies weights to them, adjusting
+their influence on the final retrieval outcome. The <code class="docutils literal notranslate"><span class="pre">target_module_params</span></code> allows for further customization of each
+target module.</p></li>
 </ul>
-</section>
-<section id="strategy">
-<h3><strong>Strategy</strong><a class="headerlink" href="#strategy" title="Link to this heading">#</a></h3>
-<p><strong>Performance Evaluation</strong>: The performance of the query_expansion node cannot be measured by the result alone. Therefore, it executes retrieval using queries, the result of Node, and evaluates it with the retrieval result.
-Therefore, in strategy, we set the parameters necessary for retrieval and evaluation.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Please refer to the parameter of <a class="reference internal" href="../retrieval/retrieval.html"><span class="std std-doc">retrieval Node</span></a> for more details.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>In the config YAML file that you wrote, you don’t have to specify the target_module_params.
+It is automatically generated when you run the optimization process.</p>
 </div>
-<section id="strategy-parameters">
-<h4><strong>Strategy Parameters</strong>:<a class="headerlink" href="#strategy-parameters" title="Link to this heading">#</a></h4>
-<ol class="arabic simple">
-<li><p><strong>Metrics</strong>: Metrics such as <code class="docutils literal notranslate"><span class="pre">retrieval_f1</span></code>,<code class="docutils literal notranslate"><span class="pre">retrieval_recall</span></code>, and <code class="docutils literal notranslate"><span class="pre">retrieval_precision</span></code> are used to evaluate the performance of the query expansion process through its impact on retrieval outcomes.</p></li>
-<li><p><strong>Speed Threshold</strong>: <code class="docutils literal notranslate"><span class="pre">speed_threshold</span></code> is applied across all nodes, ensuring that any method exceeding the average processing time for a query is not utilized.</p></li>
-<li><p><strong>Top_k</strong>: This parameter specifies the number of top results to consider during the retrieval evaluation phase.</p></li>
-<li><p><strong>Retrieval Modules</strong>: The query expansion node can utilize all modules and module parameters from the retrieval node, including:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="../retrieval/bm25.html"><span class="std std-doc">bm25</span></a></p></li>
-<li><p><a class="reference internal" href="../retrieval/vectordb.html"><span class="std std-doc">vectordb</span></a>: with <code class="docutils literal notranslate"><span class="pre">embedding_model</span></code> parameter</p></li>
-<li><p><a class="reference internal" href="../retrieval/hybrid_rrf.html"><span class="std std-doc">hybrid_rrf</span></a>: with <code class="docutils literal notranslate"><span class="pre">target_modules</span></code> and <code class="docutils literal notranslate"><span class="pre">rrf_k</span></code> parameters</p></li>
-<li><p><a class="reference internal" href="../retrieval/hybrid_cc.html"><span class="std std-doc">hybrid_cc</span></a>: with <code class="docutils literal notranslate"><span class="pre">target_modules</span></code> and <code class="docutils literal notranslate"><span class="pre">weights</span></code> parameters</p></li>
-</ul>
-</li>
-</ol>
 </section>
-</section>
-<section id="example-config-yaml-file">
-<h3>Example config.yaml file<a class="headerlink" href="#example-config-yaml-file" title="Link to this heading">#</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">node_lines</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_line_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pre_retrieve_node_line</span><span class="w">  </span><span class="c1"># Arbitrary node line name</span>
-<span class="w">  </span><span class="nt">nodes</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query_expansion</span>
-<span class="w">      </span><span class="nt">strategy</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">retrieval_f1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">retrieval_recall</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">retrieval_precision</span><span class="p p-Indicator">]</span>
-<span class="w">        </span><span class="nt">speed_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">        </span><span class="nt">top_k</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
-<span class="w">        </span><span class="nt">retrieval_modules</span><span class="p">:</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bm25</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vectordb</span>
-<span class="w">            </span><span class="nt">embedding_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
-<span class="w">      </span><span class="nt">modules</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pass_query_expansion</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query_decompose</span>
-<span class="w">          </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
-<span class="w">          </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">]</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hyde</span>
-<span class="w">          </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
-<span class="w">          </span><span class="nt">max_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<section id="example-config-yaml">
+<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">#</a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid_dbsf</span>
+<span class="w">    </span><span class="nt">target_modules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(&#39;bm25&#39;, &#39;vectordb&#39;)</span>
+<span class="w">    </span><span class="nt">weights</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(0.5, 0.5)</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(0.3, 0.7)</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(0.7, 0.3)</span>
 </pre></div>
 </div>
-<div class="admonition-what-is-pass-query-expansion admonition">
-<p class="admonition-title">What is pass_query_expansion?</p>
-<p>Its purpose is to test the performance that ‘not using’ any query expansion module.
-Because it can be the better option that not using query expansion node.
-So with this module, you can automatically test the performance of the retrieval without using any query expansion module.</p>
-</div>
-<section id="supported-modules">
-<h4>Supported Modules<a class="headerlink" href="#supported-modules" title="Link to this heading">#</a></h4>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="query_decompose.html">Query Decompose</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hyde.html">HyDE</a></li>
-</ul>
-</div>
-</section>
-</section>
 </section>
 </section>
 
@@ -409,23 +368,23 @@ So with this module, you can automatically test the performance of the retrieval
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="query_decompose.html">
+          <a class="next-page" href="../passage_reranker/passage_reranker.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Query Decompose</div>
+                <div class="title">3. Passage_Reranker</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../index.html">
+          <a class="prev-page" href="hybrid_rsf.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Available List</div>
+                <div class="title">Hybrid - rsf</div>
                 
               </div>
             </a>
@@ -459,22 +418,11 @@ So with this module, you can automatically test the performance of the retrieval
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#"><strong>1. Query Expansion</strong></a><ul>
-<li><a class="reference internal" href="#definition">🔎 <strong>Definition</strong></a></li>
-<li><a class="reference internal" href="#benefits">🤸 <strong>Benefits</strong></a></li>
-<li><a class="reference internal" href="#parameters">🔢 <strong>Parameters</strong></a><ul>
-<li><a class="reference internal" href="#overview"><strong>Overview</strong>:</a></li>
-<li><a class="reference internal" href="#node-parameters"><strong>Node Parameters</strong></a></li>
-<li><a class="reference internal" href="#strategy"><strong>Strategy</strong></a><ul>
-<li><a class="reference internal" href="#strategy-parameters"><strong>Strategy Parameters</strong>:</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#example-config-yaml-file">Example config.yaml file</a><ul>
-<li><a class="reference internal" href="#supported-modules">Supported Modules</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">Hybrid - dbsf</a><ul>
+<li><a class="reference internal" href="#what-is-dbsf">What is dbsf?</a></li>
+<li><a class="reference internal" href="#hybird-additional-explanation">❗️Hybird additional explanation</a></li>
+<li><a class="reference internal" href="#module-parameters"><strong>Module Parameters</strong></a></li>
+<li><a class="reference internal" href="#example-config-yaml"><strong>Example config.yaml</strong></a></li>
 </ul>
 </li>
 </ul>

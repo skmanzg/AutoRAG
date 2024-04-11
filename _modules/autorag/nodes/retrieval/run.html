@@ -198,6 +198,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/hybrid_cc.html">Hybrid - cc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/hybrid_rsf.html">Hybrid - rsf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../nodes/retrieval/hybrid_dbsf.html">Hybrid - dbsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../nodes/passage_reranker/passage_reranker.html">3. Passage_Reranker</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage_Reranker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -379,7 +380,7 @@
         <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="n">average_times</span><span class="p">,</span> <span class="n">summary_df</span>
 
     <span class="c1"># run retrieval modules except hybrid</span>
-    <span class="n">hybrid_module_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;hybrid_rrf&#39;</span><span class="p">,</span> <span class="s1">&#39;hybrid_cc&#39;</span><span class="p">,</span> <span class="s1">&#39;hybrid_rsf&#39;</span><span class="p">]</span>
+    <span class="n">hybrid_module_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;hybrid_rrf&#39;</span><span class="p">,</span> <span class="s1">&#39;hybrid_cc&#39;</span><span class="p">,</span> <span class="s1">&#39;hybrid_rsf&#39;</span><span class="p">,</span> <span class="s1">&#39;hybrid_dbsf&#39;</span><span class="p">]</span>
     <span class="n">filename_first</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">module</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hybrid_module_names</span> <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">]):</span>
         <span class="n">non_hybrid_modules</span><span class="p">,</span> <span class="n">non_hybrid_module_params</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hybrid_module_names</span><span class="p">,</span>
