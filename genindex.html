@@ -211,6 +211,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/colbert.html">Colbert Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/sentence_transformer_reranker.html">Sentence Transformer Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/flag_embedding_reranker.html">Flag Embedding Reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/passage_reranker/flag_embedding_llm_reranker.html">Flag Embedding LLM Reranker</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -620,8 +621,6 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.base">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagereranker.cohere
 
@@ -629,6 +628,8 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.cohere">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagereranker.colbert
 
@@ -641,6 +642,13 @@
 
         <ul>
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.flag_embedding">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.nodes.passagereranker.flag_embedding_llm
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.flag_embedding_llm">module</a>
 </li>
         </ul></li>
         <li>
@@ -1082,14 +1090,16 @@
 </li>
         <li><a href="api_spec/autorag.html#autorag.strategy.filter_by_threshold">filter_by_threshold() (in module autorag.strategy)</a>
 </li>
+        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.flag_embedding_llm.flag_embedding_llm_reranker">flag_embedding_llm_reranker() (in module autorag.nodes.passagereranker.flag_embedding_llm)</a>
+</li>
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.flag_embedding.flag_embedding_reranker">flag_embedding_reranker() (in module autorag.nodes.passagereranker.flag_embedding)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.flag_embedding.flag_embedding_reranker_pure">flag_embedding_reranker_pure() (in module autorag.nodes.passagereranker.flag_embedding)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.forward">forward() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.forward">forward() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
+</li>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.module.Module.from_dict">from_dict() (autorag.schema.module.Module class method)</a>
 
         <ul>
@@ -1359,6 +1369,8 @@
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.colbert">autorag.nodes.passagereranker.colbert</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.flag_embedding">autorag.nodes.passagereranker.flag_embedding</a>
+</li>
+          <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.flag_embedding_llm">autorag.nodes.passagereranker.flag_embedding_llm</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.jina">autorag.nodes.passagereranker.jina</a>
 </li>
