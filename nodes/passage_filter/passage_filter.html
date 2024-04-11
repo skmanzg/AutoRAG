@@ -344,9 +344,16 @@ So it is important to filter out irrelevant passages.</p>
 <span class="w">          </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">retrieval_f1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">retrieval_recall</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">retrieval_precision</span><span class="w"> </span><span class="p p-Indicator">]</span>
 <span class="w">          </span><span class="nt">speed_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
 <span class="w">        </span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pass_passage_filter</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">similarity_threshold_cutoff</span>
 <span class="w">            </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.85</span>
 </pre></div>
+</div>
+<div class="admonition-what-is-pass-passage-filter admonition">
+<p class="admonition-title">What is pass_passage_filter?</p>
+<p>Its purpose is to test the performance that ‘not using’ any passage filter module.
+Because it can be the better option that not using passage filter node.
+So with this module, you can automatically test the performance without using any passage filter module.</p>
 </div>
 <div class="toctree-wrapper compound">
 <ul>
