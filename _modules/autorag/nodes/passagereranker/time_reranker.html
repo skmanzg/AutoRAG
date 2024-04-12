@@ -14,7 +14,7 @@
     <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>autorag.nodes.passagereranker.flag_embedding_llm - AutoRAG documentation</title>
+        <title>autorag.nodes.passagereranker.time_reranker - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -310,56 +310,43 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for autorag.nodes.passagereranker.flag_embedding_llm</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+          <h1>Source code for autorag.nodes.passagereranker.time_reranker</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">FlagEmbedding</span> <span class="kn">import</span> <span class="n">FlagLLMReranker</span>
-
 <span class="kn">from</span> <span class="nn">autorag.nodes.passagereranker.base</span> <span class="kn">import</span> <span class="n">passage_reranker_node</span>
-<span class="kn">from</span> <span class="nn">autorag.nodes.passagereranker.flag_embedding</span> <span class="kn">import</span> <span class="n">flag_embedding_reranker_pure</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
 
 
-<div class="viewcode-block" id="flag_embedding_llm_reranker">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.flag_embedding_llm.flag_embedding_llm_reranker">[docs]</a>
+<div class="viewcode-block" id="time_reranker">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.time_reranker.time_reranker">[docs]</a>
 <span class="nd">@passage_reranker_node</span>
-<span class="k">def</span> <span class="nf">flag_embedding_llm_reranker</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-                                <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-                                <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span><span class="p">,</span> <span class="n">use_fp16</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-                                <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;BAAI/bge-reranker-v2-gemma&quot;</span><span class="p">,</span>
-                                <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
+<span class="k">def</span> <span class="nf">time_reranker</span><span class="p">(</span><span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                  <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                  <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">time_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">datetime</span><span class="p">]]</span>
+                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Rerank a list of contents based on their relevance to a query using BAAI LLM-based-Reranker model.</span>
+<span class="sd">    Rerank the passages based on merely the datetime of the passage.</span>
+<span class="sd">    It uses &#39;last_modified_datetime&#39; key in the corpus metadata,</span>
+<span class="sd">    so the metadata should be in the format of {&#39;last_modified_datetime&#39;: datetime.datetime} at the corpus data file.</span>
 
-<span class="sd">    :param queries: The list of queries to use for reranking</span>
-<span class="sd">    :param contents_list: The list of lists of contents to rerank</span>
-<span class="sd">    :param scores_list: The list of lists of scores retrieved from the initial ranking</span>
-<span class="sd">    :param ids_list: The list of lists of ids retrieved from the initial ranking</span>
-<span class="sd">    :param top_k: The number of passages to be retrieved</span>
-<span class="sd">    :param batch: The number of queries to be processed in a batch</span>
-<span class="sd">    :param use_fp16: Whether to use fp16 for inference</span>
-<span class="sd">    :param model_name: The name of the BAAI Reranker LLM-based-model name.</span>
-<span class="sd">        Default is &quot;BAAI/bge-reranker-v2-gemma&quot;</span>
-<span class="sd">    :return: tuple of lists containing the reranked contents, ids, and scores</span>
+<span class="sd">    :param contents_list: The list of lists of contents</span>
+<span class="sd">    :param scores_list: The list of lists of scores from the initial ranking</span>
+<span class="sd">    :param ids_list: The list of lists of ids</span>
+<span class="sd">    :param top_k: The number of passages to be retrieved after reranking</span>
+<span class="sd">    :param time_list: The metadata list of lists of datetime.datetime</span>
+<span class="sd">        It automatically extracts the &#39;last_modified_datetime&#39; key from the metadata in the corpus data.</span>
+<span class="sd">    :return: The reranked contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">FlagLLMReranker</span><span class="p">(</span>
-        <span class="n">model_name_or_path</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">use_fp16</span><span class="o">=</span><span class="n">use_fp16</span>
-    <span class="p">)</span>
-    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">flag_embedding_reranker_pure</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-             <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">)]</span>
-    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
-    <span class="n">content_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
-    <span class="n">id_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
-    <span class="n">score_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">sort_row</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">top_k</span><span class="p">):</span>
+        <span class="n">combined</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">time</span><span class="p">))</span>
+        <span class="n">combined</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sorted_contents</span><span class="p">,</span> <span class="n">sorted_scores</span><span class="p">,</span> <span class="n">sorted_ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">combined</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">sorted_contents</span><span class="p">)[:</span><span class="n">top_k</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">sorted_scores</span><span class="p">)[:</span><span class="n">top_k</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">sorted_ids</span><span class="p">)[:</span><span class="n">top_k</span><span class="p">]</span>
 
-    <span class="k">del</span> <span class="n">model</span>
-    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
-        <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
+    <span class="n">reranked_contents</span><span class="p">,</span> <span class="n">reranked_scores</span><span class="p">,</span> <span class="n">reranked_ids</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="n">sort_row</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">,</span> <span class="n">time_list</span><span class="p">,</span> <span class="p">[</span><span class="n">top_k</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents_list</span><span class="p">)))</span>
 
-    <span class="k">return</span> <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span></div>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_contents</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_ids</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_scores</span><span class="p">)</span></div>
 
 </pre></div>
         </article>

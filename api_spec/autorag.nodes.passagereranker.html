@@ -213,6 +213,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/colbert.html">Colbert Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/sentence_transformer_reranker.html">Sentence Transformer Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/flag_embedding_reranker.html">Flag Embedding Reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/time_reranker.html">Time Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_reranker/flag_embedding_llm_reranker.html">Flag Embedding LLM Reranker</a></li>
 </ul>
 </li>
@@ -801,6 +802,32 @@ Default is “cross-encoder/ms-marco-MiniLM-L-2-v2”</p></li>
 </dd></dl>
 
 </section>
+<section id="module-autorag.nodes.passagereranker.time_reranker">
+<span id="autorag-nodes-passagereranker-time-reranker-module"></span><h2>autorag.nodes.passagereranker.time_reranker module<a class="headerlink" href="#module-autorag.nodes.passagereranker.time_reranker" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.time_reranker.time_reranker">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.time_reranker.</span></span><span class="sig-name descname"><span class="pre">time_reranker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contents_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/time_reranker.html#time_reranker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.time_reranker.time_reranker" title="Link to this definition">#</a></dt>
+<dd><p>Rerank the passages based on merely the datetime of the passage.
+It uses ‘last_modified_datetime’ key in the corpus metadata,
+so the metadata should be in the format of {‘last_modified_datetime’: datetime.datetime} at the corpus data file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contents_list</strong> – The list of lists of contents</p></li>
+<li><p><strong>scores_list</strong> – The list of lists of scores from the initial ranking</p></li>
+<li><p><strong>ids_list</strong> – The list of lists of ids</p></li>
+<li><p><strong>top_k</strong> – The number of passages to be retrieved after reranking</p></li>
+<li><p><strong>time_list</strong> – The metadata list of lists of datetime.datetime
+It automatically extracts the ‘last_modified_datetime’ key from the metadata in the corpus data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The reranked contents, ids, and scores</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-autorag.nodes.passagereranker.upr">
 <span id="autorag-nodes-passagereranker-upr-module"></span><h2>autorag.nodes.passagereranker.upr module<a class="headerlink" href="#module-autorag.nodes.passagereranker.upr" title="Link to this heading">#</a></h2>
 <dl class="py function">
@@ -996,6 +1023,10 @@ The suffix prompt provides a cue or a closing instruction to the language model,
 <li><a class="reference internal" href="#module-autorag.nodes.passagereranker.sentence_transformer">autorag.nodes.passagereranker.sentence_transformer module</a><ul>
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker"><code class="docutils literal notranslate"><span class="pre">sentence_transformer_reranker()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker_pure"><code class="docutils literal notranslate"><span class="pre">sentence_transformer_reranker_pure()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.passagereranker.time_reranker">autorag.nodes.passagereranker.time_reranker module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.time_reranker.time_reranker"><code class="docutils literal notranslate"><span class="pre">time_reranker()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.passagereranker.upr">autorag.nodes.passagereranker.upr module</a><ul>

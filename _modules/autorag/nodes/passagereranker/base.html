@@ -212,6 +212,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_reranker/colbert.html">Colbert Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_reranker/sentence_transformer_reranker.html">Sentence Transformer Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_reranker/flag_embedding_reranker.html">Flag Embedding Reranker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_reranker/time_reranker.html">Time Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_reranker/flag_embedding_llm_reranker.html">Flag Embedding LLM Reranker</a></li>
 </ul>
 </li>
@@ -312,12 +313,13 @@
           <h1>Source code for autorag.nodes.passagereranker.base</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">result_to_dataframe</span><span class="p">,</span> <span class="n">validate_qa_dataset</span>
+<span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">result_to_dataframe</span><span class="p">,</span> <span class="n">validate_qa_dataset</span><span class="p">,</span> <span class="n">fetch_contents</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AutoRAG&quot;</span><span class="p">)</span>
 
@@ -349,8 +351,16 @@
         <span class="k">assert</span> <span class="s2">&quot;retrieved_ids&quot;</span> <span class="ow">in</span> <span class="n">previous_result</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="s2">&quot;previous_result must have retrieved_ids column.&quot;</span>
         <span class="n">ids</span> <span class="o">=</span> <span class="n">previous_result</span><span class="p">[</span><span class="s2">&quot;retrieved_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
-        <span class="n">reranked_contents</span><span class="p">,</span> <span class="n">reranked_ids</span><span class="p">,</span> <span class="n">reranked_scores</span> \
-            <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">queries</span><span class="o">=</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="o">=</span><span class="n">contents</span><span class="p">,</span> <span class="n">scores_list</span><span class="o">=</span><span class="n">scores</span><span class="p">,</span> <span class="n">ids_list</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># time rerankers</span>
+        <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;time_reranker&#39;</span><span class="p">:</span>
+            <span class="n">corpus_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;corpus.parquet&quot;</span><span class="p">))</span>
+            <span class="n">metadatas</span> <span class="o">=</span> <span class="n">fetch_contents</span><span class="p">(</span><span class="n">corpus_df</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">column_name</span><span class="o">=</span><span class="s1">&#39;metadata&#39;</span><span class="p">)</span>
+            <span class="n">times</span> <span class="o">=</span> <span class="p">[[</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;last_modified_datetime&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">time_list</span><span class="p">]</span> <span class="k">for</span> <span class="n">time_list</span> <span class="ow">in</span> <span class="n">metadatas</span><span class="p">]</span>
+            <span class="n">reranked_contents</span><span class="p">,</span> <span class="n">reranked_ids</span><span class="p">,</span> <span class="n">reranked_scores</span> \
+                <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">contents_list</span><span class="o">=</span><span class="n">contents</span><span class="p">,</span> <span class="n">scores_list</span><span class="o">=</span><span class="n">scores</span><span class="p">,</span> <span class="n">ids_list</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span> <span class="n">time_list</span><span class="o">=</span><span class="n">times</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">reranked_contents</span><span class="p">,</span> <span class="n">reranked_ids</span><span class="p">,</span> <span class="n">reranked_scores</span> \
+                <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">queries</span><span class="o">=</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="o">=</span><span class="n">contents</span><span class="p">,</span> <span class="n">scores_list</span><span class="o">=</span><span class="n">scores</span><span class="p">,</span> <span class="n">ids_list</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">reranked_contents</span><span class="p">,</span> <span class="n">reranked_ids</span><span class="p">,</span> <span class="n">reranked_scores</span>
 

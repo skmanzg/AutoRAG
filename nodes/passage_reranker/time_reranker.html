@@ -12,10 +12,10 @@
         gtag('js', new Date());
         gtag('config', 'G-T8ZKQM6RT9');
     </script>
-    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="jina_reranker" href="jina_reranker.html" /><link rel="prev" title="cohere_reranker" href="cohere.html" />
+    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Flag Embedding LLM Reranker" href="flag_embedding_llm_reranker.html" /><link rel="prev" title="Flag Embedding Reranker" href="flag_embedding_reranker.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>RankGPT - AutoRAG documentation</title>
+        <title>Time Reranker - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -208,12 +208,12 @@
 <li class="toctree-l2"><a class="reference internal" href="monot5.html">MonoT5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="koreranker.html">Ko-reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cohere.html">cohere_reranker</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">RankGPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rankgpt.html">RankGPT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="jina_reranker.html">jina_reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="colbert.html">Colbert Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sentence_transformer_reranker.html">Sentence Transformer Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flag_embedding_reranker.html">Flag Embedding Reranker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="time_reranker.html">Time Reranker</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Time Reranker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flag_embedding_llm_reranker.html">Flag Embedding LLM Reranker</a></li>
 </ul>
 </li>
@@ -312,33 +312,23 @@
           </label>
         </div>
         <article role="main">
-          <section id="rankgpt">
-<h1>RankGPT<a class="headerlink" href="#rankgpt" title="Link to this heading">#</a></h1>
-<p>The ‘RankGPT’ module is a reranker using <a class="reference external" href="https://github.com/sunnweiwei/RankGPT">RankGPT</a>.
-RankGPT uses GPT or other LLM model to reranking passages based on their relevance to a given query.</p>
+          <section id="time-reranker">
+<h1>Time Reranker<a class="headerlink" href="#time-reranker" title="Link to this heading">#</a></h1>
+<p>This reranker simply sorts the passages by their time.
+It is useful when you want to use the latest information.
+The time can be extracted from the corpus metadata.</p>
+<p>You must have the <code class="docutils literal notranslate"><span class="pre">last_modified_datetime</span></code> field in the corpus metadata to use this reranker.
+Plus, the value of the metadata must be <code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code> object.</p>
 <section id="module-parameters">
 <h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">llm</span></code>: Default LLM model is gpt-3.5-turbo-16k, but you can use another LLM model to use RankGPT.
-The usage on the config YAML file for setting custom LLM is the same
-as <a class="reference internal" href="../generator/llama_index_llm.html"><span class="std std-doc">llama_index_llm</span></a> module.
-More details can be found in the <a class="reference internal" href="../../local_model.html"><span class="std std-doc">Local Model</span></a> page.
-Set <code class="docutils literal notranslate"><span class="pre">llm</span></code> as the name of LlamaIndex class name, and write the rest of parameters.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">verbose</span></code>: The verbosity of the RankGPT module. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">batch</span></code>: Batch size. Since this module using LLM model, choose wisely to prevent OOM or token limit error. Default is
-16.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">rankgpt_rerank_prompt</span></code>: The rerank prompt. Default is RankGPT default prompt.</p></li>
+<li><p><strong>Not Applicable (N/A):</strong> There are no direct module parameters specified for the <code class="docutils literal notranslate"><span class="pre">time_reranker</span></code> module.</p></li>
 </ul>
 </section>
 <section id="example-config-yaml">
 <h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">#</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rankgpt</span>
-<span class="w">    </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
-<span class="w">    </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpt-4</span>
-<span class="w">    </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
-<span class="w">    </span><span class="nt">verbose</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
-<span class="w">    </span><span class="nt">batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">time_reranker</span>
 </pre></div>
 </div>
 </section>
@@ -349,23 +339,23 @@ Set <code class="docutils literal notranslate"><span class="pre">llm</span></cod
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="jina_reranker.html">
+          <a class="next-page" href="flag_embedding_llm_reranker.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">jina_reranker</div>
+                <div class="title">Flag Embedding LLM Reranker</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="cohere.html">
+          <a class="prev-page" href="flag_embedding_reranker.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">cohere_reranker</div>
+                <div class="title">Flag Embedding Reranker</div>
                 
               </div>
             </a>
@@ -399,7 +389,7 @@ Set <code class="docutils literal notranslate"><span class="pre">llm</span></cod
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">RankGPT</a><ul>
+<li><a class="reference internal" href="#">Time Reranker</a><ul>
 <li><a class="reference internal" href="#module-parameters"><strong>Module Parameters</strong></a></li>
 <li><a class="reference internal" href="#example-config-yaml"><strong>Example config.yaml</strong></a></li>
 </ul>
