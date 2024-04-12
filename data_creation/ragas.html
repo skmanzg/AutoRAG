@@ -12,10 +12,10 @@
         gtag('js', new Date());
         gtag('config', 'G-T8ZKQM6RT9');
     </script>
-    <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Make custom config yaml file" href="custom_config.html" /><link rel="prev" title="How optimization works" href="optimization.html" />
+    <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="How optimization works" href="../optimization/optimization.html" /><link rel="prev" title="Dataset Format" href="data_format.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>Folder Structure - AutoRAG documentation</title>
+        <title>RAGAS evaluation data generation - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -175,16 +175,16 @@
 <li class="toctree-l1"><a class="reference internal" href="../local_model.html">Configure LLM &amp; Embedding models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data Creation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../data_creation/tutorial.html">Start creating your own evaluation data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../data_creation/data_format.html">Dataset Format</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../data_creation/ragas.html">RAGAS evaluation data generation</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Start creating your own evaluation data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_format.html">Dataset Format</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">RAGAS evaluation data generation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Optimization</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="optimization.html">How optimization works</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Folder Structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_config.html">Make custom config yaml file</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../optimization/optimization.html">How optimization works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization/folder_structure.html">Folder Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../optimization/custom_config.html">Make custom config yaml file</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Nodes &amp; Modules</span></p>
 <ul>
@@ -313,160 +313,67 @@
           </label>
         </div>
         <article role="main">
-          <section id="folder-structure">
-<h1>Folder Structure<a class="headerlink" href="#folder-structure" title="Link to this heading">#</a></h1>
-<section id="sample-structure-index">
-<h2>Sample Structure Index<a class="headerlink" href="#sample-structure-index" title="Link to this heading">#</a></h2>
+          <section id="ragas-evaluation-data-generation">
+<h1>RAGAS evaluation data generation<a class="headerlink" href="#ragas-evaluation-data-generation" title="Link to this heading">#</a></h1>
+<p>RAGAS, the RAG evaluation framework also supports their advanced evaluation data generation.
+You can learn more about their evaluation data generation method
+at <a class="reference external" href="https://docs.ragas.io/en/stable/concepts/testset_generation.html">here</a>.</p>
+<section id="generate-qa-set-from-corpus-data-using-ragas">
+<h2>Generate QA set from Corpus data using RAGAS<a class="headerlink" href="#generate-qa-set-from-corpus-data-using-ragas" title="Link to this heading">#</a></h2>
+<p>You can generate QA set from corpus data using RAGAS.</p>
+<p>If you didn’t make corpus data yet, you can make it by following the <a class="reference internal" href="tutorial.html"><span class="std std-doc">tutorial</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">autorag.data.qacreation.ragas</span> <span class="kn">import</span> <span class="n">generate_qa_ragas</span>
+
+<span class="n">corpus_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;path/to/corpus.parquet&#39;</span><span class="p">)</span>
+<span class="n">qa_df</span> <span class="o">=</span> <span class="n">generate_qa_ragas</span><span class="p">(</span><span class="n">corpus_df</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will make QA set with 50 questions using RAGAS evaluation data generation method.</p>
+<p>You can use output <code class="docutils literal notranslate"><span class="pre">qa_df</span></code> directly for AutoRAG optimization.</p>
+</section>
+<section id="ragas-question-types">
+<h2>RAGAS question types<a class="headerlink" href="#ragas-question-types" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="#project"><span class="xref myst">Project</span></a></p>
-<ul>
-<li><p><a class="reference internal" href="#trial"><span class="xref myst">trial</span></a></p>
-<ul>
-<li><p><a class="reference internal" href="#configyaml"><span class="xref myst">config.yaml</span></a></p></li>
-<li><p><a class="reference internal" href="#trial-summarycsv"><span class="xref myst">summary.csv</span></a></p></li>
-<li><p><a class="reference internal" href="#pre-retrieve-node-line"><span class="xref myst">Node_line_name</span></a></p>
-<ul>
-<li><p><a class="reference internal" href="#node-line-summarycsv"><span class="xref myst">summary.csv</span></a></p></li>
-<li><p><a class="reference internal" href="#query-expansion"><span class="xref myst">Node name</span></a></p>
-<ul>
-<li><p>0.parquet</p></li>
-<li><p>…</p></li>
-<li><p>best_(index).parquet</p></li>
-<li><p><a class="reference internal" href="#node-summarycsv"><span class="xref myst">summary.csv</span></a></p></li>
+<li><p>simple</p></li>
+<li><p>reasoning</p></li>
+<li><p>multi_context</p></li>
+<li><p>conditional</p></li>
 </ul>
-</li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#retrieve-node-line"><span class="xref myst">Node_line_name</span></a></p>
-<ul>
-<li><p>Node name</p>
-<ul>
-<li><p>…</p></li>
-</ul>
-</li>
-<li><p>Node name</p>
-<ul>
-<li><p>…</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="../api_spec/autorag.data.html#module-autorag.data" title="autorag.data"><span class="xref myst py py-mod">data</span></a></p></li>
-<li><p><a class="reference internal" href="#resources"><span class="xref myst">resources</span></a></p></li>
-<li><p><a class="reference internal" href="#trialjson"><span class="xref myst">trial.json</span></a></p></li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="project">
-<h2>Project<a class="headerlink" href="#project" title="Link to this heading">#</a></h2>
-<p>In a project, you have to do experiment with only one dataset.
-The project folder is where the user runs from.</p>
-<p><img alt="project_folders" src="../_images/project_folders.png" /></p>
-<section id="trial">
-<h3>trial<a class="headerlink" href="#trial" title="Link to this heading">#</a></h3>
-<p>Trial means a single run of the experiment.
-Each trial can be run with different settings using different config yaml files.
-If there are multiple trail folders, it means you ran experiments more than once.
-We recommend running multiple trials on the same data with different settings to find the best RAG pipeline.</p>
-<p>The folder names are determined by the number of trials run.
-The first trial folder is named <code class="docutils literal notranslate"><span class="pre">0</span></code>, the second trial folder is named <code class="docutils literal notranslate"><span class="pre">1</span></code>, and so on.
-You can check this out at the <a class="reference internal" href="#trialjson"><span class="xref myst">trial.json</span></a> file, too.</p>
-<p><img alt="trial_folder" src="../_images/trial_folder.png" /></p>
-<section id="config-yaml">
-<h4>config.yaml<a class="headerlink" href="#config-yaml" title="Link to this heading">#</a></h4>
-<p>The yaml file you used for this trial.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>You can see a sample full <a class="reference download internal" download="" href="../_downloads/daabef9d1f45df908aef174da28745c5/sample_full_config.yaml"><span class="xref download myst">config.yaml</span></a>.</p>
+<p>You can set distribution of question types by making distribution list.
+You can access each question type from importing ragas evolution types.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ragas.testset.evolutions</span> <span class="kn">import</span> <span class="n">simple</span><span class="p">,</span> <span class="n">reasoning</span><span class="p">,</span> <span class="n">multi_context</span><span class="p">,</span> <span class="n">conditional</span>
+<span class="kn">from</span> <span class="nn">autorag.data.qacreation.ragas</span> <span class="kn">import</span> <span class="n">generate_qa_ragas</span>
+
+<span class="n">distributions</span> <span class="o">=</span> <span class="p">{</span>  <span class="c1"># uniform distribution</span>
+    <span class="n">simple</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">reasoning</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">multi_context</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">conditional</span><span class="p">:</span> <span class="mf">0.25</span>
+<span class="p">}</span>
+<span class="n">qa_df</span> <span class="o">=</span> <span class="n">generate_qa_ragas</span><span class="p">(</span><span class="n">corpus_df</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">distributions</span><span class="o">=</span><span class="n">distributions</span><span class="p">)</span>
+
+</pre></div>
 </div>
+<p>Now you can pass this distribution dictionary as input.</p>
 </section>
-<section id="trial-summary-csv">
-<h4>[trial] summary.csv<a class="headerlink" href="#trial-summary-csv" title="Link to this heading">#</a></h4>
-<p>Full trial summary csv file</p>
-<p>There are node lines, selected modules, files and parameters used by the selected modules,
-and the time it took to process in one row.</p>
-<p><img alt="trail_summary" src="../_images/trial_summary.png" /></p>
-</section>
-<section id="pre-retrieve-node-line">
-<h4>pre_retrieve_node_line<a class="headerlink" href="#pre-retrieve-node-line" title="Link to this heading">#</a></h4>
-<p><img alt="node_line_folder" src="../_images/node_line_folder.png" /></p>
-<section id="node-line-summary-csv">
-<h5>[Node Line] summary.csv<a class="headerlink" href="#node-line-summary-csv" title="Link to this heading">#</a></h5>
-<p><img alt="node_line_summary" src="../_images/node_line_summary.png" /></p>
-<p>Contains the best modules and settings selected from each node.
-You can see the node, the selected modules, their files and parameters used, and the time it took to process a row.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p>Need to know what to do with Node Line?
-Check out <a class="reference internal" href="../roadmap/modular_rag.html"><span class="std std-doc">Roadmap to Modular RAG</span></a>.</p>
+<section id="use-custom-models">
+<h2>Use custom models<a class="headerlink" href="#use-custom-models" title="Link to this heading">#</a></h2>
+<p>RAGAS support custom models using Langchain.
+You can get a support list of models from Langchain at <a class="reference external" href="https://python.langchain.com/docs/integrations/llms/">here</a>.</p>
+<p>Plus, you might need to use <code class="docutils literal notranslate"><span class="pre">ChatModel</span></code> class from Langchain.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.data.qacreation.ragas</span> <span class="kn">import</span> <span class="n">generate_qa_ragas</span>
+<span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span><span class="p">,</span> <span class="n">OpenAIEmbeddings</span>
+
+<span class="n">generator_llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span> <span class="n">temprature</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">critic_llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="n">temprature</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">embedding_model</span> <span class="o">=</span> <span class="n">OpenAIEmbeddings</span><span class="p">()</span>
+
+<span class="n">qa_df</span> <span class="o">=</span> <span class="n">generate_qa_ragas</span><span class="p">(</span><span class="n">corpus_df</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">distributions</span><span class="o">=</span><span class="n">distributions</span><span class="p">,</span>
+                          <span class="n">generator_llm</span><span class="o">=</span><span class="n">generator_llm</span><span class="p">,</span> <span class="n">critic_llm</span><span class="o">=</span><span class="n">critic_llm</span><span class="p">,</span> <span class="n">embedding_model</span><span class="o">=</span><span class="n">embedding_model</span><span class="p">)</span>
+</pre></div>
 </div>
-</section>
-<section id="query-expansion">
-<h5>query_expansion<a class="headerlink" href="#query-expansion" title="Link to this heading">#</a></h5>
-<p>Node names belonging to the node_line</p>
-<p><img alt="node_folder" src="../_images/node_folder.png" /></p>
-<p>Depending on the module and module params, you can run different experiments on a node.
-The following image shows three experiments on a node.</p>
-<ul class="simple">
-<li><p>0.parquet</p></li>
-<li><p>1.parquet</p></li>
-<li><p>…</p></li>
-<li><p>best_(index).parquet ⇒ Top results on a node</p></li>
-</ul>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>In the image, the first result is the best of the three experiments, so the best file name is best_0.</p>
-</div>
-<section id="node-summary-csv">
-<h6>[Node] summary.csv<a class="headerlink" href="#node-summary-csv" title="Link to this heading">#</a></h6>
-<p>Results for each node. All attempts and evaluation metric results are recorded.</p>
-<p><img alt="node_summary" src="../_images/node_summary.png" /></p>
-</section>
-</section>
-</section>
-<section id="retrieve-node-line">
-<h4>retrieve_node_line<a class="headerlink" href="#retrieve-node-line" title="Link to this heading">#</a></h4>
-<div class="admonition attention">
-<p class="admonition-title">Attention</p>
-<p>All other node lines and nodes are organized in the same format as above.
-It would be too long to explain it all, but we hope you understand the structure.</p>
-</div>
-</section>
-</section>
-<section id="data">
-<h3>data<a class="headerlink" href="#data" title="Link to this heading">#</a></h3>
-<p><img alt="data_folder" src="../_images/data_folder.png" /></p>
-<ul>
-<li><p>corpus.parquet ⇒ corpus dataset</p></li>
-<li><p>qa.parquet ⇒ qa dataset</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>QA data can exist only as qa.parquet, but it is recommended to split it into train and test for more accurate optimization.
-Check out <a class="reference internal" href="../data_creation/tutorial.html"><span class="std std-doc">here</span></a> for how to build a qa dataset and corpus dataset.</p>
-</div>
-</li>
-</ul>
-</section>
-<section id="resources">
-<h3>resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h3>
-<p><img alt="resources_folder" src="../_images/resources_folder.png" /></p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">bm25.pkl</span></code>: created when using bm25</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">chroma</span></code>: created when using vectordb</p>
-<ul>
-<li><p>collection_name = the name of the <code class="docutils literal notranslate"><span class="pre">embedding</span> <span class="pre">model</span></code></p></li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="trial-json">
-<h3>trial.json<a class="headerlink" href="#trial-json" title="Link to this heading">#</a></h3>
-<p>It contains information about each trial.</p>
-<p><img alt="trial_json" src="../_images/trial_json.png" /></p>
-</section>
 </section>
 </section>
 
@@ -475,23 +382,23 @@ Check out <a class="reference internal" href="../data_creation/tutorial.html"><s
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="custom_config.html">
+          <a class="next-page" href="../optimization/optimization.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Make custom config yaml file</div>
+                <div class="title">How optimization works</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="optimization.html">
+          <a class="prev-page" href="data_format.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">How optimization works</div>
+                <div class="title">Dataset Format</div>
                 
               </div>
             </a>
@@ -525,28 +432,10 @@ Check out <a class="reference internal" href="../data_creation/tutorial.html"><s
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Folder Structure</a><ul>
-<li><a class="reference internal" href="#sample-structure-index">Sample Structure Index</a></li>
-<li><a class="reference internal" href="#project">Project</a><ul>
-<li><a class="reference internal" href="#trial">trial</a><ul>
-<li><a class="reference internal" href="#config-yaml">config.yaml</a></li>
-<li><a class="reference internal" href="#trial-summary-csv">[trial] summary.csv</a></li>
-<li><a class="reference internal" href="#pre-retrieve-node-line">pre_retrieve_node_line</a><ul>
-<li><a class="reference internal" href="#node-line-summary-csv">[Node Line] summary.csv</a></li>
-<li><a class="reference internal" href="#query-expansion">query_expansion</a><ul>
-<li><a class="reference internal" href="#node-summary-csv">[Node] summary.csv</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#retrieve-node-line">retrieve_node_line</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#data">data</a></li>
-<li><a class="reference internal" href="#resources">resources</a></li>
-<li><a class="reference internal" href="#trial-json">trial.json</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">RAGAS evaluation data generation</a><ul>
+<li><a class="reference internal" href="#generate-qa-set-from-corpus-data-using-ragas">Generate QA set from Corpus data using RAGAS</a></li>
+<li><a class="reference internal" href="#ragas-question-types">RAGAS question types</a></li>
+<li><a class="reference internal" href="#use-custom-models">Use custom models</a></li>
 </ul>
 </li>
 </ul>
