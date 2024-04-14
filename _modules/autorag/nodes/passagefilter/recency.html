@@ -14,7 +14,7 @@
     <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
-        <title>autorag.nodes.queryexpansion.query_decompose - AutoRAG documentation</title>
+        <title>autorag.nodes.passagefilter.recency - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -313,114 +313,67 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for autorag.nodes.queryexpansion.query_decompose</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+          <h1>Source code for autorag.nodes.passagefilter.recency</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">from</span> <span class="nn">llama_index.core.service_context_elements.llm_predictor</span> <span class="kn">import</span> <span class="n">LLMPredictorType</span>
+<span class="kn">from</span> <span class="nn">autorag.nodes.passagefilter.base</span> <span class="kn">import</span> <span class="n">passage_filter_node</span>
 
-<span class="kn">from</span> <span class="nn">autorag.nodes.queryexpansion.base</span> <span class="kn">import</span> <span class="n">query_expansion_node</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
-
-<span class="n">decompose_prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Decompose a question in self-contained sub-questions. Use </span><span class="se">\&quot;</span><span class="s2">The question needs no decomposition</span><span class="se">\&quot;</span><span class="s2"> when no decomposition is needed.</span>
-
-<span class="s2">    Example 1:</span>
-
-<span class="s2">    Question: Is Hamlet more common on IMDB than Comedy of Errors?</span>
-<span class="s2">    Decompositions: </span>
-<span class="s2">    1: How many listings of Hamlet are there on IMDB?</span>
-<span class="s2">    2: How many listing of Comedy of Errors is there on IMDB?</span>
-
-<span class="s2">    Example 2:</span>
-
-<span class="s2">    Question: Are birds important to badminton?</span>
-
-<span class="s2">    Decompositions:</span>
-<span class="s2">    The question needs no decomposition</span>
-
-<span class="s2">    Example 3:</span>
-
-<span class="s2">    Question: Is it legal for a licensed child driving Mercedes-Benz to be employed in US?</span>
-
-<span class="s2">    Decompositions:</span>
-<span class="s2">    1: What is the minimum driving age in the US?</span>
-<span class="s2">    2: What is the minimum age for someone to be employed in the US?</span>
-
-<span class="s2">    Example 4:</span>
-
-<span class="s2">    Question: Are all cucumbers the same texture?</span>
-
-<span class="s2">    Decompositions:</span>
-<span class="s2">    The question needs no decomposition</span>
-
-<span class="s2">    Example 5:</span>
-
-<span class="s2">    Question: Hydrogen&#39;s atomic number squared exceeds number of Spice Girls?</span>
-
-<span class="s2">    Decompositions:</span>
-<span class="s2">    1: What is the atomic number of hydrogen?</span>
-<span class="s2">    2: How many Spice Girls are there?</span>
-
-<span class="s2">    Example 6:</span>
-
-<span class="s2">    Question: </span><span class="si">{question}</span>
-
-<span class="s2">    Decompositions:&quot;</span>
-<span class="s2">    &quot;&quot;&quot;</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AutoRAG&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="query_decompose">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.query_decompose.query_decompose">[docs]</a>
-<span class="nd">@query_expansion_node</span>
-<span class="k">def</span> <span class="nf">query_decompose</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">llm</span><span class="p">:</span> <span class="n">LLMPredictorType</span><span class="p">,</span>
-                    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">decompose_prompt</span><span class="p">,</span>
-                    <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<div class="viewcode-block" id="recency_filter">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.recency.recency_filter">[docs]</a>
+<span class="nd">@passage_filter_node</span>
+<span class="k">def</span> <span class="nf">recency_filter</span><span class="p">(</span><span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                   <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                   <span class="n">time_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">datetime</span><span class="p">]],</span>
+                   <span class="n">threshold</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                   <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    decompose query to little piece of questions.</span>
-<span class="sd">    :param queries: List[str], queries to decompose.</span>
-<span class="sd">    :param llm: LLMPredictorType, language model to use.</span>
-<span class="sd">    :param prompt: str, prompt to use for query decomposition.</span>
-<span class="sd">        default prompt comes from Visconde&#39;s StrategyQA few-shot prompt.</span>
-<span class="sd">    :param batch: int, batch size for llm.</span>
-<span class="sd">        Default is 16.</span>
-<span class="sd">    :return: List[List[str]], list of decomposed query. Return input query if query is not decomposable.</span>
+<span class="sd">    Filter out the contents that are below the threshold datetime.</span>
+<span class="sd">    If all contents are filtered, keep the only one recency content.</span>
+<span class="sd">    If the threshold date format is incorrect, return the original contents.</span>
+
+<span class="sd">    :param contents_list: The list of lists of contents to filter</span>
+<span class="sd">    :param scores_list: The list of lists of scores retrieved</span>
+<span class="sd">    :param ids_list: The list of lists of ids retrieved</span>
+<span class="sd">    :param time_list: The list of lists of datetime retrieved</span>
+<span class="sd">    :param threshold: The threshold to cut off</span>
+<span class="sd">    :return: Tuple of lists containing the filtered contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Run async query_decompose_pure function</span>
-    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">query_decompose_pure</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">llm</span><span class="p">,</span> <span class="n">prompt</span><span class="p">)</span> <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">]</span>
-    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">results</span></div>
 
+    <span class="k">def</span> <span class="nf">sort_row</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">_datetime_threshold</span><span class="p">):</span>
+        <span class="n">combined</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">time</span><span class="p">))</span>
+        <span class="n">combined_filtered</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">combined</span> <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">_datetime_threshold</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="n">combined_filtered</span><span class="p">:</span>
+            <span class="n">remain_contents</span><span class="p">,</span> <span class="n">remain_scores</span><span class="p">,</span> <span class="n">remain_ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">combined_filtered</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">combined</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">remain_contents</span><span class="p">,</span> <span class="n">remain_scores</span><span class="p">,</span> <span class="n">remain_ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">combined</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span>
 
-<div class="viewcode-block" id="query_decompose_pure">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.query_decompose.query_decompose_pure">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">query_decompose_pure</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">llm</span><span class="p">:</span> <span class="n">LLMPredictorType</span><span class="p">,</span>
-                               <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">decompose_prompt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    decompose query to little piece of questions.</span>
-<span class="sd">    :param query: str, query to decompose.</span>
-<span class="sd">    :param llm: LLMPredictorType, language model to use.</span>
-<span class="sd">    :param prompt: str, prompt to use for query decomposition.</span>
-<span class="sd">        default prompt comes from Visconde&#39;s StrategyQA few-shot prompt.</span>
-<span class="sd">    :return: List[str], list of a decomposed query. Return input query if query is not decomposable.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">prompt</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">prompt</span> <span class="o">=</span> <span class="n">decompose_prompt</span>
-    <span class="n">full_prompt</span> <span class="o">=</span> <span class="s2">&quot;prompt: &quot;</span> <span class="o">+</span> <span class="n">prompt</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="s2">&quot;question: &quot;</span> <span class="o">+</span> <span class="n">query</span>
-    <span class="n">answer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">llm</span><span class="o">.</span><span class="n">acomplete</span><span class="p">(</span><span class="n">full_prompt</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">answer</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;the question needs no decomposition.&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">query</span><span class="p">]</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">answer</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
-        <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Decompositions:&quot;</span><span class="p">):</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">questions</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="s1">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">questions</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">query</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">questions</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">query</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">remain_contents</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">remain_ids</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">remain_scores</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">parse_threshold</span><span class="p">(</span><span class="n">threshold_str</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">fmt</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">threshold_str</span><span class="p">,</span> <span class="n">fmt</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">continue</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;threshold date format is incorrect, &quot;</span>
+                    <span class="s2">&quot;should be YYYY-MM-DD or YYYY-MM-DD HH:MM:SS or YYYY-MM-DD HH:MM&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">datetime_threshold</span> <span class="o">=</span> <span class="n">parse_threshold</span><span class="p">(</span><span class="n">threshold</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">datetime_threshold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">,</span> <span class="n">scores_list</span>
+
+    <span class="n">remain_contents_list</span><span class="p">,</span> <span class="n">remain_ids_list</span><span class="p">,</span> <span class="n">remain_scores_list</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="n">sort_row</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">,</span> <span class="n">time_list</span><span class="p">,</span> <span class="p">[</span><span class="n">datetime_threshold</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents_list</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">remain_contents_list</span><span class="p">,</span> <span class="n">remain_ids_list</span><span class="p">,</span> <span class="n">remain_scores_list</span></div>
 
 </pre></div>
         </article>
