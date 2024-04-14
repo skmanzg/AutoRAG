@@ -465,6 +465,35 @@ The prompt must include the following placeholders:
 </dd></dl>
 
 </section>
+<section id="module-autorag.data.qacreation.ragas">
+<span id="autorag-data-qacreation-ragas-module"></span><h2>autorag.data.qacreation.ragas module<a class="headerlink" href="#module-autorag.data.qacreation.ragas" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.data.qacreation.ragas.generate_qa_ragas">
+<span class="sig-prename descclassname"><span class="pre">autorag.data.qacreation.ragas.</span></span><span class="sig-name descname"><span class="pre">generate_qa_ragas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distributions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_llm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseChatModel</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">critic_llm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseChatModel</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Embeddings</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/autorag/data/qacreation/ragas.html#generate_qa_ragas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.data.qacreation.ragas.generate_qa_ragas" title="Link to this definition">#</a></dt>
+<dd><p>QA dataset generation using RAGAS.
+Returns qa dataset dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>corpus_df</strong> – Corpus dataframe.</p></li>
+<li><p><strong>test_size</strong> – Number of queries to generate.</p></li>
+<li><p><strong>distributions</strong> – Distributions of different types of questions.
+Default is “simple is 0.5, multi_context is 0.4, and reasoning is 0.1.”
+Each type of questions refers to Ragas evolution types.</p></li>
+<li><p><strong>generator_llm</strong> – Generator language model from Langchain.</p></li>
+<li><p><strong>critic_llm</strong> – Critic language model from Langchain.</p></li>
+<li><p><strong>embedding_model</strong> – Embedding model from Langchain.</p></li>
+<li><p><strong>kwargs</strong> – The additional option to pass to the ‘generate_with_langchain_docs’ method.
+You can input ‘with_debugging_logs’, ‘is_async’, ‘raise_exceptions’, and ‘run_config’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>QA dataset dataframe.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-autorag.data.qacreation.simple">
 <span id="autorag-data-qacreation-simple-module"></span><h2>autorag.data.qacreation.simple module<a class="headerlink" href="#module-autorag.data.qacreation.simple" title="Link to this heading">#</a></h2>
 <dl class="py function">
@@ -579,6 +608,10 @@ qa_dataset will be saved to filepath(file_dir/filename)</p>
 <li><a class="reference internal" href="#autorag.data.qacreation.llama_index.generate_qa_llama_index_by_ratio"><code class="docutils literal notranslate"><span class="pre">generate_qa_llama_index_by_ratio()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.data.qacreation.llama_index.parse_output"><code class="docutils literal notranslate"><span class="pre">parse_output()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.data.qacreation.llama_index.validate_llama_index_prompt"><code class="docutils literal notranslate"><span class="pre">validate_llama_index_prompt()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.data.qacreation.ragas">autorag.data.qacreation.ragas module</a><ul>
+<li><a class="reference internal" href="#autorag.data.qacreation.ragas.generate_qa_ragas"><code class="docutils literal notranslate"><span class="pre">generate_qa_ragas()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.data.qacreation.simple">autorag.data.qacreation.simple module</a><ul>
