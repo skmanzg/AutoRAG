@@ -220,6 +220,7 @@
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/passage_compressor/passage_compressor.html">4. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 4. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/passage_compressor/tree_summarize.html">Tree Summarize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/passage_compressor/refine.html">Refine</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/prompt_maker/prompt_maker.html">5. Prompt Maker</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 5. Prompt Maker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -339,6 +340,44 @@
 <dt class="sig sig-object py" id="autorag.nodes.passagecompressor.pass_compressor.pass_compressor">
 <span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagecompressor.pass_compressor.</span></span><span class="sig-name descname"><span class="pre">pass_compressor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/passagecompressor/pass_compressor.html#pass_compressor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagecompressor.pass_compressor.pass_compressor" title="Link to this definition">#</a></dt>
 <dd><p>Do not perform any passage compression</p>
+</dd></dl>
+
+</section>
+<section id="module-autorag.nodes.passagecompressor.refine">
+<span id="autorag-nodes-passagecompressor-refine-module"></span><h2>autorag.nodes.passagecompressor.refine module<a class="headerlink" href="#module-autorag.nodes.passagecompressor.refine" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.passagecompressor.refine.refine">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagecompressor.refine.</span></span><span class="sig-name descname"><span class="pre">refine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LLMPredictor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">LLM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chat_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagecompressor/refine.html#refine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagecompressor.refine.refine" title="Link to this definition">#</a></dt>
+<dd><p>Refine a response to a query across text chunks.
+This function is a wrapper for llama_index.response_synthesizers.Refine.
+For more information, visit <a class="reference external" href="https://docs.llamaindex.ai/en/stable/examples/response_synthesizers/refine/">https://docs.llamaindex.ai/en/stable/examples/response_synthesizers/refine/</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queries</strong> – The queries for retrieved passages.</p></li>
+<li><p><strong>contents</strong> – The contents of retrieved passages.</p></li>
+<li><p><strong>scores</strong> – The scores of retrieved passages.
+Do not use in this function, so you can pass an empty list.</p></li>
+<li><p><strong>ids</strong> – The ids of retrieved passages.
+Do not use in this function, so you can pass an empty list.</p></li>
+<li><p><strong>llm</strong> – The llm instance that will be used to summarize.</p></li>
+<li><p><strong>prompt</strong> – The prompt template for refine.
+If you want to use chat prompt, you should pass chat_prompt instead.
+At prompt, you must specify where to put ‘context_msg’ and ‘query_str’.
+Default is None. When it is None, it will use llama index default prompt.</p></li>
+<li><p><strong>chat_prompt</strong> – The chat prompt template for refine.
+If you want to use normal prompt, you should pass prompt instead.
+At prompt, you must specify where to put ‘context_msg’ and ‘query_str’.
+Default is None. When it is None, it will use llama index default chat prompt.</p></li>
+<li><p><strong>batch</strong> – The batch size for llm.
+Set low if you face some errors.
+Default is 16.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list of compressed texts.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -487,6 +526,10 @@ Default is 16.</p></li>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.passagecompressor.pass_compressor">autorag.nodes.passagecompressor.pass_compressor module</a><ul>
 <li><a class="reference internal" href="#autorag.nodes.passagecompressor.pass_compressor.pass_compressor"><code class="docutils literal notranslate"><span class="pre">pass_compressor()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.passagecompressor.refine">autorag.nodes.passagecompressor.refine module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.passagecompressor.refine.refine"><code class="docutils literal notranslate"><span class="pre">refine()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.passagecompressor.run">autorag.nodes.passagecompressor.run module</a><ul>
