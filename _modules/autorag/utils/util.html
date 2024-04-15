@@ -587,6 +587,16 @@
 
 
 
+<div class="viewcode-block" id="make_batch">
+<a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.make_batch">[docs]</a>
+<span class="k">def</span> <span class="nf">make_batch</span><span class="p">(</span><span class="n">elems</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make a batch of elems with batch_size.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">elems</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch_size</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elems</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">)]</span></div>
+
+
+
 <div class="viewcode-block" id="save_parquet_safe">
 <a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.save_parquet_safe">[docs]</a>
 <span class="k">def</span> <span class="nf">save_parquet_safe</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -630,6 +640,39 @@
         <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">flat_list</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span> <span class="o">+</span> <span class="n">length</span><span class="p">])</span>
         <span class="n">start</span> <span class="o">+=</span> <span class="n">length</span>
     <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="flatten_apply">
+<a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.flatten_apply">[docs]</a>
+<span class="k">def</span> <span class="nf">flatten_apply</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">nested_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function flattens the input list and applies the function to the elements.</span>
+<span class="sd">    After that, it reconstructs the list to the original shape.</span>
+<span class="sd">    Its speciality is that the first dimension length of the list can be different from each other.</span>
+
+<span class="sd">    :param func: The function that applies to the flattened list.</span>
+<span class="sd">    :param nested_list: The nested list to be flattened.</span>
+<span class="sd">    :return: The list that is reconstructed after applying the function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="n">nested_list</span><span class="p">})</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">explode</span><span class="p">(</span><span class="s1">&#39;col1&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;col1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s1">&#39;result&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="sort_by_scores">
+<a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.sort_by_scores">[docs]</a>
+<span class="k">def</span> <span class="nf">sort_by_scores</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sorts each row by &#39;scores&#39; column.</span>
+<span class="sd">    The input column names must be &#39;contents&#39;, &#39;ids&#39;, and &#39;scores&#39;.</span>
+<span class="sd">    And its elements must be list type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="n">reverse</span><span class="p">)</span>
+    <span class="n">reranked_contents</span><span class="p">,</span> <span class="n">reranked_ids</span><span class="p">,</span> <span class="n">reranked_scores</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_contents</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_ids</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_scores</span><span class="p">)</span></div>
 
 </pre></div>
         </article>

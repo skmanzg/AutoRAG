@@ -314,14 +314,14 @@
         </div>
         <article role="main">
           <h1>Source code for autorag.nodes.passagereranker.sentence_transformer</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">CrossEncoder</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.passagereranker.base</span> <span class="kn">import</span> <span class="n">passage_reranker_node</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">flatten_apply</span><span class="p">,</span> <span class="n">make_batch</span><span class="p">,</span> <span class="n">sort_by_scores</span>
 
 
 <div class="viewcode-block" id="sentence_transformer_reranker">
@@ -346,58 +346,43 @@
 <span class="sd">        Default is &quot;cross-encoder/ms-marco-MiniLM-L-2-v2&quot;</span>
 <span class="sd">    :return: tuple of lists containing the reranked contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">CrossEncoder</span><span class="p">(</span>
         <span class="n">model_name</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="n">sentence_transformer_max_length</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
     <span class="p">)</span>
-    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">sentence_transformer_reranker_pure</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-             <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">)]</span>
-    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
-    <span class="n">content_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
-    <span class="n">id_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
-    <span class="n">score_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
+
+    <span class="n">nested_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">query</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="n">content_list</span><span class="p">))</span> <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">content_list</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">)]</span>
+    <span class="n">rerank_scores</span> <span class="o">=</span> <span class="n">flatten_apply</span><span class="p">(</span><span class="n">sentence_transformer_run_model</span><span class="p">,</span> <span class="n">nested_list</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s1">&#39;contents&#39;</span><span class="p">:</span> <span class="n">contents_list</span><span class="p">,</span>
+        <span class="s1">&#39;ids&#39;</span><span class="p">:</span> <span class="n">ids_list</span><span class="p">,</span>
+        <span class="s1">&#39;scores&#39;</span><span class="p">:</span> <span class="n">rerank_scores</span><span class="p">,</span>
+    <span class="p">})</span>
+
+    <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;contents&#39;</span><span class="p">,</span> <span class="s1">&#39;ids&#39;</span><span class="p">,</span> <span class="s1">&#39;scores&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">sort_by_scores</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">result_type</span><span class="o">=</span><span class="s1">&#39;expand&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[:</span><span class="n">top_k</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[:</span><span class="n">top_k</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[:</span><span class="n">top_k</span><span class="p">])</span>
 
     <span class="k">del</span> <span class="n">model</span>
     <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span></div>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
 
 
 
-<div class="viewcode-block" id="sentence_transformer_reranker_pure">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_reranker_pure">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">sentence_transformer_reranker_pure</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">scores</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                                             <span class="n">ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Rerank a list of contents based on their relevance to a query using Sentence Transformer model.</span>
-
-<span class="sd">    :param query: The query to use for reranking</span>
-<span class="sd">    :param contents: The list of contents to rerank</span>
-<span class="sd">    :param scores: The list of scores retrieved from the initial ranking</span>
-<span class="sd">    :param ids: The list of ids retrieved from the initial ranking</span>
-<span class="sd">    :param top_k: The number of passages to be retrieved</span>
-<span class="sd">    :param model: The name of the Sentence Transformer model to use for reranking</span>
-<span class="sd">    :return: tuple of lists containing the reranked contents, ids, and scores</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">input_texts</span> <span class="o">=</span> <span class="p">[(</span><span class="n">query</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span> <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">contents</span><span class="p">]</span>
-    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-        <span class="n">pred_scores</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sentences</span><span class="o">=</span><span class="n">input_texts</span><span class="p">,</span> <span class="n">apply_softmax</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="n">content_ids_probs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">pred_scores</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
-
-    <span class="c1"># Sort the list of pairs based on the relevance score in descending order</span>
-    <span class="n">sorted_content_ids_probs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">content_ids_probs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="c1"># crop with top_k</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">top_k</span><span class="p">:</span>
-        <span class="n">top_k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
-    <span class="n">sorted_content_ids_probs</span> <span class="o">=</span> <span class="n">sorted_content_ids_probs</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]</span>
-
-    <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">sorted_content_ids_probs</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">content_result</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">id_result</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">score_result</span><span class="p">)</span></div>
+<div class="viewcode-block" id="sentence_transformer_run_model">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.sentence_transformer.sentence_transformer_run_model">[docs]</a>
+<span class="k">def</span> <span class="nf">sentence_transformer_run_model</span><span class="p">(</span><span class="n">input_texts</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">batch_input_texts</span> <span class="o">=</span> <span class="n">make_batch</span><span class="p">(</span><span class="n">input_texts</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">batch_texts</span> <span class="ow">in</span> <span class="n">batch_input_texts</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">pred_scores</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sentences</span><span class="o">=</span><span class="n">batch_texts</span><span class="p">,</span> <span class="n">apply_softmax</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pred_scores</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">results</span></div>
 
 </pre></div>
         </article>
