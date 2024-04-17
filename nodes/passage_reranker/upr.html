@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="TART" href="tart.html" /><link rel="prev" title="3. Passage_Reranker" href="passage_reranker.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>UPR - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -317,10 +317,10 @@
         </div>
         <article role="main">
           <section id="upr">
-<h1>UPR<a class="headerlink" href="#upr" title="Link to this heading">#</a></h1>
+<h1>UPR<a class="headerlink" href="#upr" title="Link to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">UPR</span></code> module is a reranker based on paper called “<a class="reference external" href="https://arxiv.org/abs/2204.07496">Improving Passage Retrieval with Zero-shot Question Generation</a>”. It uses a language model to generate a question based on the passage and reranks the passages by the likelihood of the question. It can enhance accuracy because it calculates likelihood original passages and related passages (generated) with user’s question.</p>
 <section id="module-parameters">
-<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">#</a></h2>
+<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">¶</a></h2>
 <p>Configure the UPR module with parameters like</p>
 <ul class="simple">
 <li><p>(Optional)<code class="docutils literal notranslate"><span class="pre">shard_size</span></code> (integer):</p>
@@ -354,7 +354,7 @@ signaling how to conclude the generated text or what format to follow at the end
 <p>for customizing the reranking behavior.</p>
 </section>
 <section id="example-config-yaml">
-<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">#</a></h2>
+<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">upr</span>
 <span class="w">    </span><span class="nt">shard_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
@@ -434,7 +434,7 @@ signaling how to conclude the generated text or what format to follow at the end
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Similarity Percentile Cutoff" href="similarity_percentile_cutoff.html" /><link rel="prev" title="Passage Filter" href="passage_filter.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>Similarity Threshold Cutoff - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -317,12 +317,12 @@
         </div>
         <article role="main">
           <section id="similarity-threshold-cutoff">
-<h1>Similarity Threshold Cutoff<a class="headerlink" href="#similarity-threshold-cutoff" title="Link to this heading">#</a></h1>
+<h1>Similarity Threshold Cutoff<a class="headerlink" href="#similarity-threshold-cutoff" title="Link to this heading">¶</a></h1>
 <p>This module is inspired by
 LlamaIndex <a class="reference external" href="https://docs.llamaindex.ai/en/stable/examples/node_postprocessor/OptimizerDemo/">‘Sentence Embedding Optimizer’</a>.
 Re-calculate each content’s similarity with the query and filter out the contents that are below the threshold.</p>
 <section id="module-parameters">
-<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">#</a></h2>
+<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>threshold</strong> : The threshold value to filter out the contents.
 If the similarity score is below the threshold, the content will be filtered out.
@@ -337,7 +337,7 @@ Plus, you can learn about how to add custom embedding model at <a class="referen
 </div>
 </section>
 <section id="example-config-yaml">
-<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">#</a></h2>
+<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">similarity_threshold_cutoff</span>
 <span class="w">    </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.85</span>
@@ -418,7 +418,7 @@ Plus, you can learn about how to add custom embedding model at <a class="referen
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Dataset Format" href="data_format.html" /><link rel="prev" title="Configure LLM &amp; Embedding models" href="../local_model.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>Start creating your own evaluation data - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -317,9 +317,9 @@
         </div>
         <article role="main">
           <section id="start-creating-your-own-evaluation-data">
-<h1>Start creating your own evaluation data<a class="headerlink" href="#start-creating-your-own-evaluation-data" title="Link to this heading">#</a></h1>
+<h1>Start creating your own evaluation data<a class="headerlink" href="#start-creating-your-own-evaluation-data" title="Link to this heading">¶</a></h1>
 <section id="index">
-<h2>Index<a class="headerlink" href="#index" title="Link to this heading">#</a></h2>
+<h2>Index<a class="headerlink" href="#index" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p><a class="reference internal" href="#overview"><span class="xref myst">Overview</span></a></p></li>
 <li><p><a class="reference internal" href="#make-corpus-data-from-raw-documents"><span class="xref myst">Raw data to Corpus data</span></a></p></li>
@@ -329,7 +329,7 @@
 </ol>
 </section>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>For the evaluation of RAGs we need data, but in most cases we have little or no satisfactory data.</p>
 <p>However, since the advent of LLM, creating synthetic data has become one of the good solutions to this problem.</p>
 <p>The following guide covers how to use LLM to create data in a form that AutoRAG can use.</p>
@@ -339,7 +339,7 @@
 <p>Therefore, to use AutoRAG, you need to convert your raw data into <code class="docutils literal notranslate"><span class="pre">corpus</span> <span class="pre">data</span></code>  and <code class="docutils literal notranslate"><span class="pre">qa</span> <span class="pre">data</span></code> to our <a class="reference internal" href="data_format.html"><span class="std std-doc">data format</span></a>.</p>
 </section>
 <section id="make-corpus-data-from-raw-documents">
-<h2>Make corpus data from raw documents<a class="headerlink" href="#make-corpus-data-from-raw-documents" title="Link to this heading">#</a></h2>
+<h2>Make corpus data from raw documents<a class="headerlink" href="#make-corpus-data-from-raw-documents" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Load your raw data to texts with loaders such as lama_index, LangChain, etc.</p></li>
 <li><p>Chunk the texts into passages. Use Langchain, LlamaIndex, etc.</p></li>
@@ -377,7 +377,7 @@ which is <code class="docutils literal notranslate"><span class="pre">llama_docu
 </div>
 </section>
 <section id="make-qa-data-from-corpus-data">
-<h2>Make qa data from corpus data<a class="headerlink" href="#make-qa-data-from-corpus-data" title="Link to this heading">#</a></h2>
+<h2>Make qa data from corpus data<a class="headerlink" href="#make-qa-data-from-corpus-data" title="Link to this heading">¶</a></h2>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The format for qa data can be found <a class="reference internal" href="data_format.html#qa-dataset"><span class="std std-ref">qa data format</span></a></p>
@@ -403,7 +403,7 @@ Which means it uses only one passage per question for answering the question.</p
 </div>
 </section>
 <section id="use-custom-prompt">
-<h2>Use custom prompt<a class="headerlink" href="#use-custom-prompt" title="Link to this heading">#</a></h2>
+<h2>Use custom prompt<a class="headerlink" href="#use-custom-prompt" title="Link to this heading">¶</a></h2>
 <p>You can use custom prompt to generate qa data.
 The prompt must contains two placeholders:</p>
 <ul class="simple">
@@ -438,7 +438,7 @@ The prompt must contains two placeholders:</p>
 </div>
 </section>
 <section id="use-multiple-prompts">
-<h2>Use multiple prompts<a class="headerlink" href="#use-multiple-prompts" title="Link to this heading">#</a></h2>
+<h2>Use multiple prompts<a class="headerlink" href="#use-multiple-prompts" title="Link to this heading">¶</a></h2>
 <p>If you want to generate different types of question and answer pairs, you can use multiple prompts.
 From now, we support distributing multiple prompts by randomly based on the ratio of each prompt.
 It means that the prompt will be selected by ratio per passage.</p>
@@ -541,7 +541,7 @@ The dictionary must have the key, which is the prompt text file path, and the va
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Similarity Threshold Cutoff" href="similarity_threshold_cutoff.html" /><link rel="prev" title="vllm" href="../generator/vllm.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>Passage Filter - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -317,9 +317,9 @@
         </div>
         <article role="main">
           <section id="passage-filter">
-<h1>Passage Filter<a class="headerlink" href="#passage-filter" title="Link to this heading">#</a></h1>
+<h1>Passage Filter<a class="headerlink" href="#passage-filter" title="Link to this heading">¶</a></h1>
 <section id="definition">
-<h2>🔎 <strong>Definition</strong><a class="headerlink" href="#definition" title="Link to this heading">#</a></h2>
+<h2>🔎 <strong>Definition</strong><a class="headerlink" href="#definition" title="Link to this heading">¶</a></h2>
 <p>Passage filtering is a node that filters out passages.
 It does not compress passages, but it deletes passages that are not relatable enough to the query.</p>
 <div class="admonition-what-is-difference-between-passage-filter-and-passage-reranker admonition">
@@ -331,16 +331,16 @@ It can be not filtered, or it can be filtered to 1 passage.</p>
 </div>
 </section>
 <section id="benefits">
-<h2>🤸 <strong>Benefits</strong><a class="headerlink" href="#benefits" title="Link to this heading">#</a></h2>
+<h2>🤸 <strong>Benefits</strong><a class="headerlink" href="#benefits" title="Link to this heading">¶</a></h2>
 <p>The primary benefit of passage filtering is that you can filter out irrelevant passages.
 When the LLM gets irrelevant passages, it can be confused and return irrelevant answers.
 So it is important to filter out irrelevant passages.</p>
 </section>
 <section id="node-parameters">
-<h2><strong>Node Parameters</strong><a class="headerlink" href="#node-parameters" title="Link to this heading">#</a></h2>
+<h2><strong>Node Parameters</strong><a class="headerlink" href="#node-parameters" title="Link to this heading">¶</a></h2>
 <p>There are no node parameters for passage filter.</p>
 <section id="example-config-yaml-file">
-<h3>Example config.yaml file<a class="headerlink" href="#example-config-yaml-file" title="Link to this heading">#</a></h3>
+<h3>Example config.yaml file<a class="headerlink" href="#example-config-yaml-file" title="Link to this heading">¶</a></h3>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">node_lines</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_line_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">retrieve_node_line</span><span class="w">  </span><span class="c1"># Arbitrary node line name</span>
 <span class="w">    </span><span class="nt">nodes</span><span class="p">:</span>
@@ -445,7 +445,7 @@ So with this module, you can automatically test the performance without using an
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Structure" href="structure.html" /><link rel="prev" title="Installation and Setup" href="install.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>Tutorial - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
@@ -317,7 +317,7 @@
         </div>
         <article role="main">
           <section id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Link to this heading">#</a></h1>
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Link to this heading">¶</a></h1>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Before start this tutorial, make sure you installed AutoRAG.
@@ -328,7 +328,7 @@ To install it, please check <a class="reference internal" href="install.html"><s
 <p>Do you use Colab? You can check out Colab tutorial at <a class="reference external" href="https://colab.research.google.com/drive/19OEQXO_pHN6gnn2WdfPd4hjnS-4GurVd?usp=sharing">here</a>.</p>
 </div>
 <section id="prepare-evaluation-dataset">
-<h2>Prepare Evaluation Dataset<a class="headerlink" href="#prepare-evaluation-dataset" title="Link to this heading">#</a></h2>
+<h2>Prepare Evaluation Dataset<a class="headerlink" href="#prepare-evaluation-dataset" title="Link to this heading">¶</a></h2>
 <p>First, you have to prepare an evaluation dataset for your RAG pipeline.
 Making a good evaluation dataset is the key to getting a good RAG pipeline.
 So, you need to focus on the quality of your evaluation dataset.
@@ -354,7 +354,7 @@ If you don’t know about specific columns and data types, check out the <a clas
 </div>
 </section>
 <section id="find-optimal-rag-pipeline">
-<h2>Find Optimal RAG Pipeline<a class="headerlink" href="#find-optimal-rag-pipeline" title="Link to this heading">#</a></h2>
+<h2>Find Optimal RAG Pipeline<a class="headerlink" href="#find-optimal-rag-pipeline" title="Link to this heading">¶</a></h2>
 <p>Let’s find an optimal RAG pipeline with AutoRAG!
 After you prepare your evaluation dataset, you need to have a config yaml file.
 There are few pre-made config yaml files at our GitHub repo <code class="docutils literal notranslate"><span class="pre">sample_config</span></code> folder.
@@ -393,7 +393,7 @@ You can find out more information about folder structure and result files at <a 
 <p>You can specify project directory with <code class="docutils literal notranslate"><span class="pre">--project_dir</span></code> option or project_dir parameter.</p>
 </div>
 <section id="restart-a-trial-if-an-error-occurs-during-the-trial">
-<h3>❗Restart a trial if an error occurs during the trial<a class="headerlink" href="#restart-a-trial-if-an-error-occurs-during-the-trial" title="Link to this heading">#</a></h3>
+<h3>❗Restart a trial if an error occurs during the trial<a class="headerlink" href="#restart-a-trial-if-an-error-occurs-during-the-trial" title="Link to this heading">¶</a></h3>
 <p>If an error occurs during the trial, you can restart the trial.</p>
 <p>If you had issues with the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file, you can modify the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file in the trail folder and run the
 code below.</p>
@@ -417,7 +417,7 @@ start_trial function will be executed instead of restart_trial.</p>
 </section>
 </section>
 <section id="extract-pipeline-and-evaluate-test-dataset">
-<h2>Extract pipeline and evaluate test dataset<a class="headerlink" href="#extract-pipeline-and-evaluate-test-dataset" title="Link to this heading">#</a></h2>
+<h2>Extract pipeline and evaluate test dataset<a class="headerlink" href="#extract-pipeline-and-evaluate-test-dataset" title="Link to this heading">¶</a></h2>
 <p>Now, it’s time to evaluate test dataset with a found RAG pipeline. For this, you can extract the optimal pipeline and
 save it to new config yaml file.</p>
 <p>You can use the below code.</p>
@@ -446,9 +446,9 @@ Running evaluation with another dataset in same folder can cause serious malfunc
 <p>It will evaluate your test dataset with the found RAG pipeline.</p>
 </section>
 <section id="deploy-your-optimal-rag-pipeline">
-<h2>Deploy your optimal RAG pipeline<a class="headerlink" href="#deploy-your-optimal-rag-pipeline" title="Link to this heading">#</a></h2>
+<h2>Deploy your optimal RAG pipeline<a class="headerlink" href="#deploy-your-optimal-rag-pipeline" title="Link to this heading">¶</a></h2>
 <section id="run-as-a-cli">
-<h3>1. Run as a CLI<a class="headerlink" href="#run-as-a-cli" title="Link to this heading">#</a></h3>
+<h3>1. Run as a CLI<a class="headerlink" href="#run-as-a-cli" title="Link to this heading">¶</a></h3>
 <p>You can use a found optimal RAG pipeline right away with extracted yaml file.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.deploy</span> <span class="kn">import</span> <span class="n">Runner</span>
 
@@ -458,7 +458,7 @@ Running evaluation with another dataset in same folder can cause serious malfunc
 </div>
 </section>
 <section id="run-as-an-api-server">
-<h3>2. Run as an API server<a class="headerlink" href="#run-as-an-api-server" title="Link to this heading">#</a></h3>
+<h3>2. Run as an API server<a class="headerlink" href="#run-as-an-api-server" title="Link to this heading">¶</a></h3>
 <p>You can run this pipeline as an API server.</p>
 <p>Check out API endpoint at <a class="reference internal" href="deploy/api_endpoint.html"><span class="std std-doc">here</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.deploy</span> <span class="kn">import</span> <span class="n">Runner</span>
@@ -476,7 +476,7 @@ Running evaluation with another dataset in same folder can cause serious malfunc
 </div>
 </section>
 <section id="run-as-a-web-interface">
-<h3>3. Run as a Web Interface<a class="headerlink" href="#run-as-a-web-interface" title="Link to this heading">#</a></h3>
+<h3>3. Run as a Web Interface<a class="headerlink" href="#run-as-a-web-interface" title="Link to this heading">¶</a></h3>
 <p>you can run this pipeline as a web interface.</p>
 <p>Check out web interface at <a class="reference internal" href="deploy/web.html"><span class="std std-doc">here</span></a>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autorag<span class="w"> </span>run_web<span class="w"> </span>--yaml_path<span class="w"> </span>your/path/to/pipeline.yaml
@@ -591,7 +591,7 @@ and evaluate it again and again for better result.</p>
     </aside>
   </div>
 </div><script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>

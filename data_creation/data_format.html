@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="RAGAS evaluation data generation" href="ragas.html" /><link rel="prev" title="Start creating your own evaluation data" href="tutorial.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>Dataset Format - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -317,11 +317,11 @@
         </div>
         <article role="main">
           <section id="dataset-format">
-<h1>Dataset Format<a class="headerlink" href="#dataset-format" title="Link to this heading">#</a></h1>
+<h1>Dataset Format<a class="headerlink" href="#dataset-format" title="Link to this heading">¶</a></h1>
 <p>There are two kinds of dataset, QA dataset and Corpus dataset.
 You must follow a specified format for data input.</p>
 <section id="qa-dataset">
-<h2>QA Dataset<a class="headerlink" href="#qa-dataset" title="Link to this heading">#</a></h2>
+<h2>QA Dataset<a class="headerlink" href="#qa-dataset" title="Link to this heading">¶</a></h2>
 <div class="admonition-long-story-short admonition">
 <p class="admonition-title">Long story short</p>
 <p>You must have <code class="docutils literal notranslate"><span class="pre">qid</span></code>, <code class="docutils literal notranslate"><span class="pre">query</span></code>, <code class="docutils literal notranslate"><span class="pre">retrieval_gt</span></code>, and <code class="docutils literal notranslate"><span class="pre">generation_gt</span></code> columns at <code class="docutils literal notranslate"><span class="pre">qa.parquet</span></code> file.</p>
@@ -331,7 +331,7 @@ Also, there will be relevant document ids as ground truth retrieval.
 As you know, there can be lots of variations of <em>good answers</em> for a single question.</p>
 <p>You must include the following columns at your <code class="docutils literal notranslate"><span class="pre">qa.parquet</span></code> file:</p>
 <section id="qid">
-<h3>qid<a class="headerlink" href="#qid" title="Link to this heading">#</a></h3>
+<h3>qid<a class="headerlink" href="#qid" title="Link to this heading">¶</a></h3>
 <p>Unique identifier for queries. Its type is <code class="docutils literal notranslate"><span class="pre">string</span></code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -339,14 +339,14 @@ As you know, there can be lots of variations of <em>good answers</em> for a sing
 </div>
 </section>
 <section id="query">
-<h3>query<a class="headerlink" href="#query" title="Link to this heading">#</a></h3>
+<h3>query<a class="headerlink" href="#query" title="Link to this heading">¶</a></h3>
 <p>The user’s question.
 Its type is <code class="docutils literal notranslate"><span class="pre">string</span></code>.
 In this data, you can imagine or collect user’s input questions to your RAG system.
 What kinds of questions users ask your data?</p>
 </section>
 <section id="retrieval-gt">
-<h3>retrieval_gt<a class="headerlink" href="#retrieval-gt" title="Link to this heading">#</a></h3>
+<h3>retrieval_gt<a class="headerlink" href="#retrieval-gt" title="Link to this heading">¶</a></h3>
 <div class="admonition-long-story-short admonition">
 <p class="admonition-title">Long story short</p>
 <p>Save retrieval ground truth as 2d list. It can be 1d list or just string.</p>
@@ -381,7 +381,7 @@ If you save it as 1-d list, it treats as ‘and’ operation.</p>
 It can affect hugely to optimization performance or nodes like retrieval, query expansion or passage reranker.</p>
 </section>
 <section id="generation-gt">
-<h3>generation_gt<a class="headerlink" href="#generation-gt" title="Link to this heading">#</a></h3>
+<h3>generation_gt<a class="headerlink" href="#generation-gt" title="Link to this heading">¶</a></h3>
 <div class="admonition-long-story-short admonition">
 <p class="admonition-title">Long story short</p>
 <p>Save generation ground truth as a list. If you have a single gt answer, it can be just string.</p>
@@ -396,7 +396,7 @@ So you can put all of them in a list.</p>
 </section>
 </section>
 <section id="corpus-dataset">
-<h2>Corpus Dataset<a class="headerlink" href="#corpus-dataset" title="Link to this heading">#</a></h2>
+<h2>Corpus Dataset<a class="headerlink" href="#corpus-dataset" title="Link to this heading">¶</a></h2>
 <div class="admonition-long-story-short admonition">
 <p class="admonition-title">Long story short</p>
 <p>You must have <code class="docutils literal notranslate"><span class="pre">doc_id</span></code>, <code class="docutils literal notranslate"><span class="pre">contents</span></code>, and <code class="docutils literal notranslate"><span class="pre">metadata</span></code> columns at <code class="docutils literal notranslate"><span class="pre">corpus.parquet</span></code> file.</p>
@@ -406,7 +406,7 @@ In general, you have to load your documents to text, and chunk it to passages.
 Once it is chunked, the single passage can be a row in the corpus dataset.
 Your RAG system will retrieve passages in this corpus dataset, so chunking strategy is really important.</p>
 <section id="doc-id">
-<h3>doc_id<a class="headerlink" href="#doc-id" title="Link to this heading">#</a></h3>
+<h3>doc_id<a class="headerlink" href="#doc-id" title="Link to this heading">¶</a></h3>
 <p>A unique identifier for each passage. Its type is <code class="docutils literal notranslate"><span class="pre">string</span></code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -414,7 +414,7 @@ Your RAG system will retrieve passages in this corpus dataset, so chunking strat
 </div>
 </section>
 <section id="contents">
-<h3>contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h3>
+<h3>contents<a class="headerlink" href="#contents" title="Link to this heading">¶</a></h3>
 <p>The actual contents. Type must be a <code class="docutils literal notranslate"><span class="pre">string</span></code>.</p>
 <p>For saving contents, you must chunk your documents to passages.
 There are lots of chunking strategies, and you can choose one of them.</p>
@@ -426,7 +426,7 @@ But from an early version of AutoRAG, it only supports text.</p>
 </div>
 </section>
 <section id="metadata">
-<h3>metadata<a class="headerlink" href="#metadata" title="Link to this heading">#</a></h3>
+<h3>metadata<a class="headerlink" href="#metadata" title="Link to this heading">¶</a></h3>
 <p>Metadata for your passages.
 It is a dictionary that contains information.</p>
 <p>You must include <code class="docutils literal notranslate"><span class="pre">last_modified_datetime</span></code> key at metadata.
@@ -445,7 +445,7 @@ If not, it can occur unexpected behavior.</p>
 </section>
 </section>
 <section id="samples">
-<h2>Samples<a class="headerlink" href="#samples" title="Link to this heading">#</a></h2>
+<h2>Samples<a class="headerlink" href="#samples" title="Link to this heading">¶</a></h2>
 <p>Looking for an example of dataset?
 Check out our AutoRAG dataset collection at <a class="reference external" href="https://huggingface.co/collections/MarkrAI/autorag-evaluation-datasets-65c0ee87d673dcc686bd14b8">huggingface</a>.</p>
 <p>Or you can download it using a script in our GitHub repo.
@@ -535,7 +535,7 @@ Go <a class="reference external" href="https://github.com/Marker-Inc-Korea/AutoR
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

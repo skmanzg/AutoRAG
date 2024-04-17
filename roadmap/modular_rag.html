@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="autorag" href="../api_spec/modules.html" /><link rel="prev" title="Web Interface" href="../deploy/web.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>Road to Modular RAG - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -317,9 +317,9 @@
         </div>
         <article role="main">
           <section id="road-to-modular-rag">
-<h1>Road to Modular RAG<a class="headerlink" href="#road-to-modular-rag" title="Link to this heading">#</a></h1>
+<h1>Road to Modular RAG<a class="headerlink" href="#road-to-modular-rag" title="Link to this heading">¶</a></h1>
 <section id="what-is-modular-rag">
-<h2>🤷‍♂️ What is Modular RAG?<a class="headerlink" href="#what-is-modular-rag" title="Link to this heading">#</a></h2>
+<h2>🤷‍♂️ What is Modular RAG?<a class="headerlink" href="#what-is-modular-rag" title="Link to this heading">¶</a></h2>
 <p>In a survey <a class="reference external" href="https://arxiv.org/abs/2312.10997v1">paper</a> about RAG, they propose three paradigms of RAG.</p>
 <p><img alt="RAG paradigms" src="../_images/RAG_paradigms.png" /></p>
 <p>At first, Naive RAG is a simple RAG paradigm.
@@ -347,12 +347,12 @@ And here comes Modular RAG.</p>
 </div>
 </section>
 <section id="id1">
-<h2>🚀 Road to Modular RAG<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<h2>🚀 Road to Modular RAG<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
 <p>In this version of <code class="docutils literal notranslate"><span class="pre">AutoRAG</span></code>, we support Advanced RAG only.
 However, we know how Modular RAG is important to RAG pipelines, so we are planning to support Modular RAG ASAP.</p>
 <p>Let me explain our plan to implement Modular RAG.</p>
 <section id="early-version-of-autorag">
-<h3>Early version of AutoRAG<a class="headerlink" href="#early-version-of-autorag" title="Link to this heading">#</a></h3>
+<h3>Early version of AutoRAG<a class="headerlink" href="#early-version-of-autorag" title="Link to this heading">¶</a></h3>
 <p><img alt="Advanced RAG" src="../_images/advanced_RAG.png" /></p>
 <p>Here is a simple diagram of Advanced RAG.
 Think each circle as a node.
@@ -365,7 +365,7 @@ please see <a class="reference internal" href="../optimization/optimization.html
 </div>
 </section>
 <section id="policy-node">
-<h3>Policy Node<a class="headerlink" href="#policy-node" title="Link to this heading">#</a></h3>
+<h3>Policy Node<a class="headerlink" href="#policy-node" title="Link to this heading">¶</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>This document is about our <em>plan</em>, so it can be changed in the future.
@@ -379,7 +379,7 @@ It gets a previous result from previous nodes, and decides the next step based o
 <p>In this example, the policy gets prompt, and selects which Generator model is good for generating the final answer.</p>
 </section>
 <section id="merger-node">
-<h3>Merger Node<a class="headerlink" href="#merger-node" title="Link to this heading">#</a></h3>
+<h3>Merger Node<a class="headerlink" href="#merger-node" title="Link to this heading">¶</a></h3>
 <p>There is a limitation of the policy node that it can’t merge the results again.
 Once policy takes its action, it can’t merge the results again without <code class="docutils literal notranslate"><span class="pre">Merger</span> <span class="pre">Node</span></code>.</p>
 <p>With merger node, we can now create <strong>cycles</strong> in the RAG pipeline.</p>
@@ -404,7 +404,7 @@ How can we make this to single yaml file?
 How can we make complex Modular RAG pipelines using yaml file alone?</p>
 </section>
 <section id="node-line-for-modular-rag">
-<h3>Node line for Modular RAG<a class="headerlink" href="#node-line-for-modular-rag" title="Link to this heading">#</a></h3>
+<h3>Node line for Modular RAG<a class="headerlink" href="#node-line-for-modular-rag" title="Link to this heading">¶</a></h3>
 <p>The solution is <code class="docutils literal notranslate"><span class="pre">Node</span> <span class="pre">Line</span></code>.
 If you learned about structure of <code class="docutils literal notranslate"><span class="pre">AutoRAG</span></code> config file, you are familiar with <code class="docutils literal notranslate"><span class="pre">Node</span> <span class="pre">Line</span></code>.</p>
 <div class="admonition-what-is-node-line admonition">
@@ -463,7 +463,7 @@ You can write your config yaml file for making the above pipeline like below.</p
 </section>
 </section>
 <section id="contact-us">
-<h2>Contact us<a class="headerlink" href="#contact-us" title="Link to this heading">#</a></h2>
+<h2>Contact us<a class="headerlink" href="#contact-us" title="Link to this heading">¶</a></h2>
 <p>We are tyring hard to make Modular RAG at <code class="docutils literal notranslate"><span class="pre">AutoRAG</span></code> as soon as possible.
 If you are really interested in Modular RAG, feel free to contact us.
 We are welcoming any questions, suggestions, feature requests, feedback, and so on.</p>
@@ -554,7 +554,7 @@ We are welcoming any questions, suggestions, feature requests, feedback, and so 
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

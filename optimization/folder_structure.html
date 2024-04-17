@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Make custom config yaml file" href="custom_config.html" /><link rel="prev" title="How optimization works" href="optimization.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>Folder Structure - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
@@ -317,9 +317,9 @@
         </div>
         <article role="main">
           <section id="folder-structure">
-<h1>Folder Structure<a class="headerlink" href="#folder-structure" title="Link to this heading">#</a></h1>
+<h1>Folder Structure<a class="headerlink" href="#folder-structure" title="Link to this heading">¶</a></h1>
 <section id="sample-structure-index">
-<h2>Sample Structure Index<a class="headerlink" href="#sample-structure-index" title="Link to this heading">#</a></h2>
+<h2>Sample Structure Index<a class="headerlink" href="#sample-structure-index" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="#project"><span class="xref myst">Project</span></a></p>
 <ul>
@@ -364,12 +364,12 @@
 </ul>
 </section>
 <section id="project">
-<h2>Project<a class="headerlink" href="#project" title="Link to this heading">#</a></h2>
+<h2>Project<a class="headerlink" href="#project" title="Link to this heading">¶</a></h2>
 <p>In a project, you have to do experiment with only one dataset.
 The project folder is where the user runs from.</p>
 <p><img alt="project_folders" src="../_images/project_folders.png" /></p>
 <section id="trial">
-<h3>trial<a class="headerlink" href="#trial" title="Link to this heading">#</a></h3>
+<h3>trial<a class="headerlink" href="#trial" title="Link to this heading">¶</a></h3>
 <p>Trial means a single run of the experiment.
 Each trial can be run with different settings using different config yaml files.
 If there are multiple trail folders, it means you ran experiments more than once.
@@ -379,7 +379,7 @@ The first trial folder is named <code class="docutils literal notranslate"><span
 You can check this out at the <a class="reference internal" href="#trialjson"><span class="xref myst">trial.json</span></a> file, too.</p>
 <p><img alt="trial_folder" src="../_images/trial_folder.png" /></p>
 <section id="config-yaml">
-<h4>config.yaml<a class="headerlink" href="#config-yaml" title="Link to this heading">#</a></h4>
+<h4>config.yaml<a class="headerlink" href="#config-yaml" title="Link to this heading">¶</a></h4>
 <p>The yaml file you used for this trial.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -387,17 +387,17 @@ You can check this out at the <a class="reference internal" href="#trialjson"><s
 </div>
 </section>
 <section id="trial-summary-csv">
-<h4>[trial] summary.csv<a class="headerlink" href="#trial-summary-csv" title="Link to this heading">#</a></h4>
+<h4>[trial] summary.csv<a class="headerlink" href="#trial-summary-csv" title="Link to this heading">¶</a></h4>
 <p>Full trial summary csv file</p>
 <p>There are node lines, selected modules, files and parameters used by the selected modules,
 and the time it took to process in one row.</p>
 <p><img alt="trail_summary" src="../_images/trial_summary.png" /></p>
 </section>
 <section id="pre-retrieve-node-line">
-<h4>pre_retrieve_node_line<a class="headerlink" href="#pre-retrieve-node-line" title="Link to this heading">#</a></h4>
+<h4>pre_retrieve_node_line<a class="headerlink" href="#pre-retrieve-node-line" title="Link to this heading">¶</a></h4>
 <p><img alt="node_line_folder" src="../_images/node_line_folder.png" /></p>
 <section id="node-line-summary-csv">
-<h5>[Node Line] summary.csv<a class="headerlink" href="#node-line-summary-csv" title="Link to this heading">#</a></h5>
+<h5>[Node Line] summary.csv<a class="headerlink" href="#node-line-summary-csv" title="Link to this heading">¶</a></h5>
 <p><img alt="node_line_summary" src="../_images/node_line_summary.png" /></p>
 <p>Contains the best modules and settings selected from each node.
 You can see the node, the selected modules, their files and parameters used, and the time it took to process a row.</p>
@@ -408,7 +408,7 @@ Check out <a class="reference internal" href="../roadmap/modular_rag.html"><span
 </div>
 </section>
 <section id="query-expansion">
-<h5>query_expansion<a class="headerlink" href="#query-expansion" title="Link to this heading">#</a></h5>
+<h5>query_expansion<a class="headerlink" href="#query-expansion" title="Link to this heading">¶</a></h5>
 <p>Node names belonging to the node_line</p>
 <p><img alt="node_folder" src="../_images/node_folder.png" /></p>
 <p>Depending on the module and module params, you can run different experiments on a node.
@@ -424,14 +424,14 @@ The following image shows three experiments on a node.</p>
 <p>In the image, the first result is the best of the three experiments, so the best file name is best_0.</p>
 </div>
 <section id="node-summary-csv">
-<h6>[Node] summary.csv<a class="headerlink" href="#node-summary-csv" title="Link to this heading">#</a></h6>
+<h6>[Node] summary.csv<a class="headerlink" href="#node-summary-csv" title="Link to this heading">¶</a></h6>
 <p>Results for each node. All attempts and evaluation metric results are recorded.</p>
 <p><img alt="node_summary" src="../_images/node_summary.png" /></p>
 </section>
 </section>
 </section>
 <section id="retrieve-node-line">
-<h4>retrieve_node_line<a class="headerlink" href="#retrieve-node-line" title="Link to this heading">#</a></h4>
+<h4>retrieve_node_line<a class="headerlink" href="#retrieve-node-line" title="Link to this heading">¶</a></h4>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
 <p>All other node lines and nodes are organized in the same format as above.
@@ -440,7 +440,7 @@ It would be too long to explain it all, but we hope you understand the structure
 </section>
 </section>
 <section id="data">
-<h3>data<a class="headerlink" href="#data" title="Link to this heading">#</a></h3>
+<h3>data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h3>
 <p><img alt="data_folder" src="../_images/data_folder.png" /></p>
 <ul>
 <li><p>corpus.parquet ⇒ corpus dataset</p></li>
@@ -454,7 +454,7 @@ Check out <a class="reference internal" href="../data_creation/tutorial.html"><s
 </ul>
 </section>
 <section id="resources">
-<h3>resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h3>
+<h3>resources<a class="headerlink" href="#resources" title="Link to this heading">¶</a></h3>
 <p><img alt="resources_folder" src="../_images/resources_folder.png" /></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">bm25.pkl</span></code>: created when using bm25</p></li>
@@ -466,7 +466,7 @@ Check out <a class="reference internal" href="../data_creation/tutorial.html"><s
 </ul>
 </section>
 <section id="trial-json">
-<h3>trial.json<a class="headerlink" href="#trial-json" title="Link to this heading">#</a></h3>
+<h3>trial.json<a class="headerlink" href="#trial-json" title="Link to this heading">¶</a></h3>
 <p>It contains information about each trial.</p>
 <p><img alt="trial_json" src="../_images/trial_json.png" /></p>
 </section>
@@ -562,7 +562,7 @@ Check out <a class="reference internal" href="../data_creation/tutorial.html"><s
     </aside>
   </div>
 </div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

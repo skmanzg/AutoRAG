@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Passage Filter" href="../passage_filter/passage_filter.html" /><link rel="prev" title="llama_index LLM" href="llama_index_llm.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>vllm - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -317,17 +317,17 @@
         </div>
         <article role="main">
           <section id="vllm">
-<h1>vllm<a class="headerlink" href="#vllm" title="Link to this heading">#</a></h1>
+<h1>vllm<a class="headerlink" href="#vllm" title="Link to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">vllm</span></code> module is generator that using <a class="reference external" href="https://blog.vllm.ai/2023/06/20/vllm.html">vllm</a>.</p>
 <section id="why-use-vllm-module">
-<h2>Why use vllm module?<a class="headerlink" href="#why-use-vllm-module" title="Link to this heading">#</a></h2>
+<h2>Why use vllm module?<a class="headerlink" href="#why-use-vllm-module" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">vllm</span></code> can generate new texts really fast. Its speed is more than 10x faster than a huggingface transformers library.</p>
 <p>You can use <code class="docutils literal notranslate"><span class="pre">vllm</span></code> model with <a class="reference internal" href="llama_index_llm.html"><span class="std std-doc">llama_index_llm module</span></a>, but it is really slow because LlamaIndex
 does not optimize for processing many prompts at once.</p>
 <p>So, we decide to make a standalone module for vllm, for faster generation speed.</p>
 </section>
 <section id="module-parameters">
-<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">#</a></h2>
+<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>llm</strong>: You can type your ‘model name’ at here. For example, <code class="docutils literal notranslate"><span class="pre">facebook/opt-125m</span></code>
 or <code class="docutils literal notranslate"><span class="pre">mistralai/Mistral-7B-Instruct-v0.2</span></code>.</p></li>
@@ -341,7 +341,7 @@ and <a class="reference external" href="https://github.com/vllm-project/vllm/blo
 </ul>
 </section>
 <section id="example-config-yaml">
-<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">#</a></h2>
+<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
 <span class="w">    </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mistralai/Mistral-7B-Instruct-v0.2</span>
@@ -423,7 +423,7 @@ and <a class="reference external" href="https://github.com/vllm-project/vllm/blo
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

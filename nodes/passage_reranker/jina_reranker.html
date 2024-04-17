@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Colbert Reranker" href="colbert.html" /><link rel="prev" title="RankGPT" href="rankgpt.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>jina_reranker - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -317,13 +317,13 @@
         </div>
         <article role="main">
           <section id="jina-reranker">
-<h1>jina_reranker<a class="headerlink" href="#jina-reranker" title="Link to this heading">#</a></h1>
+<h1>jina_reranker<a class="headerlink" href="#jina-reranker" title="Link to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">Jina</span> <span class="pre">reranker</span></code> module is a reranker from <a class="reference external" href="https://jina.ai/reranker">Jina</a>.
 It supports powerful and fast reranker for passage retrieval.</p>
 <p>You can use two model from Jina reranker, which is ‘jina-reranker-v1-base-en’ and
 ‘jina-colbert-v1-en’.</p>
 <section id="before-usage">
-<h2>Before Usage<a class="headerlink" href="#before-usage" title="Link to this heading">#</a></h2>
+<h2>Before Usage<a class="headerlink" href="#before-usage" title="Link to this heading">¶</a></h2>
 <p>At first, you need to get the Jina API key from <a class="reference external" href="https://jina.ai/reranker">Jina</a>.</p>
 <p>Next, you can set your Jina API key in the environment variable.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">JINAAI_API_KEY</span><span class="o">=</span>your_jina_api_key
@@ -336,7 +336,7 @@ It supports powerful and fast reranker for passage retrieval.</p>
 </div>
 </section>
 <section id="module-parameters">
-<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">#</a></h2>
+<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>batch</strong> : The size of batch. It sends the batch size of passages to jina API at once. If it is too large, it can
 cause some error. (default: 8)
@@ -347,7 +347,7 @@ it to “jina-reranker-v1-base-en” or “jina-colbert-v1-en”</p></li>
 </ul>
 </section>
 <section id="example-config-yaml">
-<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">#</a></h2>
+<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jina_reranker</span>
 <span class="w">  </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">your_jina_api_key</span>
 <span class="w">  </span><span class="nt">batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
@@ -428,7 +428,7 @@ it to “jina-reranker-v1-base-en” or “jina-colbert-v1-en”</p></li>
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

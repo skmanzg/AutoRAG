@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Start creating your own evaluation data" href="data_creation/tutorial.html" /><link rel="prev" title="TroubleShooting" href="troubleshooting.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>Configure LLM &amp; Embedding models - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
@@ -317,9 +317,9 @@
         </div>
         <article role="main">
           <section id="configure-llm-embedding-models">
-<h1>Configure LLM &amp; Embedding models<a class="headerlink" href="#configure-llm-embedding-models" title="Link to this heading">#</a></h1>
+<h1>Configure LLM &amp; Embedding models<a class="headerlink" href="#configure-llm-embedding-models" title="Link to this heading">¶</a></h1>
 <section id="index">
-<h2>Index<a class="headerlink" href="#index" title="Link to this heading">#</a></h2>
+<h2>Index<a class="headerlink" href="#index" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="#configure-the-llm-model"><span class="xref myst">Configure the LLM model</span></a></p>
 <ul>
@@ -338,9 +338,9 @@
 </ul>
 </section>
 <section id="configure-the-llm-model">
-<h2>Configure the LLM model<a class="headerlink" href="#configure-the-llm-model" title="Link to this heading">#</a></h2>
+<h2>Configure the LLM model<a class="headerlink" href="#configure-the-llm-model" title="Link to this heading">¶</a></h2>
 <section id="modules-that-use-llm-model">
-<h3>Modules that use LLM model<a class="headerlink" href="#modules-that-use-llm-model" title="Link to this heading">#</a></h3>
+<h3>Modules that use LLM model<a class="headerlink" href="#modules-that-use-llm-model" title="Link to this heading">¶</a></h3>
 <p>Most of the modules that using LLM model can take <code class="docutils literal notranslate"><span class="pre">llm</span></code> parameter to specify the LLM model.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="nodes/query_expansion/hyde.html"><span class="std std-doc">hyde</span></a></p></li>
@@ -350,7 +350,7 @@
 </ul>
 </section>
 <section id="supporting-llm-models">
-<h3>Supporting LLM models<a class="headerlink" href="#supporting-llm-models" title="Link to this heading">#</a></h3>
+<h3>Supporting LLM models<a class="headerlink" href="#supporting-llm-models" title="Link to this heading">¶</a></h3>
 <p>We support most of the llm that LlamaIndex is supporting.
 To change the LLM model type, you can change the <code class="docutils literal notranslate"><span class="pre">llm</span></code> parameter to the following values:</p>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -394,7 +394,7 @@ Please check what you can set for the model parameter
 at <a class="reference external" href="https://docs.llamaindex.ai/en/latest/api_reference/llms.html">LlamaIndex LLM</a>.</p>
 </section>
 <section id="add-more-llm-models">
-<h3>Add more LLM models<a class="headerlink" href="#add-more-llm-models" title="Link to this heading">#</a></h3>
+<h3>Add more LLM models<a class="headerlink" href="#add-more-llm-models" title="Link to this heading">¶</a></h3>
 <p>You can add more LLM models for AutoRAG.
 You can add it by simply calling <code class="docutils literal notranslate"><span class="pre">autorag.generator_models</span></code> and add new key and value.
 For example, if you want to add <code class="docutils literal notranslate"><span class="pre">MockLLM</span></code> model for testing, execute the following code.</p>
@@ -420,16 +420,16 @@ You can find the package at <a class="reference external" href="https://pretty-s
 </section>
 </section>
 <section id="configure-the-embedding-model">
-<h2>Configure the Embedding model<a class="headerlink" href="#configure-the-embedding-model" title="Link to this heading">#</a></h2>
+<h2>Configure the Embedding model<a class="headerlink" href="#configure-the-embedding-model" title="Link to this heading">¶</a></h2>
 <section id="modules-that-use-embedding-model">
-<h3>Modules that use Embedding model<a class="headerlink" href="#modules-that-use-embedding-model" title="Link to this heading">#</a></h3>
+<h3>Modules that use Embedding model<a class="headerlink" href="#modules-that-use-embedding-model" title="Link to this heading">¶</a></h3>
 <p>Modules that using embedding model can take <code class="docutils literal notranslate"><span class="pre">embedding_model</span></code> parameter to specify the LLM model.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="nodes/retrieval/vectordb.html"><span class="std std-doc">vectordb</span></a></p></li>
 </ul>
 </section>
 <section id="supporting-embedding-models">
-<h3>Supporting Embedding models<a class="headerlink" href="#supporting-embedding-models" title="Link to this heading">#</a></h3>
+<h3>Supporting Embedding models<a class="headerlink" href="#supporting-embedding-models" title="Link to this heading">¶</a></h3>
 <p>As default, we support OpenAI embedding models and some of the local models.
 To change the embedding model, you can change the <code class="docutils literal notranslate"><span class="pre">embedding_model</span></code> parameter to the following values:</p>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -484,7 +484,7 @@ Because the embedding model is initialized at the beginning of the AutoRAG progr
 </div>
 </section>
 <section id="add-your-embedding-models">
-<h3>Add your embedding models<a class="headerlink" href="#add-your-embedding-models" title="Link to this heading">#</a></h3>
+<h3>Add your embedding models<a class="headerlink" href="#add-your-embedding-models" title="Link to this heading">¶</a></h3>
 <p>You can add more embedding models for AutoRAG.
 You can add it by simply calling <code class="docutils literal notranslate"><span class="pre">autorag.embedding_models</span></code> and add new key and value.
 For example,
@@ -586,7 +586,7 @@ execute the following code.</p>
     </aside>
   </div>
 </div><script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>

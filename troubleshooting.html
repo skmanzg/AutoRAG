@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Configure LLM &amp; Embedding models" href="local_model.html" /><link rel="prev" title="Structure" href="structure.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>TroubleShooting - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
@@ -317,11 +317,11 @@
         </div>
         <article role="main">
           <section id="troubleshooting">
-<h1>TroubleShooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h1>
+<h1>TroubleShooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h1>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <section id="could-not-build-wheels">
-<h3>Could not build wheels<a class="headerlink" href="#could-not-build-wheels" title="Link to this heading">#</a></h3>
+<h3>Could not build wheels<a class="headerlink" href="#could-not-build-wheels" title="Link to this heading">¶</a></h3>
 <p>If you face this kind of error during installation, try some methods below.</p>
 <ol class="arabic simple">
 <li><p>Upgrade pip version</p></li>
@@ -340,9 +340,9 @@ brew<span class="w"> </span>install<span class="w"> </span>gcc<span class="w"> <
 </section>
 </section>
 <section id="optimization">
-<h2>Optimization<a class="headerlink" href="#optimization" title="Link to this heading">#</a></h2>
+<h2>Optimization<a class="headerlink" href="#optimization" title="Link to this heading">¶</a></h2>
 <section id="facing-openai-api-error">
-<h3>Facing OPENAI API error<a class="headerlink" href="#facing-openai-api-error" title="Link to this heading">#</a></h3>
+<h3>Facing OPENAI API error<a class="headerlink" href="#facing-openai-api-error" title="Link to this heading">¶</a></h3>
 <ol class="arabic simple">
 <li><p>Check your API key environment variable
 It is one of common mistakes to missing API key environment variable.
@@ -386,7 +386,7 @@ In this way, you can use both OpenAI model and custom model.</p>
 </div>
 </section>
 <section id="error-while-running-llm">
-<h3>Error while running LLM<a class="headerlink" href="#error-while-running-llm" title="Link to this heading">#</a></h3>
+<h3>Error while running LLM<a class="headerlink" href="#error-while-running-llm" title="Link to this heading">¶</a></h3>
 <p>It is common you face OOM (Out of Memory) error or out of rate limit error while running LLM.
 In this case, we suggest you adjusting batch size.</p>
 <ol class="arabic simple">
@@ -412,7 +412,7 @@ In our experiment, it occurred rate limit error when the batch size was 4.
 </div>
 </section>
 <section id="the-length-or-row-is-different-from-the-original-data">
-<h3>The length or row is different from the original data<a class="headerlink" href="#the-length-or-row-is-different-from-the-original-data" title="Link to this heading">#</a></h3>
+<h3>The length or row is different from the original data<a class="headerlink" href="#the-length-or-row-is-different-from-the-original-data" title="Link to this heading">¶</a></h3>
 <p>When the length of result is different from the original data, it is often caused by the index.</p>
 <p>You must reset the index of your dataset before running AutoRAG.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -500,7 +500,7 @@ In our experiment, it occurred rate limit error when the batch size was 4.
     </aside>
   </div>
 </div><script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>

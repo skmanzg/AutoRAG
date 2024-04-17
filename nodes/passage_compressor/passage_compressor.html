@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Tree Summarize" href="tree_summarize.html" /><link rel="prev" title="Time Reranker" href="../passage_reranker/time_reranker.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>4. Passage_Compressor - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -317,13 +317,13 @@
         </div>
         <article role="main">
           <section id="passage-compressor">
-<h1>4. Passage_Compressor<a class="headerlink" href="#passage-compressor" title="Link to this heading">#</a></h1>
+<h1>4. Passage_Compressor<a class="headerlink" href="#passage-compressor" title="Link to this heading">¶</a></h1>
 <section id="definition">
-<h2>🔎 <strong>Definition</strong><a class="headerlink" href="#definition" title="Link to this heading">#</a></h2>
+<h2>🔎 <strong>Definition</strong><a class="headerlink" href="#definition" title="Link to this heading">¶</a></h2>
 <p>Passage compressor module compresses the contents before they are input into a language model (LLM), reducing the amount of token usage.</p>
 </section>
 <section id="benefits">
-<h2>🤸 <strong>Benefits</strong><a class="headerlink" href="#benefits" title="Link to this heading">#</a></h2>
+<h2>🤸 <strong>Benefits</strong><a class="headerlink" href="#benefits" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>Efficiency in Token Usage:</strong> By compressing the contents prior to their entry into a language model, the Passage Compressor significantly reduces the number of tokens required. This efficiency is crucial for large-scale applications where token usage can quickly accumulate, potentially leading to higher computational costs and slower processing times.</p></li>
 <li><p><strong>Cost Reduction:</strong> Efficient token usage directly impacts the cost of running large language models. By reducing the number of tokens needed, the Passage Compressor can help lower operational costs associated with data processing and analysis.</p></li>
@@ -331,19 +331,19 @@
 </ul>
 </section>
 <section id="parameters">
-<h2>🔢 <strong>Parameters</strong><a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
+<h2>🔢 <strong>Parameters</strong><a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
 <section id="overview">
-<h3><strong>Overview</strong>:<a class="headerlink" href="#overview" title="Link to this heading">#</a></h3>
+<h3><strong>Overview</strong>:<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h3>
 <p>This document serves as a guide for configuring parameters, strategies, and the config YAML file for various nodes within a system.</p>
 </section>
 <section id="node-parameters">
-<h3><strong>Node Parameters</strong><a class="headerlink" href="#node-parameters" title="Link to this heading">#</a></h3>
+<h3><strong>Node Parameters</strong><a class="headerlink" href="#node-parameters" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p><strong>None</strong></p></li>
 </ul>
 </section>
 <section id="strategy-parameters">
-<h3><strong>Strategy Parameters</strong><a class="headerlink" href="#strategy-parameters" title="Link to this heading">#</a></h3>
+<h3><strong>Strategy Parameters</strong><a class="headerlink" href="#strategy-parameters" title="Link to this heading">¶</a></h3>
 <ol class="arabic">
 <li><p><strong>Metrics</strong>: The use of specialized metrics such as <code class="docutils literal notranslate"><span class="pre">retrieval_token_f1</span></code>, <code class="docutils literal notranslate"><span class="pre">retrieval_token_recall</span></code>, and <code class="docutils literal notranslate"><span class="pre">retrieval_token_precision</span></code> is crucial. These metrics are tailored to evaluate the efficiency of the passage compressor in optimizing the token-level relevance of retrieved content.</p>
 <div class="admonition-purpose admonition">
@@ -355,7 +355,7 @@
 </ol>
 </section>
 <section id="example-config-yaml-file">
-<h3>Example config.yaml file<a class="headerlink" href="#example-config-yaml-file" title="Link to this heading">#</a></h3>
+<h3>Example config.yaml file<a class="headerlink" href="#example-config-yaml-file" title="Link to this heading">¶</a></h3>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">node_lines</span><span class="p">:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_line_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">retrieve_node_line</span><span class="w">  </span><span class="c1"># Arbitrary node line name</span>
 <span class="w">  </span><span class="nt">nodes</span><span class="p">:</span>
@@ -377,7 +377,7 @@ Because it can be the better option that not using passage compressor node.
 So with this module, you can automatically test the performance without using any passage compressor module.</p>
 </div>
 <section id="supported-modules">
-<h4>Supported Modules<a class="headerlink" href="#supported-modules" title="Link to this heading">#</a></h4>
+<h4>Supported Modules<a class="headerlink" href="#supported-modules" title="Link to this heading">¶</a></h4>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tree_summarize.html">Tree Summarize</a></li>
@@ -469,7 +469,7 @@ So with this module, you can automatically test the performance without using an
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>

@@ -14,7 +14,7 @@
     </script>
     <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Time Reranker" href="time_reranker.html" /><link rel="prev" title="Flag Embedding Reranker" href="flag_embedding_reranker.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.5 and Furo 2024.01.29 -->
         <title>Flag Embedding LLM Reranker - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
@@ -317,11 +317,11 @@
         </div>
         <article role="main">
           <section id="flag-embedding-llm-reranker">
-<h1>Flag Embedding LLM Reranker<a class="headerlink" href="#flag-embedding-llm-reranker" title="Link to this heading">#</a></h1>
+<h1>Flag Embedding LLM Reranker<a class="headerlink" href="#flag-embedding-llm-reranker" title="Link to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">flag</span> <span class="pre">embedding</span> <span class="pre">llm</span> <span class="pre">reranker</span></code> module is a reranker using BAAI LLM-based-Reranker model for
 passage reranking.</p>
 <section id="module-parameters">
-<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">#</a></h2>
+<h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>batch</strong> : The size of batch. If you have limited CUDA memory, decrease the size of the batch. (default: 64)</p></li>
 <li><p><strong>model_name</strong> : The type of model you want to use for reranking. Default is “BAAI/bge-reranker-v2-gemma”.</p>
@@ -333,7 +333,7 @@ passage reranking.</p>
 </ul>
 </section>
 <section id="example-config-yaml">
-<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">#</a></h2>
+<h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flag_embedding_llm_reranker</span>
 <span class="w">  </span><span class="nt">batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
 <span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BAAI/bge-reranker-v2-gemma</span>
@@ -412,7 +412,7 @@ passage reranking.</p>
     </aside>
   </div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
