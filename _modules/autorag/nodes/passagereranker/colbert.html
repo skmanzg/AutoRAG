@@ -316,14 +316,14 @@
         </div>
         <article role="main">
           <h1>Source code for autorag.nodes.passagereranker.colbert</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.passagereranker.base</span> <span class="kn">import</span> <span class="n">passage_reranker_node</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">make_batch</span><span class="p">,</span> <span class="n">select_top_k</span><span class="p">,</span> <span class="n">flatten_apply</span><span class="p">,</span> <span class="n">sort_by_scores</span>
 
 
 <div class="viewcode-block" id="colbert_reranker">
@@ -355,49 +355,58 @@
     <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
 
-    <span class="c1"># Run async cohere_rerank_pure function</span>
-    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_colbert_score</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span> <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">ids</span> <span class="ow">in</span>
-             <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">)]</span>
-    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">score_results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
+    <span class="n">nested_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">query</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="n">content_list</span><span class="p">))</span> <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">content_list</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">)]</span>
+
+    <span class="n">rerank_scores</span> <span class="o">=</span> <span class="n">flatten_apply</span><span class="p">(</span><span class="n">colbert_run_model</span><span class="p">,</span> <span class="n">nested_list</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                                  <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s1">&#39;contents&#39;</span><span class="p">:</span> <span class="n">contents_list</span><span class="p">,</span>
+        <span class="s1">&#39;ids&#39;</span><span class="p">:</span> <span class="n">ids_list</span><span class="p">,</span>
+        <span class="s1">&#39;scores&#39;</span><span class="p">:</span> <span class="n">rerank_scores</span><span class="p">,</span>
+    <span class="p">})</span>
+    <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;contents&#39;</span><span class="p">,</span> <span class="s1">&#39;ids&#39;</span><span class="p">,</span> <span class="s1">&#39;scores&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">sort_by_scores</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">result_type</span><span class="o">=</span><span class="s1">&#39;expand&#39;</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">select_top_k</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">,</span> <span class="s1">&#39;ids&#39;</span><span class="p">,</span> <span class="s1">&#39;scores&#39;</span><span class="p">],</span> <span class="n">top_k</span><span class="p">)</span>
 
     <span class="k">del</span> <span class="n">model</span>
+    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">rerank_results</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">top_k</span><span class="p">):</span>
-        <span class="n">reranked_content</span><span class="p">,</span> <span class="n">reranked_id</span><span class="p">,</span> <span class="n">reranked_score</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
-            <span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">scores</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_content</span><span class="p">)[:</span><span class="n">top_k</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_id</span><span class="p">)[:</span><span class="n">top_k</span><span class="p">],</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_score</span><span class="p">)[:</span><span class="n">top_k</span><span class="p">]</span>
-
-    <span class="n">reranked_contents_list</span><span class="p">,</span> <span class="n">reranked_ids_list</span><span class="p">,</span> <span class="n">reranked_scores_list</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
-        <span class="n">rerank_results</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">,</span> <span class="n">score_results</span><span class="p">,</span> <span class="p">[</span><span class="n">top_k</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents_list</span><span class="p">))))</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_contents_list</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_ids_list</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_scores_list</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
 
 
 
-<div class="viewcode-block" id="get_colbert_score">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.colbert.get_colbert_score">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">get_colbert_score</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">content_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-                            <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-    <span class="n">query_encoding</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span>
-    <span class="n">query_embedding</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">query_encoding</span><span class="p">)</span><span class="o">.</span><span class="n">last_hidden_state</span>
-    <span class="n">rerank_score_list</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="viewcode-block" id="colbert_run_model">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.colbert.colbert_run_model">[docs]</a>
+<span class="k">def</span> <span class="nf">colbert_run_model</span><span class="p">(</span><span class="n">contents_list</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">batch_contents_list</span> <span class="o">=</span> <span class="n">make_batch</span><span class="p">(</span><span class="n">contents_list</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">for</span> <span class="n">document_text</span> <span class="ow">in</span> <span class="n">content_list</span><span class="p">:</span>
-        <span class="n">document_encoding</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span>
-            <span class="n">document_text</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">,</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">512</span>
-        <span class="p">)</span>
-        <span class="n">document_embedding</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">document_encoding</span><span class="p">)</span><span class="o">.</span><span class="n">last_hidden_state</span>
+    <span class="k">for</span> <span class="n">batch_contents</span> <span class="ow">in</span> <span class="n">batch_contents_list</span><span class="p">:</span>
+        <span class="n">flattened_batch_queries</span><span class="p">,</span> <span class="n">flattened_batch_contents</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">batch_contents</span><span class="p">))</span>
 
+        <span class="c1"># Tokenize both queries and contents together</span>
+        <span class="n">feature</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">flattened_batch_queries</span><span class="p">,</span> <span class="n">flattened_batch_contents</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># Process the combined feature through the model in one go</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">feature</span><span class="p">)</span>
+        <span class="n">last_hidden_state</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">last_hidden_state</span>
+
+        <span class="c1"># Split the embeddings back into query and content parts</span>
+        <span class="n">num_queries</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">flattened_batch_queries</span><span class="p">)</span>
+        <span class="n">query_embedding</span><span class="p">,</span> <span class="n">content_embedding</span> <span class="o">=</span> <span class="n">last_hidden_state</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">num_queries</span><span class="p">,</span> <span class="n">last_hidden_state</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">num_queries</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Calculate cosine similarity between query and content embeddings</span>
         <span class="n">sim_matrix</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">cosine_similarity</span><span class="p">(</span>
-            <span class="n">query_embedding</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">document_embedding</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="n">query_embedding</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">content_embedding</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span>
         <span class="p">)</span>
 
         <span class="c1"># Take the maximum similarity for each query token (across all document tokens)</span>
-        <span class="c1"># sim_matrix shape: [batch_size, query_length, doc_length]</span>
         <span class="n">max_sim_scores</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">sim_matrix</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">rerank_score_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">max_sim_scores</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">max_sim_scores</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">rerank_score_list</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">results</span><span class="p">))</span></div>
 
 </pre></div>
         </article>
