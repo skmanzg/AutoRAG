@@ -483,25 +483,9 @@ Default is “BAAI/bge-reranker-large”</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.passagereranker.flag_embedding.flag_embedding_reranker_pure">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.flag_embedding.</span></span><span class="sig-name descname"><span class="pre">flag_embedding_reranker_pure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/flag_embedding.html#flag_embedding_reranker_pure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.flag_embedding.flag_embedding_reranker_pure" title="Link to this definition">¶</a></dt>
-<dd><p>Rerank a list of contents based on their relevance to a query using BAAI Reranker model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>query</strong> – The query to use for reranking</p></li>
-<li><p><strong>contents</strong> – The list of contents to rerank</p></li>
-<li><p><strong>scores</strong> – The list of scores retrieved from the initial ranking</p></li>
-<li><p><strong>ids</strong> – The list of ids retrieved from the initial ranking</p></li>
-<li><p><strong>top_k</strong> – The number of passages to be retrieved</p></li>
-<li><p><strong>model</strong> – BAAI Reranker model.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple of lists containing the reranked contents, ids, and scores</p>
-</dd>
-</dl>
-</dd></dl>
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.flag_embedding.flag_embedding_run_model">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.passagereranker.flag_embedding.</span></span><span class="sig-name descname"><span class="pre">flag_embedding_run_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_texts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/flag_embedding.html#flag_embedding_run_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.flag_embedding.flag_embedding_run_model" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </section>
 <section id="module-autorag.nodes.passagereranker.flag_embedding_llm">
@@ -951,7 +935,7 @@ The suffix prompt provides a cue or a closing instruction to the language model,
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.passagereranker.flag_embedding">autorag.nodes.passagereranker.flag_embedding module</a><ul>
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.flag_embedding.flag_embedding_reranker"><code class="docutils literal notranslate"><span class="pre">flag_embedding_reranker()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.nodes.passagereranker.flag_embedding.flag_embedding_reranker_pure"><code class="docutils literal notranslate"><span class="pre">flag_embedding_reranker_pure()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.flag_embedding.flag_embedding_run_model"><code class="docutils literal notranslate"><span class="pre">flag_embedding_run_model()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.passagereranker.flag_embedding_llm">autorag.nodes.passagereranker.flag_embedding_llm module</a><ul>
