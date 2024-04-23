@@ -266,6 +266,7 @@
 </li>
 <li class="toctree-l3 current has-children current-page"><a class="current reference internal" href="#">autorag.nodes package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of autorag.nodes package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="autorag.nodes.generator.html">autorag.nodes.generator package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autorag.nodes.passageaugmenter.html">autorag.nodes.passageaugmenter package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.nodes.passagecompressor.html">autorag.nodes.passagecompressor package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.nodes.passagefilter.html">autorag.nodes.passagefilter package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="autorag.nodes.passagereranker.html">autorag.nodes.passagereranker package</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of autorag.nodes.passagereranker package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -345,6 +346,25 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="autorag.nodes.generator.html#module-autorag.nodes.generator">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="autorag.nodes.passageaugmenter.html">autorag.nodes.passageaugmenter package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.passageaugmenter.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter.base">autorag.nodes.passageaugmenter.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.base.embedding_query_content"><code class="docutils literal notranslate"><span class="pre">embedding_query_content()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.base.passage_augmenter_node"><code class="docutils literal notranslate"><span class="pre">passage_augmenter_node()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter.prev_next_augmenter">autorag.nodes.passageaugmenter.prev_next_augmenter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.prev_next_augmenter.prev_next_augmenter"><code class="docutils literal notranslate"><span class="pre">prev_next_augmenter()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.prev_next_augmenter.prev_next_augmenter_pure"><code class="docutils literal notranslate"><span class="pre">prev_next_augmenter_pure()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter.run">autorag.nodes.passageaugmenter.run module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.run.run_passage_augmenter_node"><code class="docutils literal notranslate"><span class="pre">run_passage_augmenter_node()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="autorag.nodes.passagecompressor.html">autorag.nodes.passagecompressor package</a><ul>
@@ -448,6 +468,7 @@
 <li class="toctree-l3"><a class="reference internal" href="autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.jina.jina_reranker_pure"><code class="docutils literal notranslate"><span class="pre">jina_reranker_pure()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.passagereranker.html#autorag-nodes-passagereranker-just-lab-module">autorag.nodes.passagereranker.just_lab module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="autorag.nodes.passagereranker.html#module-autorag.nodes.passagereranker.koreranker">autorag.nodes.passagereranker.koreranker module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.koreranker.exp_normalize"><code class="docutils literal notranslate"><span class="pre">exp_normalize()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.koreranker.koreranker"><code class="docutils literal notranslate"><span class="pre">koreranker()</span></code></a></li>
@@ -589,6 +610,7 @@
 <li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rsf.score_fusion"><code class="docutils literal notranslate"><span class="pre">score_fusion()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag-nodes-retrieval-recursive-chunk-module">autorag.nodes.retrieval.recursive_chunk module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="autorag.nodes.retrieval.html#module-autorag.nodes.retrieval.run">autorag.nodes.retrieval.run module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.edit_summary_df_params"><code class="docutils literal notranslate"><span class="pre">edit_summary_df_params()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.evaluate_retrieval_node"><code class="docutils literal notranslate"><span class="pre">evaluate_retrieval_node()</span></code></a></li>

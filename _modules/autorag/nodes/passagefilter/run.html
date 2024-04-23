@@ -265,6 +265,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api_spec/autorag.nodes.html">autorag.nodes package</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of autorag.nodes package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../api_spec/autorag.nodes.generator.html">autorag.nodes.generator package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api_spec/autorag.nodes.passageaugmenter.html">autorag.nodes.passageaugmenter package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../api_spec/autorag.nodes.passagecompressor.html">autorag.nodes.passagecompressor package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../api_spec/autorag.nodes.passagefilter.html">autorag.nodes.passagefilter package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="../../../../api_spec/autorag.nodes.passagereranker.html">autorag.nodes.passagereranker package</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of autorag.nodes.passagereranker package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -342,7 +343,7 @@
 <span class="sd">        Could be retrieval, reranker, passage filter modules result.</span>
 <span class="sd">        It means it must contain &#39;query&#39;, &#39;retrieved_contents&#39;, &#39;retrieved_ids&#39;, &#39;retrieve_scores&#39; columns.</span>
 <span class="sd">    :param node_line_dir: This node line&#39;s directory.</span>
-<span class="sd">    :param strategies: Strategies for passage reranker node.</span>
+<span class="sd">    :param strategies: Strategies for passage filter node.</span>
 <span class="sd">        In this node, we use &#39;retrieval_f1&#39;, &#39;retrieval_recall&#39; and &#39;retrieval_precision&#39;.</span>
 <span class="sd">        You can skip evaluation when you use only one module and a module parameter.</span>
 <span class="sd">    :return: The best result dataframe with previous result columns.</span>
@@ -358,7 +359,7 @@
 
     <span class="c1"># run metrics before filtering</span>
     <span class="k">if</span> <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metrics&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You must at least one metrics for passage_reranker evaluation.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You must at least one metrics for passage_filter evaluation.&quot;</span><span class="p">)</span>
     <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">evaluate_retrieval_node</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">retrieval_gt</span><span class="p">,</span> <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metrics&#39;</span><span class="p">)),</span> <span class="n">results</span><span class="p">))</span>
 
     <span class="c1"># save results to folder</span>

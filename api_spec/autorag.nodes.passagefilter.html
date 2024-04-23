@@ -266,6 +266,7 @@
 </li>
 <li class="toctree-l3 current has-children"><a class="reference internal" href="autorag.nodes.html">autorag.nodes package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of autorag.nodes package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="autorag.nodes.generator.html">autorag.nodes.generator package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autorag.nodes.passageaugmenter.html">autorag.nodes.passageaugmenter package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.nodes.passagecompressor.html">autorag.nodes.passagecompressor package</a></li>
 <li class="toctree-l4 current current-page"><a class="current reference internal" href="#">autorag.nodes.passagefilter package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="autorag.nodes.passagereranker.html">autorag.nodes.passagereranker package</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of autorag.nodes.passagereranker package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -431,7 +432,7 @@ If the threshold date format is incorrect, return the original contents.</p>
 Could be retrieval, reranker, passage filter modules result.
 It means it must contain ‘query’, ‘retrieved_contents’, ‘retrieved_ids’, ‘retrieve_scores’ columns.</p></li>
 <li><p><strong>node_line_dir</strong> – This node line’s directory.</p></li>
-<li><p><strong>strategies</strong> – Strategies for passage reranker node.
+<li><p><strong>strategies</strong> – Strategies for passage filter node.
 In this node, we use ‘retrieval_f1’, ‘retrieval_recall’ and ‘retrieval_precision’.
 You can skip evaluation when you use only one module and a module parameter.</p></li>
 </ul>

@@ -264,6 +264,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="api_spec/autorag.nodes.html">autorag.nodes package</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of autorag.nodes package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="api_spec/autorag.nodes.generator.html">autorag.nodes.generator package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_spec/autorag.nodes.passageaugmenter.html">autorag.nodes.passageaugmenter package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api_spec/autorag.nodes.passagecompressor.html">autorag.nodes.passagecompressor package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api_spec/autorag.nodes.passagefilter.html">autorag.nodes.passagefilter package</a></li>
 <li class="toctree-l4 has-children"><a class="reference internal" href="api_spec/autorag.nodes.passagereranker.html">autorag.nodes.passagereranker package</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of autorag.nodes.passagereranker package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -324,6 +325,8 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.data.utils.html#autorag.data.utils.util.add_essential_metadata">add_essential_metadata() (in module autorag.data.utils.util)</a>
+</li>
+        <li><a href="api_spec/autorag.data.corpus.html#autorag.data.corpus.llama_index.add_essential_metadata_llama_text_node">add_essential_metadata_llama_text_node() (in module autorag.data.corpus.llama_index)</a>
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.async_g_eval">async_g_eval() (in module autorag.evaluate.metric.generation)</a>
 </li>
@@ -560,6 +563,34 @@
 </li>
         </ul></li>
         <li>
+    autorag.nodes.passageaugmenter
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.nodes.passageaugmenter.base
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter.base">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.nodes.passageaugmenter.prev_next_augmenter
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter.prev_next_augmenter">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.nodes.passageaugmenter.run
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter.run">module</a>
+</li>
+        </ul></li>
+        <li>
     autorag.nodes.passagecompressor
 
         <ul>
@@ -636,6 +667,8 @@
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.recency">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagefilter.run
 
@@ -650,8 +683,6 @@
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.threshold_cutoff">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagereranker
 
@@ -1090,8 +1121,12 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.edit_summary_df_params">edit_summary_df_params() (in module autorag.nodes.retrieval.run)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.embedding_query_content">embedding_query_content() (in module autorag.nodes.passagefilter.threshold_cutoff)</a>
+        <li><a href="api_spec/autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.base.embedding_query_content">embedding_query_content() (in module autorag.nodes.passageaugmenter.base)</a>
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.embedding_query_content">(in module autorag.nodes.passagefilter.threshold_cutoff)</a>
 </li>
+        </ul></li>
         <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification">EncT5ForSequenceClassification (class in autorag.nodes.passagereranker.tart.modeling_enc_t5)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.tokenization_enc_t5.EncT5Tokenizer">EncT5Tokenizer (class in autorag.nodes.passagereranker.tart.tokenization_enc_t5)</a>
@@ -1108,10 +1143,10 @@
 </li>
         <li><a href="api_spec/autorag.nodes.passagecompressor.html#autorag.nodes.passagecompressor.run.evaluate_passage_compressor_node">evaluate_passage_compressor_node() (in module autorag.nodes.passagecompressor.run)</a>
 </li>
-        <li><a href="api_spec/autorag.evaluate.html#autorag.evaluate.retrieval.evaluate_retrieval">evaluate_retrieval() (in module autorag.evaluate.retrieval)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.evaluate.html#autorag.evaluate.retrieval.evaluate_retrieval">evaluate_retrieval() (in module autorag.evaluate.retrieval)</a>
+</li>
         <li><a href="api_spec/autorag.evaluate.html#autorag.evaluate.retrieval_contents.evaluate_retrieval_contents">evaluate_retrieval_contents() (in module autorag.evaluate.retrieval_contents)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.evaluate_retrieval_node">evaluate_retrieval_node() (in module autorag.nodes.retrieval.run)</a>
@@ -1146,16 +1181,18 @@
 </li>
         <li><a href="api_spec/autorag.html#autorag.strategy.filter_by_threshold">filter_by_threshold() (in module autorag.strategy)</a>
 </li>
+        <li><a href="api_spec/autorag.utils.html#autorag.utils.util.filter_dict_keys">filter_dict_keys() (in module autorag.utils.util)</a>
+</li>
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.flag_embedding_llm.flag_embedding_llm_reranker">flag_embedding_llm_reranker() (in module autorag.nodes.passagereranker.flag_embedding_llm)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.flag_embedding.flag_embedding_reranker">flag_embedding_reranker() (in module autorag.nodes.passagereranker.flag_embedding)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.flag_embedding.flag_embedding_run_model">flag_embedding_run_model() (in module autorag.nodes.passagereranker.flag_embedding)</a>
 </li>
-        <li><a href="api_spec/autorag.utils.html#autorag.utils.util.flatten_apply">flatten_apply() (in module autorag.utils.util)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.utils.html#autorag.utils.util.flatten_apply">flatten_apply() (in module autorag.utils.util)</a>
+</li>
         <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.forward">forward() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
 </li>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.module.Module.from_dict">from_dict() (autorag.schema.module.Module class method)</a>
@@ -1404,6 +1441,14 @@
 </li>
           <li><a href="api_spec/autorag.nodes.generator.html#module-autorag.nodes.generator.vllm">autorag.nodes.generator.vllm</a>
 </li>
+          <li><a href="api_spec/autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter">autorag.nodes.passageaugmenter</a>
+</li>
+          <li><a href="api_spec/autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter.base">autorag.nodes.passageaugmenter.base</a>
+</li>
+          <li><a href="api_spec/autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter.prev_next_augmenter">autorag.nodes.passageaugmenter.prev_next_augmenter</a>
+</li>
+          <li><a href="api_spec/autorag.nodes.passageaugmenter.html#module-autorag.nodes.passageaugmenter.run">autorag.nodes.passageaugmenter.run</a>
+</li>
           <li><a href="api_spec/autorag.nodes.passagecompressor.html#module-autorag.nodes.passagecompressor">autorag.nodes.passagecompressor</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagecompressor.html#module-autorag.nodes.passagecompressor.base">autorag.nodes.passagecompressor.base</a>
@@ -1591,15 +1636,21 @@
 </li>
         <li><a href="api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.pass_query_expansion.pass_query_expansion">pass_query_expansion() (in module autorag.nodes.queryexpansion.pass_query_expansion)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.pass_reranker.pass_reranker">pass_reranker() (in module autorag.nodes.passagereranker.pass_reranker)</a>
 </li>
+        <li><a href="api_spec/autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.base.passage_augmenter_node">passage_augmenter_node() (in module autorag.nodes.passageaugmenter.base)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.passagecompressor.html#autorag.nodes.passagecompressor.base.passage_compressor_node">passage_compressor_node() (in module autorag.nodes.passagecompressor.base)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.base.passage_filter_node">passage_filter_node() (in module autorag.nodes.passagefilter.base)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.base.passage_reranker_node">passage_reranker_node() (in module autorag.nodes.passagereranker.base)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.prev_next_augmenter.prev_next_augmenter">prev_next_augmenter() (in module autorag.nodes.passageaugmenter.prev_next_augmenter)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.prev_next_augmenter.prev_next_augmenter_pure">prev_next_augmenter_pure() (in module autorag.nodes.passageaugmenter.prev_next_augmenter)</a>
 </li>
         <li><a href="api_spec/autorag.utils.html#autorag.utils.util.process_batch">process_batch() (in module autorag.utils.util)</a>
 </li>
@@ -1667,10 +1718,10 @@
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.generation.rouge">rouge() (in module autorag.evaluate.metric.generation)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rrf.rrf_calculate">rrf_calculate() (in module autorag.nodes.retrieval.hybrid_rrf)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rrf.rrf_pure">rrf_pure() (in module autorag.nodes.retrieval.hybrid_rrf)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rsf.rsf_min_max_scores">rsf_min_max_scores() (in module autorag.nodes.retrieval.hybrid_rsf)</a>
@@ -1690,6 +1741,8 @@
         <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.run_node">run_node (autorag.schema.node.Node attribute)</a>
 </li>
         <li><a href="api_spec/autorag.html#autorag.node_line.run_node_line">run_node_line() (in module autorag.node_line)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.run.run_passage_augmenter_node">run_passage_augmenter_node() (in module autorag.nodes.passageaugmenter.run)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagecompressor.html#autorag.nodes.passagecompressor.run.run_passage_compressor_node">run_passage_compressor_node() (in module autorag.nodes.passagecompressor.run)</a>
 </li>
