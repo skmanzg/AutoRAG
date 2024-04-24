@@ -344,11 +344,13 @@
 <span class="sd">    :param ids_list: The list of lists of ids retrieved from the initial ranking</span>
 <span class="sd">    :param top_k: The number of passages to be retrieved</span>
 <span class="sd">    :param batch: The number of queries to be processed in a batch</span>
+<span class="sd">        Default is 64.</span>
 <span class="sd">    :param use_fp16: Whether to use fp16 for inference</span>
 <span class="sd">    :param model_name: The name of the BAAI Reranker normal-model name.</span>
 <span class="sd">        Default is &quot;BAAI/bge-reranker-large&quot;</span>
 <span class="sd">    :return: tuple of lists containing the reranked contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">model</span> <span class="o">=</span> <span class="n">FlagReranker</span><span class="p">(</span>
         <span class="n">model_name_or_path</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">use_fp16</span><span class="o">=</span><span class="n">use_fp16</span>
     <span class="p">)</span>
@@ -379,7 +381,10 @@
     <span class="k">for</span> <span class="n">batch_texts</span> <span class="ow">in</span> <span class="n">batch_input_texts</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
             <span class="n">pred_scores</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">compute_score</span><span class="p">(</span><span class="n">sentence_pairs</span><span class="o">=</span><span class="n">batch_texts</span><span class="p">)</span>
-        <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pred_scores</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">batch_size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_scores</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pred_scores</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">results</span></div>
 
 </pre></div>
