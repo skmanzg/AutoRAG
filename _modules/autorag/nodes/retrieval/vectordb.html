@@ -322,6 +322,7 @@
 
 <span class="kn">import</span> <span class="nn">chromadb</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">chromadb.utils.batch_utils</span> <span class="kn">import</span> <span class="n">create_batches</span>
 <span class="kn">from</span> <span class="nn">llama_index.core.embeddings</span> <span class="kn">import</span> <span class="n">BaseEmbedding</span>
 <span class="kn">from</span> <span class="nn">llama_index.embeddings.openai</span> <span class="kn">import</span> <span class="n">OpenAIEmbedding</span>
 
@@ -422,7 +423,11 @@
 
         <span class="n">new_ids</span> <span class="o">=</span> <span class="n">new_passage</span><span class="p">[</span><span class="s1">&#39;doc_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="n">embedded_contents</span> <span class="o">=</span> <span class="n">embedding_model</span><span class="o">.</span><span class="n">get_text_embedding_batch</span><span class="p">(</span><span class="n">new_contents</span><span class="p">,</span> <span class="n">show_progress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">new_ids</span><span class="p">,</span> <span class="n">embeddings</span><span class="o">=</span><span class="n">embedded_contents</span><span class="p">)</span></div>
+        <span class="n">input_batches</span> <span class="o">=</span> <span class="n">create_batches</span><span class="p">(</span><span class="n">api</span><span class="o">=</span><span class="n">collection</span><span class="o">.</span><span class="n">_client</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="n">new_ids</span><span class="p">,</span> <span class="n">embeddings</span><span class="o">=</span><span class="n">embedded_contents</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">input_batches</span><span class="p">:</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">embed_content</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span> <span class="n">embeddings</span><span class="o">=</span><span class="n">embed_content</span><span class="p">)</span></div>
 
 </pre></div>
         </article>
