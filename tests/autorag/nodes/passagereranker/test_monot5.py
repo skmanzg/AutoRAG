@@ -1,4 +1,10 @@
+from unittest.mock import patch
+
 import pytest
+import torch
+from torch import FloatTensor
+from transformers import T5ForConditionalGeneration
+from transformers.generation import GenerateEncoderDecoderOutput
 
 from autorag.nodes.passagereranker import monot5
 from tests.autorag.nodes.passagereranker.test_passage_reranker_base \
@@ -7,7 +13,24 @@ from tests.autorag.nodes.passagereranker.test_passage_reranker_base \
 from tests.delete_tests import is_github_action
 
 
+def mock_t5_model_generate(input_ids, **kwargs) -> GenerateEncoderDecoderOutput:
+    input_num = input_ids.size()[0]
+    tokenizer_size = 32128
+    first_score = FloatTensor(torch.zeros((6, tokenizer_size)))
+    second_score = []
+    for _ in range(input_num):
+        tensor = torch.randn(1, tokenizer_size)
+        second_score.append(tensor)
+
+    second_score = FloatTensor(torch.cat(second_score, dim=0))
+
+    return GenerateEncoderDecoderOutput(
+        scores=(first_score, second_score),
+    )
+
+
 @pytest.mark.skipif(is_github_action(), reason="Skipping this test on GitHub Actions")
+@patch.object(T5ForConditionalGeneration, 'generate', mock_t5_model_generate)
 def test_monot5():
     top_k = 1
     original_monot5 = monot5.__wrapped__
