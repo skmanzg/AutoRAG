@@ -14,10 +14,10 @@
     <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
         <link rel="canonical" href="https://marker-inc-korea.github.io/AutoRAG/_modules/autorag/nodes/passagereranker/upr.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.01.29 -->
+    <!-- Generated with Sphinx 7.3.7 and Furo 2024.04.27 -->
         <title>autorag.nodes.passagereranker.upr - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=437aa6ec" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
@@ -123,6 +123,8 @@
 <label class="overlay toc-overlay" for="__toc">
   <div class="visually-hidden">Hide table of contents sidebar</div>
 </label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
 
 
@@ -315,15 +317,22 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <article role="main">
+        <article role="main" id="furo-main-content">
           <h1>Source code for autorag.nodes.passagereranker.upr</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">ray</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">T5Tokenizer</span><span class="p">,</span> <span class="n">T5ForConditionalGeneration</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.passagereranker.base</span> <span class="kn">import</span> <span class="n">passage_reranker_node</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">select_top_k</span><span class="p">,</span> <span class="n">sort_by_scores</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AutoRAG&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="upr">
@@ -331,9 +340,10 @@
 <span class="nd">@passage_reranker_node</span>
 <span class="k">def</span> <span class="nf">upr</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-        <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">shard_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="n">use_bf16</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">use_bf16</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">prefix_prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Passage: &quot;</span><span class="p">,</span>
-        <span class="n">suffix_prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Please write a question based on this passage.&quot;</span><span class="p">)</span> \
+        <span class="n">suffix_prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Please write a question based on this passage.&quot;</span><span class="p">,</span>
+        <span class="n">num_gpus</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> \
         <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rerank a list of contents based on their relevance to a query using UPR.</span>
@@ -346,10 +356,6 @@
 <span class="sd">    :param scores_list: The list of lists of scores retrieved from the initial ranking</span>
 <span class="sd">    :param ids_list: The list of lists of ids retrieved from the initial ranking</span>
 <span class="sd">    :param top_k: The number of passages to be retrieved</span>
-<span class="sd">    :param shard_size: The shard size for the model.</span>
-<span class="sd">        The larger the shard size, the faster the reranking speed.</span>
-<span class="sd">        But it will consume more memory and compute power.</span>
-<span class="sd">        Default is 16.</span>
 <span class="sd">    :param use_bf16: Whether to use bfloat16 for the model. Default is False.</span>
 <span class="sd">    :param prefix_prompt: The prefix prompt for the language model that generates question for reranking.</span>
 <span class="sd">        Default is &quot;Passage: &quot;.</span>
@@ -359,126 +365,77 @@
 <span class="sd">        Default is &quot;Please write a question based on this passage.&quot;.</span>
 <span class="sd">        The suffix prompt provides a cue or a closing instruction to the language model,</span>
 <span class="sd">            signaling how to conclude the generated text or what format to follow at the end.</span>
+<span class="sd">    :param num_gpus: The number of GPUs that you want to use. Default is 1.</span>
+<span class="sd">        Set to 1 if you use a CPU or a single GPU.</span>
 <span class="sd">    :return: tuple of lists containing the reranked contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Load the tokenizer and model</span>
-    <span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;t5-large&quot;</span>
-    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">T5Tokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">T5ForConditionalGeneration</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span>
-                                                       <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span> <span class="k">if</span> <span class="n">use_bf16</span> <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-    <span class="c1"># Determine the device to run the model on (GPU if available, otherwise CPU)</span>
-    <span class="n">device</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
-    <span class="c1"># Run async upr_rerank_pure function</span>
-    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">upr_pure</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span>
-                      <span class="n">ids</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span>
-                      <span class="n">shard_size</span><span class="p">,</span> <span class="n">prefix_prompt</span><span class="p">,</span> <span class="n">suffix_prompt</span><span class="p">)</span>
-             <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">ids</span> <span class="ow">in</span>
-             <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">)]</span>
-    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">))</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="n">queries</span><span class="p">,</span>
+        <span class="s1">&#39;contents&#39;</span><span class="p">:</span> <span class="n">contents_list</span><span class="p">,</span>
+        <span class="s1">&#39;ids&#39;</span><span class="p">:</span> <span class="n">ids_list</span><span class="p">,</span>
+    <span class="p">})</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">ray</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
-    <span class="n">content_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
-    <span class="n">id_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
-    <span class="n">score_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
-
-    <span class="k">del</span> <span class="n">model</span>
-    <span class="k">del</span> <span class="n">tokenizer</span>
     <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
-        <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
+        <span class="n">score_batch</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">map_batches</span><span class="p">(</span><span class="n">UPRScorer</span><span class="p">(</span><span class="n">suffix_prompt</span><span class="o">=</span><span class="n">suffix_prompt</span><span class="p">,</span>
+                                               <span class="n">prefix_prompt</span><span class="o">=</span><span class="n">prefix_prompt</span><span class="p">,</span> <span class="n">use_bf16</span><span class="o">=</span><span class="n">use_bf16</span><span class="p">),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                     <span class="n">concurrency</span><span class="o">=</span><span class="n">num_gpus</span><span class="p">,</span> <span class="n">num_gpus</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">score_batch</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">map_batches</span><span class="p">(</span><span class="n">UPRScorer</span><span class="p">(</span><span class="n">suffix_prompt</span><span class="o">=</span><span class="n">suffix_prompt</span><span class="p">,</span>
+                                               <span class="n">prefix_prompt</span><span class="o">=</span><span class="n">prefix_prompt</span><span class="p">,</span> <span class="n">use_bf16</span><span class="o">=</span><span class="n">use_bf16</span><span class="p">),</span>
+                                     <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                     <span class="n">concurrency</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()),</span> <span class="n">num_cpus</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">())</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">score_batch</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>  <span class="c1"># converted to a flatten list of scores</span>
 
-    <span class="k">return</span> <span class="n">content_result</span><span class="p">,</span> <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span></div>
-
-
-
-<div class="viewcode-block" id="upr_pure">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.upr.upr_pure">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">upr_pure</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">scores</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
-                   <span class="n">ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span>
-                   <span class="n">shard_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">prefix_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suffix_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> \
-        <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Rerank a list of contents based on their relevance to a query using UPR.</span>
-
-<span class="sd">    :param query: The query to use for reranking</span>
-<span class="sd">    :param contents: The list of contents to rerank</span>
-<span class="sd">    :param scores: The list of scores retrieved from the initial ranking</span>
-<span class="sd">    :param ids: The list of ids retrieved from the initial ranking</span>
-<span class="sd">    :param top_k: The number of passages to be retrieved</span>
-<span class="sd">    :param model: The UPR model to use for reranking</span>
-<span class="sd">    :param device: The device to run the model on (GPU if available, otherwise CPU)</span>
-<span class="sd">    :param tokenizer: The tokenizer to use for the model</span>
-<span class="sd">    :param shard_size: The shard size for the model.</span>
-<span class="sd">    :param prefix_prompt: The prefix prompt for the language model that generates question for reranking.</span>
-<span class="sd">    :param suffix_prompt: The suffix prompt for the language model that generates question for reranking.</span>
-<span class="sd">    :return: tuple of lists containing the reranked contents, ids, and scores</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">indexes</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">calculate_likelihood</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">contents</span><span class="p">,</span> <span class="n">prefix_prompt</span><span class="p">,</span> <span class="n">suffix_prompt</span><span class="p">,</span>
-                                           <span class="n">tokenizer</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">shard_size</span><span class="p">)</span>
-    <span class="n">reranked_contents</span><span class="p">,</span> <span class="n">reranked_ids</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[(</span><span class="n">contents</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">ids</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">indexes</span><span class="p">])</span>
-
-    <span class="c1"># crop with top_k</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">reranked_contents</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">top_k</span><span class="p">:</span>
-        <span class="n">top_k</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">reranked_contents</span><span class="p">)</span>
-    <span class="n">reranked_contents</span><span class="p">,</span> <span class="n">reranked_ids</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">reranked_contents</span><span class="p">[:</span><span class="n">top_k</span><span class="p">],</span> <span class="n">reranked_ids</span><span class="p">[:</span><span class="n">top_k</span><span class="p">],</span> <span class="n">scores</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]</span>
-
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_contents</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">reranked_ids</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span></div>
+    <span class="n">explode_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">explode</span><span class="p">(</span><span class="s1">&#39;contents&#39;</span><span class="p">)</span>
+    <span class="n">explode_df</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scores</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">explode_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;contents&#39;</span><span class="p">,</span> <span class="s1">&#39;ids&#39;</span><span class="p">,</span> <span class="s1">&#39;scores&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">sort_by_scores</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                 <span class="n">result_type</span><span class="o">=</span><span class="s1">&#39;expand&#39;</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">select_top_k</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">,</span> <span class="s1">&#39;ids&#39;</span><span class="p">,</span> <span class="s1">&#39;scores&#39;</span><span class="p">],</span> <span class="n">top_k</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
 
 
 
-<div class="viewcode-block" id="calculate_likelihood">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.upr.calculate_likelihood">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_likelihood</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-                         <span class="n">prefix_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suffix_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                         <span class="n">tokenizer</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">shard_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>\
-        <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
-    <span class="c1"># create prompts</span>
-    <span class="n">prompts</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix_prompt</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">suffix_prompt</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">contents</span><span class="p">]</span>
+<div class="viewcode-block" id="UPRScorer">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.upr.UPRScorer">[docs]</a>
+<span class="k">class</span> <span class="nc">UPRScorer</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suffix_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prefix_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">use_bf16</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;t5-large&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">T5Tokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">T5ForConditionalGeneration</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span>
+                                                                <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span>
+                                                                <span class="k">if</span> <span class="n">use_bf16</span> <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">suffix_prompt</span> <span class="o">=</span> <span class="n">suffix_prompt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix_prompt</span> <span class="o">=</span> <span class="n">prefix_prompt</span>
 
-    <span class="c1"># tokenize contexts and instruction prompts</span>
-    <span class="n">context_tokens</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">prompts</span><span class="p">,</span>
-                               <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;longest&#39;</span><span class="p">,</span>
-                               <span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
-                               <span class="n">pad_to_multiple_of</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-                               <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                               <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span>
-    <span class="n">context_tensor</span><span class="p">,</span> <span class="n">context_attention_mask</span> <span class="o">=</span> <span class="n">context_tokens</span><span class="o">.</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">context_tokens</span><span class="o">.</span><span class="n">attention_mask</span>
-    <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="s1">&#39;cuda&#39;</span><span class="p">:</span>
-        <span class="n">context_tensor</span><span class="p">,</span> <span class="n">context_attention_mask</span> <span class="o">=</span> <span class="n">context_tensor</span><span class="o">.</span><span class="n">cuda</span><span class="p">(),</span> <span class="n">context_attention_mask</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]):</span>
+        <span class="n">query_token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span>
+        <span class="n">contents</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">prompts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">content</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix_prompt</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_prompt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">contents</span><span class="p">))</span>
+        <span class="n">prompt_token_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">(</span><span class="n">prompts</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;longest&#39;</span><span class="p">,</span>
+                                              <span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+                                              <span class="n">pad_to_multiple_of</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+                                              <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                              <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span>
 
-    <span class="c1"># tokenize question</span>
-    <span class="n">question_tokens</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">([</span><span class="n">query</span><span class="p">],</span>
-                                <span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
-                                <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span>
-    <span class="n">question_tensor</span> <span class="o">=</span> <span class="n">question_tokens</span><span class="o">.</span><span class="n">input_ids</span>
-    <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="s1">&#39;cuda&#39;</span><span class="p">:</span>
-        <span class="n">question_tensor</span> <span class="o">=</span> <span class="n">question_tensor</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-    <span class="n">question_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">repeat_interleave</span><span class="p">(</span><span class="n">question_tensor</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">query_input_ids</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">repeat_interleave</span><span class="p">(</span><span class="n">query_token</span><span class="p">[</span><span class="s1">&#39;input_ids&#39;</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">contents</span><span class="p">),</span>
+                                                  <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="s1">&#39;cuda&#39;</span><span class="p">:</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-
-    <span class="n">sharded_nll_list</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="c1"># calculate log likelihood</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">context_tensor</span><span class="p">),</span> <span class="n">shard_size</span><span class="p">):</span>
-        <span class="n">encoder_tensor_view</span> <span class="o">=</span> <span class="n">context_tensor</span><span class="p">[</span><span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">shard_size</span><span class="p">]</span>
-        <span class="n">attention_mask_view</span> <span class="o">=</span> <span class="n">context_attention_mask</span><span class="p">[</span><span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">shard_size</span><span class="p">]</span>
-        <span class="n">decoder_tensor_view</span> <span class="o">=</span> <span class="n">question_tensor</span><span class="p">[</span><span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">shard_size</span><span class="p">]</span>
-        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-            <span class="n">logits</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_ids</span><span class="o">=</span><span class="n">encoder_tensor_view</span><span class="p">,</span>
-                           <span class="n">attention_mask</span><span class="o">=</span><span class="n">attention_mask_view</span><span class="p">,</span>
-                           <span class="n">labels</span><span class="o">=</span><span class="n">decoder_tensor_view</span><span class="p">)</span><span class="o">.</span><span class="n">logits</span>
-
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">input_ids</span><span class="o">=</span><span class="n">prompt_token_outputs</span><span class="p">[</span><span class="s1">&#39;input_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span>
+                            <span class="n">attention_mask</span><span class="o">=</span><span class="n">prompt_token_outputs</span><span class="p">[</span><span class="s1">&#39;attention_mask&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span>
+                            <span class="n">labels</span><span class="o">=</span><span class="n">query_input_ids</span><span class="p">)</span><span class="o">.</span><span class="n">logits</span>
         <span class="n">log_softmax</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">nll</span> <span class="o">=</span> <span class="o">-</span><span class="n">log_softmax</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">decoder_tensor_view</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-
+        <span class="n">nll</span> <span class="o">=</span> <span class="o">-</span><span class="n">log_softmax</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">query_input_ids</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">avg_nll</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">nll</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">sharded_nll_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">avg_nll</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="n">avg_nll</span><span class="o">.</span><span class="n">tolist</span><span class="p">()}</span>
 
-    <span class="n">topk_scores</span><span class="p">,</span> <span class="n">indexes</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">sharded_nll_list</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">context_tensor</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">indexes</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">topk_scores</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
+        <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span></div>
 
 </pre></div>
         </article>
@@ -515,7 +472,7 @@
 </div><script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../../../_static/scripts/furo.js?v=4e2eecee"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../../_static/tabs.js?v=3ee01567"></script>
