@@ -322,6 +322,8 @@
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 <span class="kn">from</span> <span class="nn">autorag.nodes.promptmaker.base</span> <span class="kn">import</span> <span class="n">prompt_maker_node</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AutoRAG&quot;</span><span class="p">)</span>
@@ -358,6 +360,8 @@
 
     <span class="k">def</span> <span class="nf">long_context_reorder_row</span><span class="p">(</span><span class="n">_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_retrieved_contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
                                  <span class="n">_retrieve_scores</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_retrieved_contents</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">_retrieved_contents</span> <span class="o">=</span> <span class="n">_retrieved_contents</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">_retrieved_contents</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">_retrieve_scores</span><span class="p">):</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;If you use a summarizer, the reorder will not proceed.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">_prompt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">_query</span><span class="p">,</span> <span class="n">retrieved_contents</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_retrieved_contents</span><span class="p">))</span>
