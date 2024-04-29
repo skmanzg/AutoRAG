@@ -320,6 +320,7 @@
         <article role="main" id="furo-main-content">
           <h1>Source code for autorag.nodes.generator.base</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
 
@@ -327,6 +328,8 @@
 
 <span class="kn">from</span> <span class="nn">autorag</span> <span class="kn">import</span> <span class="n">generator_models</span>
 <span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">result_to_dataframe</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AutoRAG&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="generator_node">
@@ -351,6 +354,7 @@
 <span class="sd">        :return: Pandas dataframe that contains generated texts, generated tokens, and generated log probs.</span>
 <span class="sd">            Each column is &quot;generated_texts&quot;, &quot;generated_tokens&quot;, and &quot;generated_log_probs&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running generator node - </span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> module...&quot;</span><span class="p">)</span>
         <span class="k">assert</span> <span class="s1">&#39;prompts&#39;</span> <span class="ow">in</span> <span class="n">previous_result</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="s2">&quot;previous_result must contain prompts column.&quot;</span>
         <span class="n">prompts</span> <span class="o">=</span> <span class="n">previous_result</span><span class="p">[</span><span class="s1">&#39;prompts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;llama_index_llm&#39;</span><span class="p">:</span>

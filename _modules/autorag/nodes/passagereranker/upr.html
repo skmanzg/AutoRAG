@@ -376,16 +376,18 @@
     <span class="p">})</span>
     <span class="n">ds</span> <span class="o">=</span> <span class="n">ray</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
+    <span class="n">scorer</span> <span class="o">=</span> <span class="n">UPRScorer</span><span class="p">(</span><span class="n">suffix_prompt</span><span class="o">=</span><span class="n">suffix_prompt</span><span class="p">,</span> <span class="n">prefix_prompt</span><span class="o">=</span><span class="n">prefix_prompt</span><span class="p">,</span> <span class="n">use_bf16</span><span class="o">=</span><span class="n">use_bf16</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
-        <span class="n">score_batch</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">map_batches</span><span class="p">(</span><span class="n">UPRScorer</span><span class="p">(</span><span class="n">suffix_prompt</span><span class="o">=</span><span class="n">suffix_prompt</span><span class="p">,</span>
-                                               <span class="n">prefix_prompt</span><span class="o">=</span><span class="n">prefix_prompt</span><span class="p">,</span> <span class="n">use_bf16</span><span class="o">=</span><span class="n">use_bf16</span><span class="p">),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">score_batch</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">map_batches</span><span class="p">(</span><span class="n">scorer</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                                      <span class="n">concurrency</span><span class="o">=</span><span class="n">num_gpus</span><span class="p">,</span> <span class="n">num_gpus</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">score_batch</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">map_batches</span><span class="p">(</span><span class="n">UPRScorer</span><span class="p">(</span><span class="n">suffix_prompt</span><span class="o">=</span><span class="n">suffix_prompt</span><span class="p">,</span>
-                                               <span class="n">prefix_prompt</span><span class="o">=</span><span class="n">prefix_prompt</span><span class="p">,</span> <span class="n">use_bf16</span><span class="o">=</span><span class="n">use_bf16</span><span class="p">),</span>
+        <span class="n">score_batch</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">map_batches</span><span class="p">(</span><span class="n">scorer</span><span class="p">,</span>
                                      <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                                      <span class="n">concurrency</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()),</span> <span class="n">num_cpus</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">())</span>
     <span class="n">scores</span> <span class="o">=</span> <span class="n">score_batch</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>  <span class="c1"># converted to a flatten list of scores</span>
+
+    <span class="k">del</span> <span class="n">scorer</span>
 
     <span class="n">explode_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">explode</span><span class="p">(</span><span class="s1">&#39;contents&#39;</span><span class="p">)</span>
     <span class="n">explode_df</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scores</span>
@@ -434,6 +436,7 @@
 
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span>
         <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span></div>
 
