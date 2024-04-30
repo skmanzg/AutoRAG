@@ -426,6 +426,26 @@
                 <span class="k">break</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rr_list</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">gt_sets</span><span class="p">)</span> <span class="k">if</span> <span class="n">rr_list</span> <span class="k">else</span> <span class="mf">0.0</span></div>
 
+
+
+<div class="viewcode-block" id="retrieval_map">
+<a class="viewcode-back" href="../../../../api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval.retrieval_map">[docs]</a>
+<span class="nd">@retrieval_metric</span>
+<span class="k">def</span> <span class="nf">retrieval_map</span><span class="p">(</span><span class="n">gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">pred</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mean Average Precision (MAP) is the mean of Average Precision (AP) for all queries.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gt_sets</span> <span class="o">=</span> <span class="p">[</span><span class="nb">frozenset</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gt</span><span class="p">]</span>
+
+    <span class="n">ap_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">gt_set</span> <span class="ow">in</span> <span class="n">gt_sets</span><span class="p">:</span>
+        <span class="n">pred_hits</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">pred_id</span> <span class="ow">in</span> <span class="n">gt_set</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">pred_id</span> <span class="ow">in</span> <span class="n">pred</span><span class="p">]</span>
+        <span class="n">precision_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">pred_hits</span><span class="p">[:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">hit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pred_hits</span><span class="p">)</span> <span class="k">if</span> <span class="n">hit</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">ap_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">precision_list</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">precision_list</span><span class="p">)</span> <span class="k">if</span> <span class="n">precision_list</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ap_list</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">gt_sets</span><span class="p">)</span> <span class="k">if</span> <span class="n">ap_list</span> <span class="k">else</span> <span class="mf">0.0</span></div>
+
 </pre></div>
         </article>
       </div>

@@ -520,6 +520,12 @@ It contains and/or connections between ids.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="autorag.evaluate.metric.retrieval.retrieval_map">
+<span class="sig-prename descclassname"><span class="pre">autorag.evaluate.metric.retrieval.</span></span><span class="sig-name descname"><span class="pre">retrieval_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/autorag/evaluate/metric/retrieval.html#retrieval_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluate.metric.retrieval.retrieval_map" title="Link to this definition">¶</a></dt>
+<dd><p>Mean Average Precision (MAP) is the mean of Average Precision (AP) for all queries.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="autorag.evaluate.metric.retrieval.retrieval_metric">
 <span class="sig-prename descclassname"><span class="pre">autorag.evaluate.metric.retrieval.</span></span><span class="sig-name descname"><span class="pre">retrieval_metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/evaluate/metric/retrieval.html#retrieval_metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluate.metric.retrieval.retrieval_metric" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -661,6 +667,7 @@ which means calculate the metric based on the contents of the retrieved items.</
 </li>
 <li><a class="reference internal" href="#module-autorag.evaluate.metric.retrieval">autorag.evaluate.metric.retrieval module</a><ul>
 <li><a class="reference internal" href="#autorag.evaluate.metric.retrieval.retrieval_f1"><code class="docutils literal notranslate"><span class="pre">retrieval_f1()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.evaluate.metric.retrieval.retrieval_map"><code class="docutils literal notranslate"><span class="pre">retrieval_map()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.evaluate.metric.retrieval.retrieval_metric"><code class="docutils literal notranslate"><span class="pre">retrieval_metric()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.evaluate.metric.retrieval.retrieval_mrr"><code class="docutils literal notranslate"><span class="pre">retrieval_mrr()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.evaluate.metric.retrieval.retrieval_ndcg"><code class="docutils literal notranslate"><span class="pre">retrieval_ndcg()</span></code></a></li>

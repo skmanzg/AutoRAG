@@ -325,7 +325,8 @@
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">autorag.evaluate.metric</span> <span class="kn">import</span> <span class="n">retrieval_recall</span><span class="p">,</span> <span class="n">retrieval_precision</span><span class="p">,</span> <span class="n">retrieval_f1</span><span class="p">,</span> <span class="n">retrieval_ndcg</span><span class="p">,</span> <span class="n">retrieval_mrr</span>
+<span class="kn">from</span> <span class="nn">autorag.evaluate.metric</span> <span class="kn">import</span> <span class="p">(</span><span class="n">retrieval_recall</span><span class="p">,</span> <span class="n">retrieval_precision</span><span class="p">,</span> <span class="n">retrieval_f1</span><span class="p">,</span> <span class="n">retrieval_ndcg</span><span class="p">,</span> <span class="n">retrieval_mrr</span><span class="p">,</span>
+                                     <span class="n">retrieval_map</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="evaluate_retrieval">
@@ -351,6 +352,7 @@
                 <span class="n">retrieval_f1</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="n">retrieval_f1</span><span class="p">,</span>
                 <span class="n">retrieval_ndcg</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="n">retrieval_ndcg</span><span class="p">,</span>
                 <span class="n">retrieval_mrr</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="n">retrieval_mrr</span><span class="p">,</span>
+                <span class="n">retrieval_map</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="n">retrieval_map</span><span class="p">,</span>
             <span class="p">}</span>
 
             <span class="n">metric_scores</span> <span class="o">=</span> <span class="p">{}</span>
