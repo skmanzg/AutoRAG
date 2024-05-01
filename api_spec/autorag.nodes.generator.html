@@ -234,6 +234,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/generator/generator.html">6. Generator</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/generator/llama_index_llm.html">llama_index LLM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/generator/vllm.html">vllm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/generator/openai_llm.html">OpenAI LLM</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/passage_filter/passage_filter.html">Passage Filter</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Passage Filter</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -359,6 +360,50 @@ The third element is a list of generated text’s pseudo log probs.</p>
 </dd>
 </dl>
 </dd></dl>
+
+</section>
+<section id="module-autorag.nodes.generator.openai_llm">
+<span id="autorag-nodes-generator-openai-llm-module"></span><h2>autorag.nodes.generator.openai_llm module<a class="headerlink" href="#module-autorag.nodes.generator.openai_llm" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.generator.openai_llm.get_result">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">autorag.nodes.generator.openai_llm.</span></span><span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncOpenAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Encoding</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/generator/openai_llm.html#get_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.generator.openai_llm.get_result" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.generator.openai_llm.openai_llm">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.generator.openai_llm.</span></span><span class="sig-name descname"><span class="pre">openai_llm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'gpt-3.5-turbo'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truncate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/generator/openai_llm.html#openai_llm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.generator.openai_llm.openai_llm" title="Link to this definition">¶</a></dt>
+<dd><p>OpenAI generator module.
+Uses official openai library for generating answer from the given prompt.
+It returns real token ids and log probs, so you must use this for using token ids and log probs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prompts</strong> – A list of prompts.</p></li>
+<li><p><strong>llm</strong> – A model name for openai.
+Default is gpt-3.5-turbo.</p></li>
+<li><p><strong>batch</strong> – Batch size for openai api call.
+If you get API limit errors, you should lower the batch size.
+Default is 16.</p></li>
+<li><p><strong>truncate</strong> – Whether to truncate the input prompt.
+Default is True.</p></li>
+<li><p><strong>api_key</strong> – OpenAI API key. You can set this by passing env variable <cite>OPENAI_API_KEY</cite></p></li>
+<li><p><strong>kwargs</strong> – The optional parameter for openai api call <cite>openai.chat.completion</cite>
+See <a class="reference external" href="https://platform.openai.com/docs/api-reference/chat/create">https://platform.openai.com/docs/api-reference/chat/create</a> for more details.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple of three elements.
+The first element is a list of generated text.
+The second element is a list of generated text’s token ids.
+The third element is a list of generated text’s log probs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.generator.openai_llm.truncate_by_token">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.generator.openai_llm.</span></span><span class="sig-name descname"><span class="pre">truncate_by_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Encoding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_token_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/generator/openai_llm.html#truncate_by_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.generator.openai_llm.truncate_by_token" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </section>
 <section id="module-autorag.nodes.generator.run">
@@ -498,6 +543,12 @@ The third element is a list of generated text’s log probs.</p>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.generator.llama_index_llm">autorag.nodes.generator.llama_index_llm module</a><ul>
 <li><a class="reference internal" href="#autorag.nodes.generator.llama_index_llm.llama_index_llm"><code class="docutils literal notranslate"><span class="pre">llama_index_llm()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.generator.openai_llm">autorag.nodes.generator.openai_llm module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.generator.openai_llm.get_result"><code class="docutils literal notranslate"><span class="pre">get_result()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.generator.openai_llm.openai_llm"><code class="docutils literal notranslate"><span class="pre">openai_llm()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.generator.openai_llm.truncate_by_token"><code class="docutils literal notranslate"><span class="pre">truncate_by_token()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.generator.run">autorag.nodes.generator.run module</a><ul>

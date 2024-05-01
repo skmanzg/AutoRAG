@@ -232,6 +232,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/generator/generator.html">6. Generator</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="nodes/generator/llama_index_llm.html">llama_index LLM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/generator/vllm.html">vllm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/generator/openai_llm.html">OpenAI LLM</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/passage_filter/passage_filter.html">Passage Filter</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Passage Filter</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -551,6 +552,13 @@
 </li>
         </ul></li>
         <li>
+    autorag.nodes.generator.openai_llm
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.generator.html#module-autorag.nodes.generator.openai_llm">module</a>
+</li>
+        </ul></li>
+        <li>
     autorag.nodes.generator.run
 
         <ul>
@@ -669,6 +677,8 @@
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.percentile_cutoff">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagefilter.recency
 
@@ -676,8 +686,6 @@
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.recency">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagefilter.run
 
@@ -1244,10 +1252,10 @@
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.colbert.get_colbert_score">get_colbert_score() (in module autorag.nodes.passagereranker.colbert)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.get_encoder">get_encoder() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.data.utils.html#autorag.data.utils.util.get_file_metadata">get_file_metadata() (in module autorag.data.utils.util)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.get_hybrid_execution_times">get_hybrid_execution_times() (in module autorag.nodes.retrieval.run)</a>
@@ -1259,6 +1267,8 @@
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.get_module_params">get_module_params() (in module autorag.nodes.retrieval.run)</a>
 </li>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.get_param_combinations">get_param_combinations() (autorag.schema.node.Node method)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.generator.html#autorag.nodes.generator.openai_llm.get_result">get_result() (in module autorag.nodes.generator.openai_llm)</a>
 </li>
         <li><a href="api_spec/autorag.html#autorag.web.get_runner">get_runner() (in module autorag.web)</a>
 </li>
@@ -1450,6 +1460,8 @@
 </li>
           <li><a href="api_spec/autorag.nodes.generator.html#module-autorag.nodes.generator.llama_index_llm">autorag.nodes.generator.llama_index_llm</a>
 </li>
+          <li><a href="api_spec/autorag.nodes.generator.html#module-autorag.nodes.generator.openai_llm">autorag.nodes.generator.openai_llm</a>
+</li>
           <li><a href="api_spec/autorag.nodes.generator.html#module-autorag.nodes.generator.run">autorag.nodes.generator.run</a>
 </li>
           <li><a href="api_spec/autorag.nodes.generator.html#module-autorag.nodes.generator.vllm">autorag.nodes.generator.vllm</a>
@@ -1630,6 +1642,10 @@
 <section id="O" class="genindex-section">
   <h2>O</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.nodes.generator.html#autorag.nodes.generator.openai_llm.openai_llm">openai_llm() (in module autorag.nodes.generator.openai_llm)</a>
+</li>
+    </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.utils.html#autorag.utils.util.openai_truncate_by_token">openai_truncate_by_token() (in module autorag.utils.util)</a>
 </li>
@@ -1858,6 +1874,8 @@
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.time_reranker.time_reranker">time_reranker() (in module autorag.nodes.passagereranker.time_reranker)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagecompressor.html#autorag.nodes.passagecompressor.tree_summarize.tree_summarize">tree_summarize() (in module autorag.nodes.passagecompressor.tree_summarize)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.generator.html#autorag.nodes.generator.openai_llm.truncate_by_token">truncate_by_token() (in module autorag.nodes.generator.openai_llm)</a>
 </li>
     </ul></td>
   </tr></table>

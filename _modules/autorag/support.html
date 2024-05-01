@@ -233,6 +233,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../nodes/generator/generator.html">6. Generator</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../nodes/generator/llama_index_llm.html">llama_index LLM</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nodes/generator/vllm.html">vllm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nodes/generator/openai_llm.html">OpenAI LLM</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../nodes/passage_filter/passage_filter.html">Passage Filter</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Passage Filter</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -383,6 +384,7 @@
         <span class="c1"># generator</span>
         <span class="s1">&#39;llama_index_llm&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;autorag.nodes.generator&#39;</span><span class="p">,</span> <span class="s1">&#39;llama_index_llm&#39;</span><span class="p">),</span>
         <span class="s1">&#39;vllm&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;autorag.nodes.generator&#39;</span><span class="p">,</span> <span class="s1">&#39;vllm&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;openai_llm&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;autorag.nodes.generator&#39;</span><span class="p">,</span> <span class="s1">&#39;openai_llm&#39;</span><span class="p">),</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">dynamically_find_function</span><span class="p">(</span><span class="n">module_name</span><span class="p">,</span> <span class="n">support_modules</span><span class="p">)</span></div>
 
