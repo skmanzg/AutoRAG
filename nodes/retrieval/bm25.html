@@ -327,13 +327,37 @@
 <section id="module-parameters">
 <h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><strong>Parameter</strong>: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>bm25_tokenizer</strong>: You can select which tokenize method you use for bm25.
+The default method is ‘porter_stemmer’.
+And you can choose between ‘ko_kiwi’, ‘space’, and huggingface AutoTokenizer name.</p></li>
 </ul>
+<section id="porter-stemmer">
+<h3>porter_stemmer<a class="headerlink" href="#porter-stemmer" title="Link to this heading">¶</a></h3>
+<p>The default method to tokenize. It is optimized for English. It divides sentences to word, and extract stem.</p>
+<p>It means, stemmer can change ‘studying’, ‘studies’ to ‘study’.</p>
+</section>
+<section id="ko-kiwi">
+<h3>ko_kiwi<a class="headerlink" href="#ko-kiwi" title="Link to this heading">¶</a></h3>
+<p>It uses kiwi tokenizer for Korean language.
+We highly recommend to use it for Korean documents.
+You can check more information about kiwi at <a class="reference external" href="https://github.com/bab2min/Kiwi">here</a>.</p>
+</section>
+<section id="space">
+<h3>space<a class="headerlink" href="#space" title="Link to this heading">¶</a></h3>
+<p>It is simple method to divide words into just space.
+It is simple, but it can be a great choice for multilingual documents.</p>
+</section>
+<section id="huggingface-autotokenizer">
+<h3>Huggingface AutoTokenizer<a class="headerlink" href="#huggingface-autotokenizer" title="Link to this heading">¶</a></h3>
+<p>You can use any <code class="docutils literal notranslate"><span class="pre">AutoTokenizer</span></code> from huggingface, like gpt2 or mistralai/Mistral-7B-Instruct-v0.2.
+Just type huggingface repo path, and you can use the tokenizer.</p>
+</section>
 </section>
 <section id="example-config-yaml">
 <h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bm25</span>
+<span class="w">    </span><span class="nt">bm25_tokenizer</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">porter_stemmer</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ko_kiwi</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">space</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">gpt2</span><span class="w"> </span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
 </section>
@@ -395,7 +419,13 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">BM25</a><ul>
-<li><a class="reference internal" href="#module-parameters"><strong>Module Parameters</strong></a></li>
+<li><a class="reference internal" href="#module-parameters"><strong>Module Parameters</strong></a><ul>
+<li><a class="reference internal" href="#porter-stemmer">porter_stemmer</a></li>
+<li><a class="reference internal" href="#ko-kiwi">ko_kiwi</a></li>
+<li><a class="reference internal" href="#space">space</a></li>
+<li><a class="reference internal" href="#huggingface-autotokenizer">Huggingface AutoTokenizer</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#example-config-yaml"><strong>Example config.yaml</strong></a></li>
 </ul>
 </li>

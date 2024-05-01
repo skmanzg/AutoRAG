@@ -363,7 +363,10 @@
 
         <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;bm25&quot;</span><span class="p">:</span>
             <span class="c1"># check if bm25_path and file exists</span>
-            <span class="n">bm25_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">resources_dir</span><span class="p">,</span> <span class="s1">&#39;bm25.pkl&#39;</span><span class="p">)</span>
+            <span class="n">bm25_tokenizer</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bm25_tokenizer&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">bm25_tokenizer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">bm25_tokenizer</span> <span class="o">=</span> <span class="s2">&quot;porter_stemmer&quot;</span>
+            <span class="n">bm25_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">resources_dir</span><span class="p">,</span> <span class="n">get_bm25_pkl_name</span><span class="p">(</span><span class="n">bm25_tokenizer</span><span class="p">))</span>
             <span class="k">assert</span> <span class="n">bm25_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;bm25_path must be specified for using bm25 retrieval.&quot;</span>
             <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">bm25_path</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;bm25_path </span><span class="si">{</span><span class="n">bm25_path</span><span class="si">}</span><span class="s2"> does not exist. Please ingest first.&quot;</span>
         <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;vectordb&quot;</span><span class="p">:</span>
@@ -479,11 +482,11 @@
 
 
 
-<div class="viewcode-block" id="run_retrieval_modules">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.base.run_retrieval_modules">[docs]</a>
-<span class="k">def</span> <span class="nf">run_retrieval_modules</span><span class="p">(</span><span class="n">project_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">previous_result</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-                          <span class="n">module_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">module_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-    <span class="k">return</span></div>
+<div class="viewcode-block" id="get_bm25_pkl_name">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.base.get_bm25_pkl_name">[docs]</a>
+<span class="k">def</span> <span class="nf">get_bm25_pkl_name</span><span class="p">(</span><span class="n">bm25_tokenizer</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">bm25_tokenizer</span> <span class="o">=</span> <span class="n">bm25_tokenizer</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;bm25_</span><span class="si">{</span><span class="n">bm25_tokenizer</span><span class="si">}</span><span class="s1">.pkl&#39;</span></div>
 
 </pre></div>
         </article>
