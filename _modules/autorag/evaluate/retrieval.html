@@ -388,17 +388,19 @@
           <h1>Source code for autorag.evaluate.retrieval</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">autorag.evaluate.metric</span> <span class="kn">import</span> <span class="p">(</span><span class="n">retrieval_recall</span><span class="p">,</span> <span class="n">retrieval_precision</span><span class="p">,</span> <span class="n">retrieval_f1</span><span class="p">,</span> <span class="n">retrieval_ndcg</span><span class="p">,</span> <span class="n">retrieval_mrr</span><span class="p">,</span>
                                      <span class="n">retrieval_map</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">autorag.evaluate.metric.retrieval_no_gt</span> <span class="kn">import</span> <span class="n">ragas_context_precision</span>
 
 
 <div class="viewcode-block" id="evaluate_retrieval">
 <a class="viewcode-back" href="../../../api_spec/autorag.evaluate.html#autorag.evaluate.retrieval.evaluate_retrieval">[docs]</a>
-<span class="k">def</span> <span class="nf">evaluate_retrieval</span><span class="p">(</span><span class="n">retrieval_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="n">metrics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+<span class="k">def</span> <span class="nf">evaluate_retrieval</span><span class="p">(</span><span class="n">retrieval_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="n">metrics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                       <span class="n">queries</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">generation_gt</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">decorator_evaluate_retrieval</span><span class="p">(</span>
             <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -422,14 +424,27 @@
                 <span class="n">retrieval_map</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="n">retrieval_map</span><span class="p">,</span>
             <span class="p">}</span>
 
+            <span class="n">no_gt_metric_funcs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">ragas_context_precision</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="n">ragas_context_precision</span><span class="p">,</span>
+            <span class="p">}</span>
+
             <span class="n">metric_scores</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">metric</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metric_funcs</span><span class="p">:</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;metric </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2"> is not in supported metrics: </span><span class="si">{</span><span class="n">metric_funcs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-                                  <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2"> will be ignored.&quot;</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metric_funcs</span><span class="p">:</span>
                     <span class="n">metric_func</span> <span class="o">=</span> <span class="n">metric_funcs</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span>
                     <span class="n">metric_scores</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_func</span><span class="p">(</span><span class="n">retrieval_gt</span><span class="o">=</span><span class="n">retrieval_gt</span><span class="p">,</span> <span class="n">pred_ids</span><span class="o">=</span><span class="n">pred_ids</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">no_gt_metric_funcs</span><span class="p">:</span>
+                    <span class="n">metric_func</span> <span class="o">=</span> <span class="n">no_gt_metric_funcs</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">queries</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;To using </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">, you have to provide queries.&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">generation_gt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;To using </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">, you have to provide generation ground truth.&quot;</span><span class="p">)</span>
+                    <span class="n">metric_scores</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_func</span><span class="p">(</span><span class="n">queries</span><span class="o">=</span><span class="n">queries</span><span class="p">,</span> <span class="n">retrieved_contents</span><span class="o">=</span><span class="n">contents</span><span class="p">,</span>
+                                                        <span class="n">generation_gt</span><span class="o">=</span><span class="n">generation_gt</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;metric </span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2"> is not in supported metrics: </span><span class="si">{</span><span class="n">metric_funcs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                                  <span class="sa">f</span><span class="s2">&quot; and </span><span class="si">{</span><span class="n">no_gt_metric_funcs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                                  <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2"> will be ignored.&quot;</span><span class="p">)</span>
 
             <span class="n">metric_result_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">metric_scores</span><span class="p">)</span>
             <span class="n">execution_result_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>

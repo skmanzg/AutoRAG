@@ -389,15 +389,15 @@
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.retrieval.run</span> <span class="kn">import</span> <span class="n">evaluate_retrieval_node</span>
 <span class="kn">from</span> <span class="nn">autorag.strategy</span> <span class="kn">import</span> <span class="n">measure_speed</span><span class="p">,</span> <span class="n">filter_by_threshold</span><span class="p">,</span> <span class="n">select_best_average</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">make_combinations</span><span class="p">,</span> <span class="n">explode</span>
 <span class="kn">from</span> <span class="nn">autorag.support</span> <span class="kn">import</span> <span class="n">get_support_modules</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">make_combinations</span><span class="p">,</span> <span class="n">explode</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AutoRAG&quot;</span><span class="p">)</span>
 
@@ -524,7 +524,9 @@
     <span class="n">previous_result</span><span class="p">[</span><span class="s1">&#39;queries&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expanded_queries</span>
     <span class="n">retrieval_results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span> <span class="n">previous_result</span><span class="o">=</span><span class="n">previous_result</span><span class="p">,</span> <span class="o">**</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
                                  <span class="nb">zip</span><span class="p">(</span><span class="n">retrieval_funcs</span><span class="p">,</span> <span class="n">retrieval_params</span><span class="p">)))</span>
-    <span class="n">evaluation_results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">evaluate_retrieval_node</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">retrieval_gt</span><span class="p">,</span> <span class="n">metrics</span><span class="p">),</span>
+    <span class="n">evaluation_results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">evaluate_retrieval_node</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">retrieval_gt</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span>
+                                                                    <span class="n">previous_result</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                                                                    <span class="n">previous_result</span><span class="p">[</span><span class="s1">&#39;generation_gt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()),</span>
                                   <span class="n">retrieval_results</span><span class="p">))</span>
     <span class="n">best_result</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">select_best_average</span><span class="p">(</span><span class="n">evaluation_results</span><span class="p">,</span> <span class="n">metrics</span><span class="p">)</span>
     <span class="n">best_result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">previous_result</span><span class="p">,</span> <span class="n">best_result</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>

@@ -655,6 +655,19 @@ which means calculate the metric based on the contents of the retrieved items.</
 <dd></dd></dl>
 
 </section>
+<section id="module-autorag.evaluate.metric.retrieval_no_gt">
+<span id="autorag-evaluate-metric-retrieval-no-gt-module"></span><h2>autorag.evaluate.metric.retrieval_no_gt module<a class="headerlink" href="#module-autorag.evaluate.metric.retrieval_no_gt" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.evaluate.metric.retrieval_no_gt.cast_generation_gt">
+<span class="sig-prename descclassname"><span class="pre">autorag.evaluate.metric.retrieval_no_gt.</span></span><span class="sig-name descname"><span class="pre">cast_generation_gt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generation_gt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/evaluate/metric/retrieval_no_gt.html#cast_generation_gt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluate.metric.retrieval_no_gt.cast_generation_gt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.evaluate.metric.retrieval_no_gt.ragas_context_precision">
+<span class="sig-prename descclassname"><span class="pre">autorag.evaluate.metric.retrieval_no_gt.</span></span><span class="sig-name descname"><span class="pre">ragas_context_precision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrieved_contents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generation_gt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">openai_model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'gpt-4-turbo'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/evaluate/metric/retrieval_no_gt.html#ragas_context_precision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluate.metric.retrieval_no_gt.ragas_context_precision" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
 <section id="module-autorag.evaluate.metric.util">
 <span id="autorag-evaluate-metric-util-module"></span><h2>autorag.evaluate.metric.util module<a class="headerlink" href="#module-autorag.evaluate.metric.util" title="Link to this heading">¶</a></h2>
 <dl class="py function">
@@ -753,6 +766,11 @@ which means calculate the metric based on the contents of the retrieved items.</
 <li><a class="reference internal" href="#autorag.evaluate.metric.retrieval_contents.retrieval_token_precision"><code class="docutils literal notranslate"><span class="pre">retrieval_token_precision()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.evaluate.metric.retrieval_contents.retrieval_token_recall"><code class="docutils literal notranslate"><span class="pre">retrieval_token_recall()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.evaluate.metric.retrieval_contents.single_token_f1"><code class="docutils literal notranslate"><span class="pre">single_token_f1()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.evaluate.metric.retrieval_no_gt">autorag.evaluate.metric.retrieval_no_gt module</a><ul>
+<li><a class="reference internal" href="#autorag.evaluate.metric.retrieval_no_gt.cast_generation_gt"><code class="docutils literal notranslate"><span class="pre">cast_generation_gt()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.evaluate.metric.retrieval_no_gt.ragas_context_precision"><code class="docutils literal notranslate"><span class="pre">ragas_context_precision()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.evaluate.metric.util">autorag.evaluate.metric.util module</a><ul>

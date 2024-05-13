@@ -12,10 +12,10 @@
         gtag('config', 'G-T8ZKQM6RT9');
     </script>
     <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
-        <link rel="canonical" href="https://marker-inc-korea.github.io/AutoRAG/_modules/autorag/nodes/passagereranker/run.html" />
+        <link rel="canonical" href="https://marker-inc-korea.github.io/AutoRAG/_modules/autorag/evaluate/metric/retrieval_no_gt.html" />
 
     <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
-        <title>autorag.nodes.passagereranker.run - AutoRAG documentation</title>
+        <title>autorag.evaluate.metric.retrieval_no_gt - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=387cc868" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -385,97 +385,49 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for autorag.nodes.passagereranker.run</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span>
+          <h1>Source code for autorag.evaluate.metric.retrieval_no_gt</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">ragas</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">langchain_openai.chat_models</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
+<span class="kn">from</span> <span class="nn">ragas.metrics</span> <span class="kn">import</span> <span class="n">context_precision</span>
 
-<span class="kn">from</span> <span class="nn">autorag.nodes.retrieval.run</span> <span class="kn">import</span> <span class="n">evaluate_retrieval_node</span>
-<span class="kn">from</span> <span class="nn">autorag.strategy</span> <span class="kn">import</span> <span class="n">measure_speed</span><span class="p">,</span> <span class="n">filter_by_threshold</span><span class="p">,</span> <span class="n">select_best_average</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AutoRAG&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="ragas_context_precision">
+<a class="viewcode-back" href="../../../../api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval_no_gt.ragas_context_precision">[docs]</a>
+<span class="k">def</span> <span class="nf">ragas_context_precision</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">retrieved_contents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                            <span class="n">openai_model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gpt-4-turbo&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="n">generation_gt</span> <span class="o">=</span> <span class="n">cast_generation_gt</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">)</span>
+    <span class="n">data_samples</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;question&#39;</span><span class="p">:</span> <span class="n">queries</span><span class="p">,</span>
+        <span class="s1">&#39;contexts&#39;</span><span class="p">:</span> <span class="n">retrieved_contents</span><span class="p">,</span>
+        <span class="s1">&#39;ground_truth&#39;</span><span class="p">:</span> <span class="n">generation_gt</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="n">openai_model_name</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data_samples</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">ragas</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="n">context_precision</span><span class="p">],</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">score_df</span> <span class="o">=</span> <span class="n">score</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">score_df</span><span class="p">[</span><span class="s1">&#39;context_precision&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="run_passage_reranker_node">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.run.run_passage_reranker_node">[docs]</a>
-<span class="k">def</span> <span class="nf">run_passage_reranker_node</span><span class="p">(</span><span class="n">modules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
-                              <span class="n">module_params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
-                              <span class="n">previous_result</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-                              <span class="n">node_line_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                              <span class="n">strategies</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
-                              <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Run evaluation and select the best module among passage reranker node results.</span>
 
-<span class="sd">    :param modules: Passage reranker modules to run.</span>
-<span class="sd">    :param module_params: Passage reranker module parameters.</span>
-<span class="sd">    :param previous_result: Previous result dataframe.</span>
-<span class="sd">        Could be retrieval, reranker modules result.</span>
-<span class="sd">        It means it must contain &#39;query&#39;, &#39;retrieved_contents&#39;, &#39;retrieved_ids&#39;, &#39;retrieve_scores&#39; columns.</span>
-<span class="sd">    :param node_line_dir: This node line&#39;s directory.</span>
-<span class="sd">    :param strategies: Strategies for passage reranker node.</span>
-<span class="sd">        In this node, we use &#39;retrieval_f1&#39;, &#39;retrieval_recall&#39; and &#39;retrieval_precision&#39;.</span>
-<span class="sd">        You can skip evaluation when you use only one module and a module parameter.</span>
-<span class="sd">    :return: The best result dataframe with previous result columns.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">node_line_dir</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">node_line_dir</span><span class="p">)</span>
-    <span class="n">project_dir</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">PurePath</span><span class="p">(</span><span class="n">node_line_dir</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
-    <span class="n">qa_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;qa.parquet&quot;</span><span class="p">))</span>
-    <span class="n">retrieval_gt</span> <span class="o">=</span> <span class="n">qa_df</span><span class="p">[</span><span class="s1">&#39;retrieval_gt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-    <span class="n">retrieval_gt</span> <span class="o">=</span> <span class="p">[[[</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span> <span class="k">for</span> <span class="n">uuid</span> <span class="ow">in</span> <span class="n">sub_array</span><span class="p">]</span> <span class="k">if</span> <span class="n">sub_array</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">sub_array</span> <span class="ow">in</span> <span class="n">inner_array</span><span class="p">]</span>
-                    <span class="k">for</span> <span class="n">inner_array</span> <span class="ow">in</span> <span class="n">retrieval_gt</span><span class="p">]</span>
-
-    <span class="n">results</span><span class="p">,</span> <span class="n">execution_times</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">task</span><span class="p">:</span> <span class="n">measure_speed</span><span class="p">(</span>
-        <span class="n">task</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span> <span class="n">previous_result</span><span class="o">=</span><span class="n">previous_result</span><span class="p">,</span> <span class="o">**</span><span class="n">task</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">module_params</span><span class="p">)))</span>
-    <span class="n">average_times</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">execution_times</span><span class="p">))</span>
-
-    <span class="c1"># run metrics before filtering</span>
-    <span class="k">if</span> <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metrics&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You must at least one metrics for passage_reranker evaluation.&quot;</span><span class="p">)</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">evaluate_retrieval_node</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">retrieval_gt</span><span class="p">,</span> <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metrics&#39;</span><span class="p">),</span>
-                                                         <span class="n">qa_df</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-                                                         <span class="n">qa_df</span><span class="p">[</span><span class="s1">&#39;generation_gt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()),</span> <span class="n">results</span><span class="p">))</span>
-
-    <span class="c1"># save results to folder</span>
-    <span class="n">save_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">node_line_dir</span><span class="p">,</span> <span class="s2">&quot;passage_reranker&quot;</span><span class="p">)</span>  <span class="c1"># node name</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">save_dir</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_dir</span><span class="p">)</span>
-    <span class="n">filepaths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1">.parquet&#39;</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">modules</span><span class="p">))))</span>
-    <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">filepaths</span><span class="p">)))</span>  <span class="c1"># execute save to parquet</span>
-    <span class="n">filenames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">filepaths</span><span class="p">))</span>
-
-    <span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-        <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="n">filenames</span><span class="p">,</span>
-        <span class="s1">&#39;module_name&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">module</span><span class="p">:</span> <span class="n">module</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">modules</span><span class="p">)),</span>
-        <span class="s1">&#39;module_params&#39;</span><span class="p">:</span> <span class="n">module_params</span><span class="p">,</span>
-        <span class="s1">&#39;execution_time&#39;</span><span class="p">:</span> <span class="n">average_times</span><span class="p">,</span>
-        <span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s1">&#39;passage_reranker_</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">result</span><span class="p">:</span> <span class="n">result</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">results</span><span class="p">))</span> <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span>
-           <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metrics&#39;</span><span class="p">)},</span>
-    <span class="p">})</span>
-
-    <span class="c1"># filter by strategies</span>
-    <span class="k">if</span> <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;speed_threshold&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">results</span><span class="p">,</span> <span class="n">filenames</span> <span class="o">=</span> <span class="n">filter_by_threshold</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">average_times</span><span class="p">,</span> <span class="n">strategies</span><span class="p">[</span><span class="s1">&#39;speed_threshold&#39;</span><span class="p">],</span> <span class="n">filenames</span><span class="p">)</span>
-    <span class="n">selected_result</span><span class="p">,</span> <span class="n">selected_filename</span> <span class="o">=</span> <span class="n">select_best_average</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metrics&#39;</span><span class="p">),</span> <span class="n">filenames</span><span class="p">)</span>
-    <span class="c1"># change metric name columns to passage_reranker_metric_name</span>
-    <span class="n">selected_result</span> <span class="o">=</span> <span class="n">selected_result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-        <span class="n">metric_name</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;passage_reranker_</span><span class="si">{</span><span class="n">metric_name</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">metric_name</span> <span class="ow">in</span> <span class="n">strategies</span><span class="p">[</span><span class="s1">&#39;metrics&#39;</span><span class="p">]})</span>
-    <span class="c1"># drop retrieval result columns in previous_result</span>
-    <span class="n">previous_result</span> <span class="o">=</span> <span class="n">previous_result</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;retrieved_contents&#39;</span><span class="p">,</span> <span class="s1">&#39;retrieved_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;retrieve_scores&#39;</span><span class="p">])</span>
-    <span class="n">best_result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">previous_result</span><span class="p">,</span> <span class="n">selected_result</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="c1"># add &#39;is_best&#39; column to summary file</span>
-    <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;is_best&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">selected_filename</span>
-
-    <span class="c1"># save files</span>
-    <span class="n">summary_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s2">&quot;summary.csv&quot;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">best_result</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;best_</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">selected_filename</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">.parquet&#39;</span><span class="p">),</span>
-                           <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">best_result</span></div>
+<div class="viewcode-block" id="cast_generation_gt">
+<a class="viewcode-back" href="../../../../api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval_no_gt.cast_generation_gt">[docs]</a>
+<span class="k">def</span> <span class="nf">cast_generation_gt</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">gt</span> <span class="ow">in</span> <span class="n">generation_gt</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gt</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected type of generation gt elements : </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
 
 </pre></div>
         </article>
