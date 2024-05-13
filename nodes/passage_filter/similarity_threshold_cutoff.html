@@ -290,6 +290,7 @@
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Similarity Threshold Cutoff</a></li>
 <li class="toctree-l2"><a class="reference internal" href="similarity_percentile_cutoff.html">Similarity Percentile Cutoff</a></li>
 <li class="toctree-l2"><a class="reference internal" href="recency_filter.html">Recency Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threshold_cutoff.html">Threshold Cutoff</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../passage_compressor/passage_compressor.html">6. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -397,6 +398,7 @@
 <p>This module is inspired by
 LlamaIndex <a class="reference external" href="https://docs.llamaindex.ai/en/stable/examples/node_postprocessor/OptimizerDemo/">‘Sentence Embedding Optimizer’</a>.
 Re-calculate each content’s similarity with the query and filter out the contents that are below the threshold.</p>
+<p>📣 Keeps at least one item per query if all scores are below the threshold.</p>
 <section id="module-parameters">
 <h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">¶</a></h2>
 <ul class="simple">

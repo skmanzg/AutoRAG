@@ -288,6 +288,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_filter/similarity_threshold_cutoff.html">Similarity Threshold Cutoff</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_filter/similarity_percentile_cutoff.html">Similarity Percentile Cutoff</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_filter/recency_filter.html">Recency Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/passage_filter/threshold_cutoff.html">Threshold Cutoff</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/passage_compressor/passage_compressor.html">6. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -744,26 +745,33 @@
 </li>
         </ul></li>
         <li>
-    autorag.nodes.passagefilter.percentile_cutoff
-
-        <ul>
-          <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.percentile_cutoff">module</a>
-</li>
-        </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li>
     autorag.nodes.passagefilter.recency
 
         <ul>
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.recency">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagefilter.run
 
         <ul>
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.run">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.nodes.passagefilter.similarity_percentile_cutoff
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.similarity_percentile_cutoff">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.nodes.passagefilter.similarity_threshold_cutoff
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.similarity_threshold_cutoff">module</a>
 </li>
         </ul></li>
         <li>
@@ -1212,7 +1220,7 @@
         <li><a href="api_spec/autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.base.embedding_query_content">embedding_query_content() (in module autorag.nodes.passageaugmenter.base)</a>
 
         <ul>
-          <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.embedding_query_content">(in module autorag.nodes.passagefilter.threshold_cutoff)</a>
+          <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.similarity_threshold_cutoff.embedding_query_content">(in module autorag.nodes.passagefilter.similarity_threshold_cutoff)</a>
 </li>
         </ul></li>
         <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification">EncT5ForSequenceClassification (class in autorag.nodes.passagereranker.tart.modeling_enc_t5)</a>
@@ -1571,11 +1579,13 @@
 </li>
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.pass_passage_filter">autorag.nodes.passagefilter.pass_passage_filter</a>
 </li>
-          <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.percentile_cutoff">autorag.nodes.passagefilter.percentile_cutoff</a>
-</li>
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.recency">autorag.nodes.passagefilter.recency</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.run">autorag.nodes.passagefilter.run</a>
+</li>
+          <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.similarity_percentile_cutoff">autorag.nodes.passagefilter.similarity_percentile_cutoff</a>
+</li>
+          <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.similarity_threshold_cutoff">autorag.nodes.passagefilter.similarity_threshold_cutoff</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.threshold_cutoff">autorag.nodes.passagefilter.threshold_cutoff</a>
 </li>
@@ -1914,13 +1924,13 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.html#autorag.web.set_page_header">set_page_header() (in module autorag.web)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.percentile_cutoff.similarity_percentile_cutoff">similarity_percentile_cutoff() (in module autorag.nodes.passagefilter.percentile_cutoff)</a>
+        <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.similarity_percentile_cutoff.similarity_percentile_cutoff">similarity_percentile_cutoff() (in module autorag.nodes.passagefilter.similarity_percentile_cutoff)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.percentile_cutoff.similarity_percentile_cutoff_pure">similarity_percentile_cutoff_pure() (in module autorag.nodes.passagefilter.percentile_cutoff)</a>
+        <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.similarity_percentile_cutoff.similarity_percentile_cutoff_pure">similarity_percentile_cutoff_pure() (in module autorag.nodes.passagefilter.similarity_percentile_cutoff)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.similarity_threshold_cutoff">similarity_threshold_cutoff() (in module autorag.nodes.passagefilter.threshold_cutoff)</a>
+        <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.similarity_threshold_cutoff.similarity_threshold_cutoff">similarity_threshold_cutoff() (in module autorag.nodes.passagefilter.similarity_threshold_cutoff)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.similarity_threshold_cutoff_pure">similarity_threshold_cutoff_pure() (in module autorag.nodes.passagefilter.threshold_cutoff)</a>
+        <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.similarity_threshold_cutoff.similarity_threshold_cutoff_pure">similarity_threshold_cutoff_pure() (in module autorag.nodes.passagefilter.similarity_threshold_cutoff)</a>
 </li>
         <li><a href="api_spec/autorag.evaluate.metric.html#autorag.evaluate.metric.retrieval_contents.single_token_f1">single_token_f1() (in module autorag.evaluate.metric.retrieval_contents)</a>
 </li>
@@ -1950,12 +1960,16 @@
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.tart.tart_run_model">tart_run_model() (in module autorag.nodes.passagereranker.tart.tart)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.time_reranker.time_reranker">time_reranker() (in module autorag.nodes.passagereranker.time_reranker)</a>
+        <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.threshold_cutoff">threshold_cutoff() (in module autorag.nodes.passagefilter.threshold_cutoff)</a>
 </li>
-        <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.tokenize_ko_kiwi">tokenize_ko_kiwi() (in module autorag.nodes.retrieval.bm25)</a>
+        <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.threshold_cutoff_pure">threshold_cutoff_pure() (in module autorag.nodes.passagefilter.threshold_cutoff)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.time_reranker.time_reranker">time_reranker() (in module autorag.nodes.passagereranker.time_reranker)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.tokenize_ko_kiwi">tokenize_ko_kiwi() (in module autorag.nodes.retrieval.bm25)</a>
+</li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.tokenize_porter_stemmer">tokenize_porter_stemmer() (in module autorag.nodes.retrieval.bm25)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.tokenize_space">tokenize_space() (in module autorag.nodes.retrieval.bm25)</a>

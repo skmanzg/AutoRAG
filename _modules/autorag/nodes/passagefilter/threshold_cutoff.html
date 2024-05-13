@@ -289,6 +289,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_filter/similarity_threshold_cutoff.html">Similarity Threshold Cutoff</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_filter/similarity_percentile_cutoff.html">Similarity Percentile Cutoff</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_filter/recency_filter.html">Recency Filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../nodes/passage_filter/threshold_cutoff.html">Threshold Cutoff</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../nodes/passage_compressor/passage_compressor.html">6. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -386,102 +387,64 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for autorag.nodes.passagefilter.threshold_cutoff</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">itertools</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch.cuda</span>
-
-<span class="kn">from</span> <span class="nn">autorag</span> <span class="kn">import</span> <span class="n">embedding_models</span>
-<span class="kn">from</span> <span class="nn">autorag.evaluate.metric.util</span> <span class="kn">import</span> <span class="n">calculate_cosine_similarity</span>
 <span class="kn">from</span> <span class="nn">autorag.nodes.passagefilter.base</span> <span class="kn">import</span> <span class="n">passage_filter_node</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">reconstruct_list</span>
 
 
-<div class="viewcode-block" id="similarity_threshold_cutoff">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.similarity_threshold_cutoff">[docs]</a>
+<div class="viewcode-block" id="threshold_cutoff">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.threshold_cutoff">[docs]</a>
 <span class="nd">@passage_filter_node</span>
-<span class="k">def</span> <span class="nf">similarity_threshold_cutoff</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-                                <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-                                <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">embedding_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                                <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
-                                <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
+<span class="k">def</span> <span class="nf">threshold_cutoff</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                     <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                     <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Re-calculate each content&#39;s similarity with the query and filter out the contents that are below the threshold.</span>
-<span class="sd">    If all contents are filtered, keep the only one highest similarity content.</span>
-<span class="sd">    This is a filter and does not override scores.</span>
-<span class="sd">    The output of scores is not coming from query-content similarity.</span>
+<span class="sd">    Filters the contents, scores, and ids based on a previous result&#39;s score.</span>
+<span class="sd">    Keeps at least one item per query if all scores are below the threshold.</span>
 
-<span class="sd">    :param queries: The list of queries to use for filtering</span>
-<span class="sd">    :param contents_list: The list of lists of contents to filter</span>
-<span class="sd">    :param scores_list: The list of lists of scores retrieved</span>
-<span class="sd">    :param ids_list: The list of lists of ids retrieved</span>
-<span class="sd">    :param threshold: The threshold to cut off</span>
-<span class="sd">    :param embedding_model: The embedding model to use for calculating similarity</span>
-<span class="sd">        Default is OpenAIEmbedding.</span>
-<span class="sd">    :param batch: The number of queries to be processed in a batch</span>
-<span class="sd">        Default is 128.</span>
-<span class="sd">    :return: Tuple of lists containing the filtered contents, ids, and scores</span>
+<span class="sd">    :param queries: List of query strings (not used in the current implementation).</span>
+<span class="sd">    :param contents_list: List of content strings for each query.</span>
+<span class="sd">    :param scores_list: List of scores for each content.</span>
+<span class="sd">    :param ids_list: List of ids for each content.</span>
+<span class="sd">    :param threshold: The minimum score to keep an item.</span>
+<span class="sd">    :param reverse: If True, the lower the score, the better.</span>
+<span class="sd">        Default is False.</span>
+<span class="sd">    :return: Filtered lists of contents, ids, and scores.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">query_embeddings</span><span class="p">,</span> <span class="n">content_embeddings</span> <span class="o">=</span> <span class="n">embedding_query_content</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">embedding_model</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span>
-
-    <span class="n">remain_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">similarity_threshold_cutoff_pure</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">threshold</span><span class="p">),</span>
-                              <span class="nb">zip</span><span class="p">(</span><span class="n">query_embeddings</span><span class="p">,</span> <span class="n">content_embeddings</span><span class="p">)))</span>
+    <span class="n">remain_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">threshold_cutoff_pure</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">reverse</span><span class="p">),</span> <span class="n">scores_list</span><span class="p">))</span>
 
     <span class="n">remain_content_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span><span class="p">],</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">remain_indices</span><span class="p">))</span>
     <span class="n">remain_scores_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span><span class="p">],</span> <span class="n">scores_list</span><span class="p">,</span> <span class="n">remain_indices</span><span class="p">))</span>
     <span class="n">remain_ids_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_id</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="p">[</span><span class="n">_id</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span><span class="p">],</span> <span class="n">ids_list</span><span class="p">,</span> <span class="n">remain_indices</span><span class="p">))</span>
 
-    <span class="k">del</span> <span class="n">embedding_model</span>
-    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
-        <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
-
     <span class="k">return</span> <span class="n">remain_content_list</span><span class="p">,</span> <span class="n">remain_ids_list</span><span class="p">,</span> <span class="n">remain_scores_list</span></div>
 
 
 
-<div class="viewcode-block" id="similarity_threshold_cutoff_pure">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.similarity_threshold_cutoff_pure">[docs]</a>
-<span class="k">def</span> <span class="nf">similarity_threshold_cutoff_pure</span><span class="p">(</span><span class="n">query_embedding</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                                     <span class="n">content_embeddings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
-                                     <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<div class="viewcode-block" id="threshold_cutoff_pure">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.threshold_cutoff_pure">[docs]</a>
+<span class="k">def</span> <span class="nf">threshold_cutoff_pure</span><span class="p">(</span><span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+                          <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                          <span class="n">reverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return indices that have to remain.</span>
 <span class="sd">    Return at least one index if there is nothing to remain.</span>
 
-<span class="sd">    :param query_embedding: Query embedding</span>
-<span class="sd">    :param content_embeddings: Each content embedding</span>
+<span class="sd">    :param scores_list: Each score</span>
 <span class="sd">    :param threshold: The threshold to cut off</span>
+<span class="sd">    :param reverse: If True, the lower the score, the better</span>
+<span class="sd">        Default is False.</span>
 <span class="sd">    :return: Indices to remain at the contents</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">similarities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">calculate_cosine_similarity</span><span class="p">(</span><span class="n">query_embedding</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span>
-                                     <span class="n">content_embeddings</span><span class="p">)))</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">similarities</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">result</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">similarities</span><span class="p">)]</span></div>
-
-
-
-<div class="viewcode-block" id="embedding_query_content">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.threshold_cutoff.embedding_query_content">[docs]</a>
-<span class="k">def</span> <span class="nf">embedding_query_content</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-                            <span class="n">embedding_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">embedding_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">embedding_model</span> <span class="o">=</span> <span class="n">embedding_models</span><span class="p">[</span><span class="s1">&#39;openai&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">reverse</span><span class="p">:</span>
+        <span class="n">remain_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scores_list</span><span class="p">)</span> <span class="k">if</span> <span class="n">score</span> <span class="o">&lt;=</span> <span class="n">threshold</span><span class="p">]</span>
+        <span class="n">default_index</span> <span class="o">=</span> <span class="n">scores_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">scores_list</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">embedding_model</span> <span class="o">=</span> <span class="n">embedding_models</span><span class="p">[</span><span class="n">embedding_model</span><span class="p">]</span>
+        <span class="n">remain_indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scores_list</span><span class="p">)</span> <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">]</span>
+        <span class="n">default_index</span> <span class="o">=</span> <span class="n">scores_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">scores_list</span><span class="p">))</span>
 
-    <span class="c1"># Embedding using batch</span>
-    <span class="n">embedding_model</span><span class="o">.</span><span class="n">embed_batch_size</span> <span class="o">=</span> <span class="n">batch</span>
-    <span class="n">query_embeddings</span> <span class="o">=</span> <span class="n">embedding_model</span><span class="o">.</span><span class="n">get_text_embedding_batch</span><span class="p">(</span><span class="n">queries</span><span class="p">)</span>
-
-    <span class="n">content_lengths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">))</span>
-    <span class="n">content_embeddings_flatten</span> <span class="o">=</span> <span class="n">embedding_model</span><span class="o">.</span><span class="n">get_text_embedding_batch</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span>
-        <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">contents_list</span><span class="p">)))</span>
-    <span class="n">content_embeddings</span> <span class="o">=</span> <span class="n">reconstruct_list</span><span class="p">(</span><span class="n">content_embeddings_flatten</span><span class="p">,</span> <span class="n">content_lengths</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">query_embeddings</span><span class="p">,</span> <span class="n">content_embeddings</span></div>
+    <span class="k">return</span> <span class="n">remain_indices</span> <span class="k">if</span> <span class="n">remain_indices</span> <span class="k">else</span> <span class="p">[</span><span class="n">default_index</span><span class="p">]</span></div>
 
 </pre></div>
         </article>
