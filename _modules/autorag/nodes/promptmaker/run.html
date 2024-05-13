@@ -399,7 +399,7 @@
 <span class="kn">from</span> <span class="nn">autorag.strategy</span> <span class="kn">import</span> <span class="n">measure_speed</span><span class="p">,</span> <span class="n">filter_by_threshold</span><span class="p">,</span> <span class="n">select_best_average</span>
 <span class="kn">from</span> <span class="nn">autorag.support</span> <span class="kn">import</span> <span class="n">get_support_modules</span>
 <span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">validate_qa_dataset</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">make_combinations</span><span class="p">,</span> <span class="n">explode</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">make_combinations</span><span class="p">,</span> <span class="n">explode</span><span class="p">,</span> <span class="n">split_dataframe</span>
 
 
 <div class="viewcode-block" id="run_prompt_maker_node">
@@ -496,10 +496,14 @@
         <span class="n">generation_gt</span> <span class="o">=</span> <span class="n">qa_data</span><span class="p">[</span><span class="s1">&#39;generation_gt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="n">generation_gt</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">generation_gt</span><span class="p">))</span>
 
-        <span class="c1"># run evaluations</span>
-        <span class="n">evaluation_results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">result</span><span class="p">:</span> <span class="n">evaluate_one_prompt_maker_node</span><span class="p">(</span>
-            <span class="n">generator_callables</span><span class="p">,</span> <span class="n">generator_params</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;prompts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-            <span class="n">generation_gt</span><span class="p">,</span> <span class="n">general_strategy</span><span class="p">[</span><span class="s1">&#39;metrics&#39;</span><span class="p">],</span> <span class="n">project_dir</span><span class="p">),</span> <span class="n">results</span><span class="p">))</span>
+        <span class="n">all_prompts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">all_prompts</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;prompts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+        <span class="n">evaluation_result_all</span> <span class="o">=</span> <span class="n">evaluate_one_prompt_maker_node</span><span class="p">(</span><span class="n">all_prompts</span><span class="p">,</span> <span class="n">generator_callables</span><span class="p">,</span> <span class="n">generator_params</span><span class="p">,</span>
+                                                               <span class="n">generation_gt</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">),</span>
+                                                               <span class="n">general_strategy</span><span class="p">[</span><span class="s1">&#39;metrics&#39;</span><span class="p">],</span> <span class="n">project_dir</span><span class="p">)</span>
+        <span class="n">evaluation_results</span> <span class="o">=</span> <span class="n">split_dataframe</span><span class="p">(</span><span class="n">evaluation_result_all</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
         <span class="n">evaluation_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
             <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="n">filenames</span><span class="p">,</span>
@@ -551,9 +555,9 @@
 
 <div class="viewcode-block" id="evaluate_one_prompt_maker_node">
 <a class="viewcode-back" href="../../../../api_spec/autorag.nodes.promptmaker.html#autorag.nodes.promptmaker.run.evaluate_one_prompt_maker_node">[docs]</a>
-<span class="k">def</span> <span class="nf">evaluate_one_prompt_maker_node</span><span class="p">(</span><span class="n">generator_funcs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
+<span class="k">def</span> <span class="nf">evaluate_one_prompt_maker_node</span><span class="p">(</span><span class="n">prompts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                                   <span class="n">generator_funcs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
                                    <span class="n">generator_params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
-                                   <span class="n">prompts</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
                                    <span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
                                    <span class="n">metrics</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]],</span>
                                    <span class="n">project_dir</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
