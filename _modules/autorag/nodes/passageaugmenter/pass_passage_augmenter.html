@@ -396,7 +396,10 @@
 <div class="viewcode-block" id="pass_passage_augmenter">
 <a class="viewcode-back" href="../../../../api_spec/autorag.nodes.passageaugmenter.html#autorag.nodes.passageaugmenter.pass_passage_augmenter.pass_passage_augmenter">[docs]</a>
 <span class="nd">@passage_augmenter_node</span>
-<span class="k">def</span> <span class="nf">pass_passage_augmenter</span><span class="p">(</span><span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]):</span>
+<span class="k">def</span> <span class="nf">pass_passage_augmenter</span><span class="p">(</span><span class="n">ids_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                           <span class="n">contents_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                           <span class="n">scores_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
+                           <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Do not perform augmentation.</span>
 <span class="sd">    Return given passages, scores, and ids as is.</span>
