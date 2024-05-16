@@ -393,6 +393,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">normalize_unicode</span>
+
 
 <div class="viewcode-block" id="validate_qa_dataset">
 <a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.preprocess.validate_qa_dataset">[docs]</a>
@@ -447,6 +449,8 @@
         <span class="s2">&quot;query must be string type.&quot;</span>
     <span class="n">df</span><span class="p">[</span><span class="s1">&#39;retrieval_gt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;retrieval_gt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">cast_retrieval_gt</span><span class="p">)</span>
     <span class="n">df</span><span class="p">[</span><span class="s1">&#39;generation_gt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;generation_gt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">cast_generation_gt</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">normalize_unicode</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;generation_gt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;generation_gt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">normalize_unicode</span><span class="p">,</span> <span class="n">x</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">df</span></div>
 
 
@@ -480,6 +484,19 @@
 
     <span class="n">df</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">make_prev_next_id_metadata</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;prev_id&#39;</span><span class="p">))</span>
     <span class="n">df</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">make_prev_next_id_metadata</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;next_id&#39;</span><span class="p">))</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;contents&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">normalize_unicode</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">normalize_unicode_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_unicode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">normalize_unicode_metadata</span><span class="p">)</span>
 
     <span class="c1"># check every metadata have a prev_id, next_id key</span>
     <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="s1">&#39;prev_id&#39;</span> <span class="ow">in</span> <span class="n">metadata</span> <span class="k">for</span> <span class="n">metadata</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]),</span> <span class="s2">&quot;Every metadata must have a prev_id key.&quot;</span>
