@@ -242,6 +242,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../optimization/optimization.html">How optimization works</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../optimization/folder_structure.html">Folder Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../optimization/custom_config.html">Make custom config yaml file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../optimization/strategies.html">Strategy</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Evaluation Metrics</span></p>
 <ul>
@@ -396,7 +397,7 @@
 
 <span class="kn">from</span> <span class="nn">autorag.evaluate</span> <span class="kn">import</span> <span class="n">evaluate_generation</span>
 <span class="kn">from</span> <span class="nn">autorag.evaluate.util</span> <span class="kn">import</span> <span class="n">cast_metrics</span>
-<span class="kn">from</span> <span class="nn">autorag.strategy</span> <span class="kn">import</span> <span class="n">measure_speed</span><span class="p">,</span> <span class="n">filter_by_threshold</span><span class="p">,</span> <span class="n">select_best_average</span>
+<span class="kn">from</span> <span class="nn">autorag.strategy</span> <span class="kn">import</span> <span class="n">measure_speed</span><span class="p">,</span> <span class="n">filter_by_threshold</span><span class="p">,</span> <span class="n">select_best</span>
 
 
 <div class="viewcode-block" id="run_generator_node">
@@ -464,7 +465,8 @@
         <span class="n">results</span><span class="p">,</span> <span class="n">filenames</span> <span class="o">=</span> <span class="n">filter_by_threshold</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">average_times</span><span class="p">,</span> <span class="n">strategies</span><span class="p">[</span><span class="s1">&#39;speed_threshold&#39;</span><span class="p">],</span> <span class="n">filenames</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;token_threshold&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">results</span><span class="p">,</span> <span class="n">filenames</span> <span class="o">=</span> <span class="n">filter_by_threshold</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">token_usages</span><span class="p">,</span> <span class="n">strategies</span><span class="p">[</span><span class="s1">&#39;token_threshold&#39;</span><span class="p">],</span> <span class="n">filenames</span><span class="p">)</span>
-    <span class="n">selected_result</span><span class="p">,</span> <span class="n">selected_filename</span> <span class="o">=</span> <span class="n">select_best_average</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">metric_names</span><span class="p">,</span> <span class="n">filenames</span><span class="p">)</span>
+    <span class="n">selected_result</span><span class="p">,</span> <span class="n">selected_filename</span> <span class="o">=</span> <span class="n">select_best</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">metric_names</span><span class="p">,</span> <span class="n">filenames</span><span class="p">,</span>
+                                                     <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">))</span>
     <span class="n">best_result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">previous_result</span><span class="p">,</span> <span class="n">selected_result</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># add &#39;is_best&#39; column at summary file</span>

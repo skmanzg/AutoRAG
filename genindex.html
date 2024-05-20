@@ -241,6 +241,7 @@
 <li class="toctree-l1"><a class="reference internal" href="optimization/optimization.html">How optimization works</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimization/folder_structure.html">Folder Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimization/custom_config.html">Make custom config yaml file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization/strategies.html">Strategy</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Evaluation Metrics</span></p>
 <ul>
@@ -1914,7 +1915,11 @@
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.hybrid_rsf.score_fusion">score_fusion() (in module autorag.nodes.retrieval.hybrid_rsf)</a>
 </li>
+        <li><a href="api_spec/autorag.html#autorag.strategy.select_best">select_best() (in module autorag.strategy)</a>
+</li>
         <li><a href="api_spec/autorag.html#autorag.strategy.select_best_average">select_best_average() (in module autorag.strategy)</a>
+</li>
+        <li><a href="api_spec/autorag.html#autorag.strategy.select_best_rr">select_best_rr() (in module autorag.strategy)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.bm25.select_bm25_tokenizer">select_bm25_tokenizer() (in module autorag.nodes.retrieval.bm25)</a>
 </li>
@@ -1932,10 +1937,10 @@
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.set_input_embeddings">set_input_embeddings() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
 </li>
-        <li><a href="api_spec/autorag.html#autorag.web.set_page_config">set_page_config() (in module autorag.web)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.html#autorag.web.set_page_config">set_page_config() (in module autorag.web)</a>
+</li>
         <li><a href="api_spec/autorag.html#autorag.web.set_page_header">set_page_header() (in module autorag.web)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagefilter.html#autorag.nodes.passagefilter.similarity_percentile_cutoff.similarity_percentile_cutoff">similarity_percentile_cutoff() (in module autorag.nodes.passagefilter.similarity_percentile_cutoff)</a>
@@ -2024,6 +2029,8 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_spec/autorag.html#autorag.strategy.validate_strategy_inputs">validate_strategy_inputs() (in module autorag.strategy)</a>
+</li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.vectordb.vectordb">vectordb() (in module autorag.nodes.retrieval.vectordb)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.vectordb.vectordb_ingest">vectordb_ingest() (in module autorag.nodes.retrieval.vectordb)</a>

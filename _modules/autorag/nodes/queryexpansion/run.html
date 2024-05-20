@@ -242,6 +242,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../optimization/optimization.html">How optimization works</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../optimization/folder_structure.html">Folder Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../optimization/custom_config.html">Make custom config yaml file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../optimization/strategies.html">Strategy</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Evaluation Metrics</span></p>
 <ul>
@@ -397,7 +398,7 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.retrieval.run</span> <span class="kn">import</span> <span class="n">evaluate_retrieval_node</span>
-<span class="kn">from</span> <span class="nn">autorag.strategy</span> <span class="kn">import</span> <span class="n">measure_speed</span><span class="p">,</span> <span class="n">filter_by_threshold</span><span class="p">,</span> <span class="n">select_best_average</span>
+<span class="kn">from</span> <span class="nn">autorag.strategy</span> <span class="kn">import</span> <span class="n">measure_speed</span><span class="p">,</span> <span class="n">filter_by_threshold</span><span class="p">,</span> <span class="n">select_best</span>
 <span class="kn">from</span> <span class="nn">autorag.support</span> <span class="kn">import</span> <span class="n">get_support_modules</span>
 <span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">make_combinations</span><span class="p">,</span> <span class="n">explode</span>
 
@@ -485,7 +486,7 @@
         <span class="c1"># run evaluation</span>
         <span class="n">evaluation_results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">result</span><span class="p">:</span> <span class="n">evaluate_one_query_expansion_node</span><span class="p">(</span>
             <span class="n">retrieval_callables</span><span class="p">,</span> <span class="n">retrieval_params</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;queries&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">retrieval_gt</span><span class="p">,</span>
-            <span class="n">general_strategy</span><span class="p">[</span><span class="s1">&#39;metrics&#39;</span><span class="p">],</span> <span class="n">project_dir</span><span class="p">,</span> <span class="n">previous_result</span><span class="p">),</span> <span class="n">results</span><span class="p">))</span>
+            <span class="n">general_strategy</span><span class="p">[</span><span class="s1">&#39;metrics&#39;</span><span class="p">],</span> <span class="n">project_dir</span><span class="p">,</span> <span class="n">previous_result</span><span class="p">,</span> <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">)),</span> <span class="n">results</span><span class="p">))</span>
 
         <span class="n">evaluation_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
             <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="n">filenames</span><span class="p">,</span>
@@ -494,7 +495,8 @@
         <span class="p">})</span>
         <span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="n">summary_df</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">evaluation_df</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
 
-        <span class="n">best_result</span><span class="p">,</span> <span class="n">best_filename</span> <span class="o">=</span> <span class="n">select_best_average</span><span class="p">(</span><span class="n">evaluation_results</span><span class="p">,</span> <span class="n">general_strategy</span><span class="p">[</span><span class="s1">&#39;metrics&#39;</span><span class="p">],</span> <span class="n">filenames</span><span class="p">)</span>
+        <span class="n">best_result</span><span class="p">,</span> <span class="n">best_filename</span> <span class="o">=</span> <span class="n">select_best</span><span class="p">(</span><span class="n">evaluation_results</span><span class="p">,</span> <span class="n">general_strategy</span><span class="p">[</span><span class="s1">&#39;metrics&#39;</span><span class="p">],</span> <span class="n">filenames</span><span class="p">,</span>
+                                                 <span class="n">strategies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">))</span>
         <span class="c1"># change metric name columns to query_expansion_metric_name</span>
         <span class="n">best_result</span> <span class="o">=</span> <span class="n">best_result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
             <span class="n">metric_name</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;query_expansion_</span><span class="si">{</span><span class="n">metric_name</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">metric_name</span> <span class="ow">in</span> <span class="n">strategies</span><span class="p">[</span><span class="s1">&#39;metrics&#39;</span><span class="p">]})</span>
@@ -522,7 +524,8 @@
                                       <span class="n">retrieval_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
                                       <span class="n">metrics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
                                       <span class="n">project_dir</span><span class="p">,</span>
-                                      <span class="n">previous_result</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+                                      <span class="n">previous_result</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                                      <span class="n">strategy_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">previous_result</span><span class="p">[</span><span class="s1">&#39;queries&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expanded_queries</span>
     <span class="n">retrieval_results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span> <span class="n">previous_result</span><span class="o">=</span><span class="n">previous_result</span><span class="p">,</span> <span class="o">**</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
                                  <span class="nb">zip</span><span class="p">(</span><span class="n">retrieval_funcs</span><span class="p">,</span> <span class="n">retrieval_params</span><span class="p">)))</span>
@@ -530,7 +533,7 @@
                                                                     <span class="n">previous_result</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
                                                                     <span class="n">previous_result</span><span class="p">[</span><span class="s1">&#39;generation_gt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()),</span>
                                   <span class="n">retrieval_results</span><span class="p">))</span>
-    <span class="n">best_result</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">select_best_average</span><span class="p">(</span><span class="n">evaluation_results</span><span class="p">,</span> <span class="n">metrics</span><span class="p">)</span>
+    <span class="n">best_result</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">select_best</span><span class="p">(</span><span class="n">evaluation_results</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">strategy_name</span><span class="o">=</span><span class="n">strategy_name</span><span class="p">)</span>
     <span class="n">best_result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">previous_result</span><span class="p">,</span> <span class="n">best_result</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">best_result</span></div>
 
