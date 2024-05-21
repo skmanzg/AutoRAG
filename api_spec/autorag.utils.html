@@ -456,6 +456,28 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.dict_to_markdown">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">dict_to_markdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#dict_to_markdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.dict_to_markdown" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a dictionary to a Markdown formatted string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> – Dictionary to convert</p></li>
+<li><p><strong>level</strong> – Current level of heading (used for nested dictionaries)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Markdown formatted string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.dict_to_markdown_table">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">dict_to_markdown_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_column_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_column_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#dict_to_markdown_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.dict_to_markdown_table" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="autorag.utils.util.explode">
 <span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">explode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explode_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Collection</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#explode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.explode" title="Link to this definition">¶</a></dt>
 <dd><p>Explode index_values and explode_values.
@@ -487,6 +509,16 @@ It will flatten explode_values and keep index_values as a pair.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.utils.util.filter_dict_keys">
 <span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">filter_dict_keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#filter_dict_keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.filter_dict_keys" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.find_node_summary_files">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">find_node_summary_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#find_node_summary_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.find_node_summary_files" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.find_trial_dir">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">find_trial_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/utils/util.html#find_trial_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.find_trial_dir" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -707,10 +739,14 @@ And its elements must be list type.</p>
 <li><a class="reference internal" href="#autorag.utils.util.convert_datetime_string"><code class="docutils literal notranslate"><span class="pre">convert_datetime_string()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.convert_env_in_dict"><code class="docutils literal notranslate"><span class="pre">convert_env_in_dict()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.convert_string_to_tuple_in_dict"><code class="docutils literal notranslate"><span class="pre">convert_string_to_tuple_in_dict()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.dict_to_markdown"><code class="docutils literal notranslate"><span class="pre">dict_to_markdown()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.dict_to_markdown_table"><code class="docutils literal notranslate"><span class="pre">dict_to_markdown_table()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.explode"><code class="docutils literal notranslate"><span class="pre">explode()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.fetch_contents"><code class="docutils literal notranslate"><span class="pre">fetch_contents()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.fetch_one_content"><code class="docutils literal notranslate"><span class="pre">fetch_one_content()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.filter_dict_keys"><code class="docutils literal notranslate"><span class="pre">filter_dict_keys()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.find_node_summary_files"><code class="docutils literal notranslate"><span class="pre">find_node_summary_files()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.find_trial_dir"><code class="docutils literal notranslate"><span class="pre">find_trial_dir()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.flatten_apply"><code class="docutils literal notranslate"><span class="pre">flatten_apply()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.load_summary_file"><code class="docutils literal notranslate"><span class="pre">load_summary_file()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.make_batch"><code class="docutils literal notranslate"><span class="pre">make_batch()</span></code></a></li>

@@ -393,6 +393,7 @@
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -817,10 +818,86 @@
 
 
 
+<div class="viewcode-block" id="find_trial_dir">
+<a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.find_trial_dir">[docs]</a>
+<span class="k">def</span> <span class="nf">find_trial_dir</span><span class="p">(</span><span class="n">project_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="c1"># Pattern to match directories named with numbers</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="s1">&#39;[0-9]*&#39;</span><span class="p">)</span>
+    <span class="n">all_entries</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+
+    <span class="c1"># Filter out only directories</span>
+    <span class="n">trial_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">all_entries</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entry</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()]</span>
+
+    <span class="k">return</span> <span class="n">trial_dirs</span></div>
+
+
+
+<div class="viewcode-block" id="find_node_summary_files">
+<a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.find_node_summary_files">[docs]</a>
+<span class="k">def</span> <span class="nf">find_node_summary_files</span><span class="p">(</span><span class="n">trial_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="c1"># Find all summary.csv files recursively</span>
+    <span class="n">all_summary_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">trial_dir</span><span class="p">,</span> <span class="s1">&#39;**&#39;</span><span class="p">,</span> <span class="s1">&#39;summary.csv&#39;</span><span class="p">),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Filter out files that are at a lower directory level</span>
+    <span class="n">filtered_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">all_summary_files</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">trial_dir</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">filtered_files</span></div>
+
+
+
 <div class="viewcode-block" id="normalize_unicode">
 <a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.normalize_unicode">[docs]</a>
 <span class="k">def</span> <span class="nf">normalize_unicode</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s1">&#39;NFC&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="dict_to_markdown">
+<a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.dict_to_markdown">[docs]</a>
+<span class="k">def</span> <span class="nf">dict_to_markdown</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a dictionary to a Markdown formatted string.</span>
+
+<span class="sd">    :param d: Dictionary to convert</span>
+<span class="sd">    :param level: Current level of heading (used for nested dictionaries)</span>
+<span class="sd">    :return: Markdown formatted string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">markdown</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">markdown</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;#&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">level</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">markdown</span> <span class="o">+=</span> <span class="n">dict_to_markdown</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">markdown</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;#&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">level</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">markdown</span> <span class="o">+=</span> <span class="n">dict_to_markdown</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">markdown</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">markdown</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;#&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">level</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">markdown</span></div>
+
+
+
+<div class="viewcode-block" id="dict_to_markdown_table">
+<a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.util.dict_to_markdown_table">[docs]</a>
+<span class="k">def</span> <span class="nf">dict_to_markdown_table</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key_column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value_column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="c1"># Check if the input is a dictionary</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input must be a dictionary&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create the header of the table</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;| </span><span class="si">{</span><span class="n">key_column_name</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">value_column_name</span><span class="si">}</span><span class="s2"> |</span><span class="se">\n</span><span class="s2">| :---: | :-----: |</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="c1"># Create the rows of the table</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">rows</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;| </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> |</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="c1"># Combine header and rows</span>
+    <span class="n">markdown_table</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">rows</span>
+    <span class="k">return</span> <span class="n">markdown_table</span></div>
 
 </pre></div>
         </article>
