@@ -437,7 +437,6 @@
 <li class="toctree-l4"><a class="reference internal" href="autorag.evaluate.metric.html#module-autorag.evaluate.metric.generation">autorag.evaluate.metric.generation module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.evaluate.metric.html#module-autorag.evaluate.metric.retrieval">autorag.evaluate.metric.retrieval module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.evaluate.metric.html#module-autorag.evaluate.metric.retrieval_contents">autorag.evaluate.metric.retrieval_contents module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autorag.evaluate.metric.html#autorag-evaluate-metric-retrieval-no-gt-module">autorag.evaluate.metric.retrieval_no_gt module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.evaluate.metric.html#module-autorag.evaluate.metric.util">autorag.evaluate.metric.util module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autorag.evaluate.metric.html#module-autorag.evaluate.metric">Module contents</a></li>
 </ul>
@@ -648,6 +647,39 @@
 </section>
 <section id="module-autorag.cli">
 <span id="autorag-cli-module"></span><h2>autorag.cli module<a class="headerlink" href="#module-autorag.cli" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-autorag.dashboard">
+<span id="autorag-dashboard-module"></span><h2>autorag.dashboard module<a class="headerlink" href="#module-autorag.dashboard" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.dashboard.find_node_dir">
+<span class="sig-prename descclassname"><span class="pre">autorag.dashboard.</span></span><span class="sig-name descname"><span class="pre">find_node_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/dashboard.html#find_node_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.dashboard.find_node_dir" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.dashboard.get_metric_values">
+<span class="sig-prename descclassname"><span class="pre">autorag.dashboard.</span></span><span class="sig-name descname"><span class="pre">get_metric_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_summary_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../_modules/autorag/dashboard.html#get_metric_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.dashboard.get_metric_values" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.dashboard.make_trial_summary_md">
+<span class="sig-prename descclassname"><span class="pre">autorag.dashboard.</span></span><span class="sig-name descname"><span class="pre">make_trial_summary_md</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/dashboard.html#make_trial_summary_md"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.dashboard.make_trial_summary_md" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.dashboard.node_view">
+<span class="sig-prename descclassname"><span class="pre">autorag.dashboard.</span></span><span class="sig-name descname"><span class="pre">node_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/dashboard.html#node_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.dashboard.node_view" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.dashboard.run">
+<span class="sig-prename descclassname"><span class="pre">autorag.dashboard.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/dashboard.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.dashboard.run" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.dashboard.yaml_to_markdown">
+<span class="sig-prename descclassname"><span class="pre">autorag.dashboard.</span></span><span class="sig-name descname"><span class="pre">yaml_to_markdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yaml_filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/dashboard.html#yaml_to_markdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.dashboard.yaml_to_markdown" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-autorag.deploy">
 <span id="autorag-deploy-module"></span><h2>autorag.deploy module<a class="headerlink" href="#module-autorag.deploy" title="Link to this heading">¶</a></h2>
@@ -1111,6 +1143,15 @@ The metadata will be returned even if you did not give input ‘metadatas’ par
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-autorag.cli">autorag.cli module</a></li>
+<li><a class="reference internal" href="#module-autorag.dashboard">autorag.dashboard module</a><ul>
+<li><a class="reference internal" href="#autorag.dashboard.find_node_dir"><code class="docutils literal notranslate"><span class="pre">find_node_dir()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.dashboard.get_metric_values"><code class="docutils literal notranslate"><span class="pre">get_metric_values()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.dashboard.make_trial_summary_md"><code class="docutils literal notranslate"><span class="pre">make_trial_summary_md()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.dashboard.node_view"><code class="docutils literal notranslate"><span class="pre">node_view()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.dashboard.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.dashboard.yaml_to_markdown"><code class="docutils literal notranslate"><span class="pre">yaml_to_markdown()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-autorag.deploy">autorag.deploy module</a><ul>
 <li><a class="reference internal" href="#autorag.deploy.Runner"><code class="docutils literal notranslate"><span class="pre">Runner</span></code></a><ul>
 <li><a class="reference internal" href="#autorag.deploy.Runner.from_trial_folder"><code class="docutils literal notranslate"><span class="pre">Runner.from_trial_folder()</span></code></a></li>
