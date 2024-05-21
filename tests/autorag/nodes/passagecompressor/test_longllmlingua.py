@@ -1,26 +1,26 @@
-from typing import List
+import pandas as pd
 
 from autorag.nodes.passagecompressor import longllmlingua
-
-queries = [
-    "What is the capital of France?",
-    "What is the meaning of life?",
-]
-retrieved_contents = [
-    ["Paris is the capital of France.", "France is a country in Europe.", "France is a member of the EU."],
-    ["The meaning of life is 42.", "The meaning of life is to be happy.", "The meaning of life is to be kind."],
-]
+from tests.autorag.nodes.passagecompressor.test_base_passage_compressor import (queries, retrieved_contents,
+                                                                                check_result, df)
 
 
 def test_longllmlingua_default():
     result = longllmlingua.__wrapped__(queries, retrieved_contents, [], [])
-    print(result)
     check_result(result)
 
 
-def check_result(result: List[str]):
-    assert len(result) == len(queries)
-    for r in result:
-        assert isinstance(r, str)
-        assert len(r) > 0
-        assert bool(r) is True
+def test_refine_node():
+    result = longllmlingua(
+        "project_dir",
+        df,
+        max_tokens=75,
+    )
+    assert isinstance(result, pd.DataFrame)
+    contents = result['retrieved_contents'].tolist()
+    assert isinstance(contents, list)
+    assert len(contents) == len(queries)
+    assert isinstance(contents[0], list)
+    assert len(contents[0]) == 1
+    assert isinstance(contents[0][0], str)
+    assert bool(contents[0][0]) is True
