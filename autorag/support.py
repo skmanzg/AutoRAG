@@ -27,6 +27,7 @@ def get_support_modules(module_name: str) -> Callable:
         'hybrid_dbsf': ('autorag.nodes.retrieval', 'hybrid_dbsf'),
         # passage_augmenter
         'prev_next_augmenter': ('autorag.nodes.passageaugmenter', 'prev_next_augmenter'),
+        'pass_passage_augmenter': ('autorag.nodes.passageaugmenter', 'pass_passage_augmenter'),
         # passage_reranker
         'monot5': ('autorag.nodes.passagereranker', 'monot5'),
         'tart': ('autorag.nodes.passagereranker', 'tart'),
@@ -46,6 +47,8 @@ def get_support_modules(module_name: str) -> Callable:
         'similarity_threshold_cutoff': ('autorag.nodes.passagefilter', 'similarity_threshold_cutoff'),
         'similarity_percentile_cutoff': ('autorag.nodes.passagefilter', 'similarity_percentile_cutoff'),
         'recency_filter': ('autorag.nodes.passagefilter', 'recency_filter'),
+        'threshold_cutoff': ('autorag.nodes.passagefilter', 'threshold_cutoff'),
+        'percentile_cutoff': ('autorag.nodes.passagefilter', 'percentile_cutoff'),
         # passage_compressor
         'tree_summarize': ('autorag.nodes.passagecompressor', 'tree_summarize'),
         'pass_compressor': ('autorag.nodes.passagecompressor', 'pass_compressor'),
@@ -56,6 +59,7 @@ def get_support_modules(module_name: str) -> Callable:
         # generator
         'llama_index_llm': ('autorag.nodes.generator', 'llama_index_llm'),
         'vllm': ('autorag.nodes.generator', 'vllm'),
+        'openai_llm': ('autorag.nodes.generator', 'openai_llm'),
     }
     return dynamically_find_function(module_name, support_modules)
 

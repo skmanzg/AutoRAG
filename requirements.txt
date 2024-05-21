@@ -1,7 +1,7 @@
 numpy
 pandas
 tqdm
-tiktoken  # for counting token
+tiktoken>=0.7.0  # for counting token
 openai>=1.0.0
 rank_bm25  # for bm25 retrieval
 transformers
@@ -13,7 +13,7 @@ sacrebleu  # for bleu score
 evaluate  # for meteor and other scores
 rouge_score  # for rouge score
 rich  # for pretty logging
-chromadb # for vectordb retrieval
+chromadb>=0.5.0 # for vectordb retrieval
 click  # for cli
 fastapi  # for api server
 uvicorn  # for api server
@@ -27,6 +27,8 @@ bert_score # for bert score
 sentence-transformers # for sentence transformer reranker
 FlagEmbedding # for flag embedding reranker
 ragas # evaluation data generation & evaluation
+ray # for parallel processing
+kiwipiepy  # for BM25 Korean tokenizer
 
 ### LlamaIndex ###
 llama-index>=0.10.1
@@ -38,6 +40,8 @@ llama-index-embeddings-huggingface
 llama-index-llms-openai
 llama-index-llms-huggingface
 llama-index-llms-openai-like
+# Retriever
+llama-index-retrievers-bm25
 
 # WebUI
 streamlit

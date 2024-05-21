@@ -3,6 +3,8 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
+from autorag.utils.util import normalize_unicode
+
 
 def validate_qa_dataset(df: pd.DataFrame):
     columns = ['qid', 'query', 'retrieval_gt', 'generation_gt']
@@ -49,6 +51,8 @@ def cast_qa_dataset(df: pd.DataFrame):
         "query must be string type."
     df['retrieval_gt'] = df['retrieval_gt'].apply(cast_retrieval_gt)
     df['generation_gt'] = df['generation_gt'].apply(cast_generation_gt)
+    df['query'] = df['query'].apply(normalize_unicode)
+    df['generation_gt'] = df['generation_gt'].apply(lambda x: list(map(normalize_unicode, x)))
     return df
 
 
@@ -80,8 +84,36 @@ def cast_corpus_dataset(df: pd.DataFrame):
     df['metadata'] = df['metadata'].apply(lambda x: make_prev_next_id_metadata(x, 'prev_id'))
     df['metadata'] = df['metadata'].apply(lambda x: make_prev_next_id_metadata(x, 'next_id'))
 
+    df['contents'] = df['contents'].apply(normalize_unicode)
+
+    def normalize_unicode_metadata(metadata: dict):
+        result = {}
+        for key, value in metadata.items():
+            if isinstance(value, str):
+                result[key] = normalize_unicode(value)
+            else:
+                result[key] = value
+        return result
+
+    df['metadata'] = df['metadata'].apply(normalize_unicode_metadata)
+
     # check every metadata have a prev_id, next_id key
     assert all('prev_id' in metadata for metadata in df['metadata']), "Every metadata must have a prev_id key."
     assert all('next_id' in metadata for metadata in df['metadata']), "Every metadata must have a next_id key."
 
     return df
+
+
+def validate_qa_from_corpus_dataset(qa_df: pd.DataFrame, corpus_df: pd.DataFrame):
+    qa_ids = []
+    for retrieval_gt in qa_df['retrieval_gt'].tolist():
+        if isinstance(retrieval_gt, list) and (retrieval_gt[0] != [] or any(bool(g) is True for g in retrieval_gt)):
+            for gt in retrieval_gt:
+                qa_ids.extend(gt)
+        elif isinstance(retrieval_gt, np.ndarray) and retrieval_gt[0].size > 0:
+            for gt in retrieval_gt:
+                qa_ids.extend(gt)
+
+    no_exist_ids = list(filter(lambda qa_id: corpus_df[corpus_df['doc_id'] == qa_id].empty, qa_ids))
+
+    assert len(no_exist_ids) == 0, f"{len(no_exist_ids)} doc_ids in retrieval_gt do not exist in corpus_df."

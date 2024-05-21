@@ -1,11 +1,13 @@
 import ast
 import asyncio
+import datetime
 import functools
 import itertools
 import logging
 import os
 import re
 import string
+import unicodedata
 from copy import deepcopy
 from typing import List, Callable, Dict, Optional, Any, Collection
 
@@ -17,16 +19,25 @@ logger = logging.getLogger("AutoRAG")
 
 def fetch_contents(corpus_data: pd.DataFrame, ids: List[List[str]],
                    column_name: str = 'contents') -> List[List[Any]]:
-    flat_ids = itertools.chain.from_iterable(ids)
-    contents = list(map(lambda x: corpus_data.loc[lambda row: row['doc_id'] == x][column_name].values[0], flat_ids))
+    def fetch_contents_pure(ids: List[str], corpus_data: pd.DataFrame, column_name: str):
+        return list(map(lambda x: fetch_one_content(corpus_data, x, column_name), ids))
 
-    result = []
-    idx = 0
-    for sublist in ids:
-        result.append(contents[idx:idx + len(sublist)])
-        idx += len(sublist)
-
+    result = flatten_apply(fetch_contents_pure, ids, corpus_data=corpus_data, column_name=column_name)
     return result
+
+
+def fetch_one_content(corpus_data: pd.DataFrame, id_: str,
+                      column_name: str = 'contents') -> Any:
+    if isinstance(id_, str):
+        if id_ in ['', ""]:
+            return None
+        fetch_result = corpus_data[corpus_data['doc_id'] == id_]
+        if fetch_result.empty:
+            raise ValueError(f"doc_id: {id_} not found in corpus_data.")
+        else:
+            return fetch_result[column_name].iloc[0]
+    else:
+        return None
 
 
 def result_to_dataframe(column_names: List[str]):
@@ -71,10 +82,29 @@ def load_summary_file(summary_path: str,
         raise ValueError(f"{dict_columns} must be in summary_df.columns.")
 
     def convert_dict(elem):
-        return ast.literal_eval(elem)
+        try:
+            return ast.literal_eval(elem)
+        except:
+            # convert datetime or date to its object (recency filter)
+            date_object = convert_datetime_string(elem)
+            if date_object is None:
+                raise ValueError(f"Malformed dict received : {elem}\nCan't convert to dict properly")
+            return {'threshold': date_object}
 
     summary_df[dict_columns] = summary_df[dict_columns].applymap(convert_dict)
     return summary_df
+
+
+def convert_datetime_string(s):
+    # Regex to extract datetime arguments from the string
+    m = re.search(r"(datetime|date)(\((\d+)(,\s*\d+)*\))", s)
+    if m:
+        args = ast.literal_eval(m.group(2))
+        if m.group(1) == 'datetime':
+            return datetime.datetime(*args)
+        elif m.group(1) == 'date':
+            return datetime.date(*args)
+    return None
 
 
 def make_combinations(target_dict: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -326,3 +356,12 @@ def filter_dict_keys(dict_, keys: List[str]):
         else:
             raise KeyError(f"Key '{key}' not found in dictionary.")
     return result
+
+
+def split_dataframe(df, chunk_size):
+    num_chunks = len(df) // chunk_size + 1 if len(df) % chunk_size != 0 else len(df) // chunk_size
+    return list(map(lambda x: df[x * chunk_size:(x + 1) * chunk_size], range(num_chunks)))
+
+
+def normalize_unicode(text: str) -> str:
+    return unicodedata.normalize('NFC', text)
