@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=387cc868" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=87e54e7c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
     
     
@@ -296,6 +296,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/passage_compressor/passage_compressor.html">6. Passage_Compressor</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 6. Passage_Compressor</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_compressor/tree_summarize.html">Tree Summarize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/passage_compressor/refine.html">Refine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/passage_compressor/longllmlingua.html">Long LLM Lingua</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/prompt_maker/prompt_maker.html">7. Prompt Maker</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of 7. Prompt Maker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -698,6 +699,13 @@
 </li>
         </ul></li>
         <li>
+    autorag.nodes.passagecompressor.longllmlingua
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.passagecompressor.html#module-autorag.nodes.passagecompressor.longllmlingua">module</a>
+</li>
+        </ul></li>
+        <li>
     autorag.nodes.passagecompressor.pass_compressor
 
         <ul>
@@ -753,6 +761,8 @@
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.percentile_cutoff">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagefilter.recency
 
@@ -760,8 +770,6 @@
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.recency">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagefilter.run
 
@@ -1450,9 +1458,11 @@
 </li>
         <li><a href="api_spec/autorag.nodes.generator.html#autorag.nodes.generator.llama_index_llm.llama_index_llm">llama_index_llm() (in module autorag.nodes.generator.llama_index_llm)</a>
 </li>
+        <li><a href="api_spec/autorag.data.corpus.html#autorag.data.corpus.llama_index.llama_text_node_to_parquet">llama_text_node_to_parquet() (in module autorag.data.corpus.llama_index)</a>
+</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_spec/autorag.data.corpus.html#autorag.data.corpus.llama_index.llama_text_node_to_parquet">llama_text_node_to_parquet() (in module autorag.data.corpus.llama_index)</a>
+        <li><a href="api_spec/autorag.nodes.passagecompressor.html#autorag.nodes.passagecompressor.longllmlingua.llmlingua_pure">llmlingua_pure() (in module autorag.nodes.passagecompressor.longllmlingua)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.base.load_bm25_corpus">load_bm25_corpus() (in module autorag.nodes.retrieval.base)</a>
 </li>
@@ -1461,6 +1471,8 @@
         <li><a href="api_spec/autorag.utils.html#autorag.utils.util.load_summary_file">load_summary_file() (in module autorag.utils.util)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.promptmaker.html#autorag.nodes.promptmaker.long_context_reorder.long_context_reorder">long_context_reorder() (in module autorag.nodes.promptmaker.long_context_reorder)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.passagecompressor.html#autorag.nodes.passagecompressor.longllmlingua.longllmlingua">longllmlingua() (in module autorag.nodes.passagecompressor.longllmlingua)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -1583,6 +1595,8 @@
           <li><a href="api_spec/autorag.nodes.passagecompressor.html#module-autorag.nodes.passagecompressor">autorag.nodes.passagecompressor</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagecompressor.html#module-autorag.nodes.passagecompressor.base">autorag.nodes.passagecompressor.base</a>
+</li>
+          <li><a href="api_spec/autorag.nodes.passagecompressor.html#module-autorag.nodes.passagecompressor.longllmlingua">autorag.nodes.passagecompressor.longllmlingua</a>
 </li>
           <li><a href="api_spec/autorag.nodes.passagecompressor.html#module-autorag.nodes.passagecompressor.pass_compressor">autorag.nodes.passagecompressor.pass_compressor</a>
 </li>
@@ -2104,6 +2118,6 @@
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/tabs.js?v=3ee01567"></script>
-    <script src="_static/design-tabs.js?v=36754332"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
     </body>
 </html>
