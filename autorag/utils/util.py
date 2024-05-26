@@ -15,6 +15,8 @@ from typing import List, Callable, Dict, Optional, Any, Collection
 import pandas as pd
 import tiktoken
 
+from autorag.support import get_support_modules
+
 logger = logging.getLogger("AutoRAG")
 
 
@@ -430,3 +432,20 @@ def dict_to_markdown_table(data, key_column_name: str, value_column_name: str):
     # Combine header and rows
     markdown_table = header + rows
     return markdown_table
+
+
+def make_generator_callable_params(strategy_dict: Dict):
+    node_dict = deepcopy(strategy_dict)
+    generator_module_list: Optional[List[Dict]] = node_dict.pop('generator_modules', None)
+    if generator_module_list is None:
+        generator_module_list = [{
+            'module_type': 'llama_index_llm',
+            'llm': 'openai',
+            'model': 'gpt-3.5-turbo',
+        }]
+    node_params = node_dict
+    modules = list(map(lambda module_dict: get_support_modules(module_dict.pop('module_type')),
+                       generator_module_list))
+    param_combinations = list(map(lambda module_dict: make_combinations({**module_dict, **node_params}),
+                                  generator_module_list))
+    return explode(modules, param_combinations)

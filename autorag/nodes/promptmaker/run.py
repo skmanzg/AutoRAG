@@ -1,7 +1,6 @@
 import os
 import pathlib
-from copy import deepcopy
-from typing import List, Callable, Dict, Optional, Union
+from typing import List, Callable, Dict, Union
 
 import pandas as pd
 import tokenlog
@@ -9,9 +8,8 @@ import tokenlog
 from autorag.evaluate import evaluate_generation
 from autorag.evaluate.util import cast_metrics
 from autorag.strategy import measure_speed, filter_by_threshold, select_best
-from autorag.support import get_support_modules
 from autorag.utils import validate_qa_dataset
-from autorag.utils.util import make_combinations, explode, split_dataframe
+from autorag.utils.util import split_dataframe, make_generator_callable_params
 
 
 def run_prompt_maker_node(modules: List[Callable],
@@ -142,23 +140,6 @@ def run_prompt_maker_node(modules: List[Callable],
     best_result.to_parquet(os.path.join(node_dir, f"best_{os.path.splitext(best_filename)[0]}.parquet"), index=False)
 
     return best_result
-
-
-def make_generator_callable_params(strategy_dict: Dict):
-    node_dict = deepcopy(strategy_dict)
-    generator_module_list: Optional[List[Dict]] = node_dict.pop('generator_modules', None)
-    if generator_module_list is None:
-        generator_module_list = [{
-            'module_type': 'llama_index_llm',
-            'llm': 'openai',
-            'model': 'gpt-3.5-turbo',
-        }]
-    node_params = node_dict
-    modules = list(map(lambda module_dict: get_support_modules(module_dict.pop('module_type')),
-                       generator_module_list))
-    param_combinations = list(map(lambda module_dict: make_combinations({**module_dict, **node_params}),
-                                  generator_module_list))
-    return explode(modules, param_combinations)
 
 
 def evaluate_one_prompt_maker_node(prompts: List[str],

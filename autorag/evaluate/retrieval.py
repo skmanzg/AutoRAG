@@ -5,13 +5,13 @@ from typing import List, Callable, Any, Tuple, Optional, Union, Dict
 import pandas as pd
 
 from autorag.evaluate.metric import (retrieval_recall, retrieval_precision, retrieval_f1, retrieval_ndcg, retrieval_mrr,
-                                     retrieval_map)
+                                     retrieval_map, retrieval_precision_tonic)
 from autorag.evaluate.util import cast_metrics
 
 RETRIEVAL_METRIC_FUNC_DICT = {func.__name__: func for func in
                               [retrieval_recall, retrieval_precision, retrieval_f1, retrieval_ndcg, retrieval_mrr,
                                retrieval_map]}
-RETRIEVAL_NO_GT_METRIC_FUNC_DICT = {func.__name__: func for func in []}
+RETRIEVAL_NO_GT_METRIC_FUNC_DICT = {func.__name__: func for func in [retrieval_precision_tonic]}
 
 
 def evaluate_retrieval(retrieval_gt: List[List[List[str]]], metrics: Union[List[str], List[Dict]],
@@ -46,7 +46,7 @@ def evaluate_retrieval(retrieval_gt: List[List[List[str]]], metrics: Union[List[
                     if generation_gt is None:
                         raise ValueError(f"To using {metric_name}, you have to provide generation ground truth.")
                     metric_scores[metric_name] = metric_func(queries=queries, retrieved_contents=contents,
-                                                             generation_gt=generation_gt, **metric_param)
+                                                             **metric_param)
                 else:
                     warnings.warn(
                         f"metric {metric_name} is not in supported metrics: {RETRIEVAL_METRIC_FUNC_DICT.keys()}"
