@@ -255,6 +255,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/query_expansion/query_expansion.html"><strong>1. Query Expansion</strong></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 1. Query Expansion</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="nodes/query_expansion/query_decompose.html">Query Decompose</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes/query_expansion/hyde.html">HyDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes/query_expansion/multi_query_expansion.html">Multi Query Expansion</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="nodes/retrieval/retrieval.html">2. Retrieval</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 2. Retrieval</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -761,8 +762,6 @@
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.percentile_cutoff">module</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagefilter.recency
 
@@ -770,6 +769,8 @@
           <li><a href="api_spec/autorag.nodes.passagefilter.html#module-autorag.nodes.passagefilter.recency">module</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li>
     autorag.nodes.passagefilter.run
 
@@ -985,6 +986,13 @@
 
         <ul>
           <li><a href="api_spec/autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion.hyde">module</a>
+</li>
+        </ul></li>
+        <li>
+    autorag.nodes.queryexpansion.multi_query_expansion
+
+        <ul>
+          <li><a href="api_spec/autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion.multi_query_expansion">module</a>
 </li>
         </ul></li>
         <li>
@@ -1362,10 +1370,10 @@
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.tart.html#autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification.get_encoder">get_encoder() (autorag.nodes.passagereranker.tart.modeling_enc_t5.EncT5ForSequenceClassification method)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.data.utils.html#autorag.data.utils.util.get_file_metadata">get_file_metadata() (in module autorag.data.utils.util)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.get_hybrid_execution_times">get_hybrid_execution_times() (in module autorag.nodes.retrieval.run)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.get_ids_and_scores">get_ids_and_scores() (in module autorag.nodes.retrieval.run)</a>
@@ -1375,6 +1383,8 @@
         <li><a href="api_spec/autorag.html#autorag.dashboard.get_metric_values">get_metric_values() (in module autorag.dashboard)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.get_module_params">get_module_params() (in module autorag.nodes.retrieval.run)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.multi_query_expansion.get_multi_query_expansion">get_multi_query_expansion() (in module autorag.nodes.queryexpansion.multi_query_expansion)</a>
 </li>
         <li><a href="api_spec/autorag.schema.html#autorag.schema.node.Node.get_param_combinations">get_param_combinations() (autorag.schema.node.Node method)</a>
 </li>
@@ -1680,6 +1690,8 @@
 </li>
           <li><a href="api_spec/autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion.hyde">autorag.nodes.queryexpansion.hyde</a>
 </li>
+          <li><a href="api_spec/autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion.multi_query_expansion">autorag.nodes.queryexpansion.multi_query_expansion</a>
+</li>
           <li><a href="api_spec/autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion.pass_query_expansion">autorag.nodes.queryexpansion.pass_query_expansion</a>
 </li>
           <li><a href="api_spec/autorag.nodes.queryexpansion.html#module-autorag.nodes.queryexpansion.query_decompose">autorag.nodes.queryexpansion.query_decompose</a>
@@ -1740,6 +1752,8 @@
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.monot5.monot5">monot5() (in module autorag.nodes.passagereranker.monot5)</a>
 </li>
         <li><a href="api_spec/autorag.nodes.passagereranker.html#autorag.nodes.passagereranker.monot5.monot5_run_model">monot5_run_model() (in module autorag.nodes.passagereranker.monot5)</a>
+</li>
+        <li><a href="api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.multi_query_expansion.multi_query_expansion">multi_query_expansion() (in module autorag.nodes.queryexpansion.multi_query_expansion)</a>
 </li>
     </ul></td>
   </tr></table>

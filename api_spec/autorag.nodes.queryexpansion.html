@@ -257,6 +257,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/query_expansion/query_expansion.html"><strong>1. Query Expansion</strong></a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 1. Query Expansion</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/query_expansion/query_decompose.html">Query Decompose</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/query_expansion/hyde.html">HyDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/query_expansion/multi_query_expansion.html">Multi Query Expansion</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/retrieval/retrieval.html">2. Retrieval</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 2. Retrieval</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -430,6 +431,35 @@ And then, retrieve passages using hypothetical passage as a query.
 </dd></dl>
 
 </section>
+<section id="module-autorag.nodes.queryexpansion.multi_query_expansion">
+<span id="autorag-nodes-queryexpansion-multi-query-expansion-module"></span><h2>autorag.nodes.queryexpansion.multi_query_expansion module<a class="headerlink" href="#module-autorag.nodes.queryexpansion.multi_query_expansion" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.queryexpansion.multi_query_expansion.get_multi_query_expansion">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.queryexpansion.multi_query_expansion.</span></span><span class="sig-name descname"><span class="pre">get_multi_query_expansion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">answer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/queryexpansion/multi_query_expansion.html#get_multi_query_expansion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.queryexpansion.multi_query_expansion.get_multi_query_expansion" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.queryexpansion.multi_query_expansion.multi_query_expansion">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.queryexpansion.multi_query_expansion.</span></span><span class="sig-name descname"><span class="pre">multi_query_expansion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generator_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'You</span> <span class="pre">are</span> <span class="pre">an</span> <span class="pre">AI</span> <span class="pre">language</span> <span class="pre">model</span> <span class="pre">assistant.</span> <span class="pre">\n</span>&#160;&#160;&#160; <span class="pre">Your</span> <span class="pre">task</span> <span class="pre">is</span> <span class="pre">to</span> <span class="pre">generate</span> <span class="pre">3</span> <span class="pre">different</span> <span class="pre">versions</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">given</span> <span class="pre">user</span> <span class="pre">\n</span>&#160;&#160;&#160; <span class="pre">question</span> <span class="pre">to</span> <span class="pre">retrieve</span> <span class="pre">relevant</span> <span class="pre">documents</span> <span class="pre">from</span> <span class="pre">a</span> <span class="pre">vector</span>&#160; <span class="pre">database.</span> <span class="pre">\n</span>&#160;&#160;&#160; <span class="pre">By</span> <span class="pre">generating</span> <span class="pre">multiple</span> <span class="pre">perspectives</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">user</span> <span class="pre">question,</span> <span class="pre">\n</span>&#160;&#160;&#160; <span class="pre">your</span> <span class="pre">goal</span> <span class="pre">is</span> <span class="pre">to</span> <span class="pre">help</span> <span class="pre">the</span> <span class="pre">user</span> <span class="pre">overcome</span> <span class="pre">some</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">limitations</span> <span class="pre">\n</span>&#160;&#160;&#160; <span class="pre">of</span> <span class="pre">distance-based</span> <span class="pre">similarity</span> <span class="pre">search.</span> <span class="pre">Provide</span> <span class="pre">these</span> <span class="pre">alternative</span> <span class="pre">\n</span>&#160;&#160;&#160; <span class="pre">questions</span> <span class="pre">separated</span> <span class="pre">by</span> <span class="pre">newlines.</span> <span class="pre">Original</span> <span class="pre">question:</span> <span class="pre">{question}'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/queryexpansion/multi_query_expansion.html#multi_query_expansion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.queryexpansion.multi_query_expansion.multi_query_expansion" title="Link to this definition">¶</a></dt>
+<dd><p>Expand a list of queries using a multi-query expansion approach.
+LLM model generate 3 different versions queries for each input query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queries</strong> – List[str], queries to decompose.</p></li>
+<li><p><strong>generator_func</strong> – Callable, generator functions.</p></li>
+<li><p><strong>generator_params</strong> – Dict, generator parameters.</p></li>
+<li><p><strong>prompt</strong> – str, prompt to use for multi-query expansion.
+default prompt comes from langchain MultiQueryRetriever default query prompt.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[List[str]], list of expansion query.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="module-autorag.nodes.queryexpansion.pass_query_expansion">
 <span id="autorag-nodes-queryexpansion-pass-query-expansion-module"></span><h2>autorag.nodes.queryexpansion.pass_query_expansion module<a class="headerlink" href="#module-autorag.nodes.queryexpansion.pass_query_expansion" title="Link to this heading">¶</a></h2>
 <dl class="py function">
@@ -590,6 +620,11 @@ In this case, it would be qa data.</p></li>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.queryexpansion.hyde">autorag.nodes.queryexpansion.hyde module</a><ul>
 <li><a class="reference internal" href="#autorag.nodes.queryexpansion.hyde.hyde"><code class="docutils literal notranslate"><span class="pre">hyde()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.queryexpansion.multi_query_expansion">autorag.nodes.queryexpansion.multi_query_expansion module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.queryexpansion.multi_query_expansion.get_multi_query_expansion"><code class="docutils literal notranslate"><span class="pre">get_multi_query_expansion()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.queryexpansion.multi_query_expansion.multi_query_expansion"><code class="docutils literal notranslate"><span class="pre">multi_query_expansion()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.queryexpansion.pass_query_expansion">autorag.nodes.queryexpansion.pass_query_expansion module</a><ul>
