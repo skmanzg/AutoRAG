@@ -390,13 +390,11 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for autorag.nodes.queryexpansion.hyde</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span>
 
-<span class="kn">from</span> <span class="nn">llama_index.core.service_context_elements.llm_predictor</span> <span class="kn">import</span> <span class="n">LLMPredictorType</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.queryexpansion.base</span> <span class="kn">import</span> <span class="n">query_expansion_node</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
 
 <span class="n">hyde_prompt</span> <span class="o">=</span> <span class="s2">&quot;Please write a passage to answer the question&quot;</span>
 
@@ -404,37 +402,27 @@
 <div class="viewcode-block" id="hyde">
 <a class="viewcode-back" href="../../../../api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.hyde.hyde">[docs]</a>
 <span class="nd">@query_expansion_node</span>
-<span class="k">def</span> <span class="nf">hyde</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">llm</span><span class="p">:</span> <span class="n">LLMPredictorType</span><span class="p">,</span>
-         <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">hyde_prompt</span><span class="p">,</span>
-         <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="k">def</span> <span class="nf">hyde</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+         <span class="n">generator_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+         <span class="n">generator_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+         <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">hyde_prompt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    HyDE, which inspired by &quot;Precise Zero-shot Dense Retrieval without Relevance Labels&quot; (https://arxiv.org/pdf/2212.10496.pdf)</span>
 <span class="sd">    LLM model creates a hypothetical passage.</span>
 <span class="sd">    And then, retrieve passages using hypothetical passage as a query.</span>
 <span class="sd">    :param queries: List[str], queries to retrieve.</span>
-<span class="sd">    :param llm: llm to use for hypothetical passage generation.</span>
+<span class="sd">    :param generator_func: Callable, generator functions.</span>
+<span class="sd">    :param generator_params: Dict, generator parameters.</span>
 <span class="sd">    :param prompt: prompt to use when generating hypothetical passage</span>
-<span class="sd">    :param batch: Batch size for llm.</span>
-<span class="sd">        Default is 16.</span>
 <span class="sd">    :return: List[List[str]], List of hyde results.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Run async query_decompose_pure function</span>
-    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">hyde_pure</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">llm</span><span class="p">,</span> <span class="n">prompt</span><span class="p">)</span> <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">]</span>
-    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
+    <span class="n">full_prompts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+        <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">prompt</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span> <span class="k">else</span> <span class="n">hyde_prompt</span><span class="p">)</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Question: </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="se">\n</span><span class="s2">Passage:&quot;</span><span class="p">,</span> <span class="n">queries</span><span class="p">))</span>
+    <span class="n">input_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;prompts&quot;</span><span class="p">:</span> <span class="n">full_prompts</span><span class="p">})</span>
+    <span class="n">result_df</span> <span class="o">=</span> <span class="n">generator_func</span><span class="p">(</span><span class="n">project_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">previous_result</span><span class="o">=</span><span class="n">input_df</span><span class="p">,</span> <span class="o">**</span><span class="n">generator_params</span><span class="p">)</span>
+    <span class="n">answers</span> <span class="o">=</span> <span class="n">result_df</span><span class="p">[</span><span class="s1">&#39;generated_texts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">answers</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">results</span></div>
-
-
-
-<div class="viewcode-block" id="hyde_pure">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.hyde.hyde_pure">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">hyde_pure</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">llm</span><span class="p">:</span> <span class="n">LLMPredictorType</span><span class="p">,</span>
-                    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">hyde_prompt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-    <span class="k">if</span> <span class="n">prompt</span> <span class="ow">is</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">prompt</span> <span class="o">=</span> <span class="n">hyde_prompt</span>
-    <span class="n">full_prompt</span> <span class="o">=</span> <span class="n">prompt</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Question: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="se">\n</span><span class="s2">Passage:&quot;</span>
-    <span class="n">hyde_answer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">llm</span><span class="o">.</span><span class="n">acomplete</span><span class="p">(</span><span class="n">full_prompt</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">hyde_answer</span><span class="o">.</span><span class="n">text</span><span class="p">]</span></div>
 
 </pre></div>
         </article>

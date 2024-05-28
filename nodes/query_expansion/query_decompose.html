@@ -401,26 +401,26 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">query_decompose</span></code> is used to decompose a ‘multi-hop question’ into ‘multiple single-hop questions’ using a LLM model. The module uses a default decomposition prompt from the <a class="reference external" href="https://arxiv.org/pdf/2212.09656.pdf">Visconde paper</a>’s StrategyQA few-shot prompt.</p>
 <section id="module-parameters">
 <h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">¶</a></h2>
-<p><strong>llm</strong>: The query expansion node requires setting parameters related to the Large Language Model (LLM) being used. This includes specifying the LLM provider (e.g., <code class="docutils literal notranslate"><span class="pre">openai</span></code> or a list of providers like <code class="docutils literal notranslate"><span class="pre">[openai,</span> <span class="pre">huggingfacellm]</span></code>) and the model configuration. By default, if only <code class="docutils literal notranslate"><span class="pre">openai</span></code> is specified without a model, the system uses the default model set in <code class="docutils literal notranslate"><span class="pre">llama_index</span></code>, which is <code class="docutils literal notranslate"><span class="pre">gpt-3.5-turbo</span></code>.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Information about the LLM model can be found <a class="reference internal" href="../../local_model.html#supporting-llm-models"><span class="std std-ref">Supporting LLM models</span></a>.</p>
-</div>
+<p><strong>llm</strong>: The query expansion node requires setting parameters related to our generator modules.</p>
 <ul class="simple">
-<li><p><strong>Additional Parameters</strong>:</p>
-<ul>
-<li><p><strong>batch</strong>: How many llm calls to make at once. Default is 16.</p></li>
-<li><p>Other LLM-related parameters such as <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">temperature</span></code>, and <code class="docutils literal notranslate"><span class="pre">max_token</span></code> can be set. These are passed as keyword arguments (<code class="docutils literal notranslate"><span class="pre">kwargs</span></code>) to the LLM object, allowing for further customization of the LLM’s behavior. You can find these parameters at LlamaIndex docs.</p></li>
+<li><p><strong>generator_module_type</strong>: The type of the generator module to use.</p></li>
+<li><p><strong>llm</strong>: The type of llm.</p></li>
+<li><p>Other LLM-related parameters such as <code class="docutils literal notranslate"><span class="pre">model</span></code>, <code class="docutils literal notranslate"><span class="pre">temperature</span></code>, and <code class="docutils literal notranslate"><span class="pre">max_token</span></code> can be set. These are passed as keyword
+arguments (<code class="docutils literal notranslate"><span class="pre">kwargs</span></code>) to the LLM object, allowing for further customization of the LLM’s behavior.</p></li>
 </ul>
-</li>
+<p><strong>Additional Parameters</strong>:</p>
+<ul class="simple">
+<li><p><strong>prompt</strong>: You can use your own custom prompt for the LLM model.
+default prompt comes from Visconde’s StrategyQA few-shot prompt.</p></li>
 </ul>
 </section>
 <section id="example-config-yaml">
 <h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query_decompose</span>
+<span class="w">  </span><span class="nt">generator_module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llama_index_llm</span>
 <span class="w">  </span><span class="nt">llm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
-<span class="w">  </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">gpt-3.5-turbo-16k</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">gpt-3.5-turbo-1106</span><span class="w"> </span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
 </section>

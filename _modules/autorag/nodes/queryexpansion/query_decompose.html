@@ -390,13 +390,11 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for autorag.nodes.queryexpansion.query_decompose</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span>
 
-<span class="kn">from</span> <span class="nn">llama_index.core.service_context_elements.llm_predictor</span> <span class="kn">import</span> <span class="n">LLMPredictorType</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.queryexpansion.base</span> <span class="kn">import</span> <span class="n">query_expansion_node</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span>
 
 <span class="n">decompose_prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Decompose a question in self-contained sub-questions. Use </span><span class="se">\&quot;</span><span class="s2">The question needs no decomposition</span><span class="se">\&quot;</span><span class="s2"> when no decomposition is needed.</span>
 
@@ -448,47 +446,48 @@
 <div class="viewcode-block" id="query_decompose">
 <a class="viewcode-back" href="../../../../api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.query_decompose.query_decompose">[docs]</a>
 <span class="nd">@query_expansion_node</span>
-<span class="k">def</span> <span class="nf">query_decompose</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">llm</span><span class="p">:</span> <span class="n">LLMPredictorType</span><span class="p">,</span>
-                    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">decompose_prompt</span><span class="p">,</span>
-                    <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="k">def</span> <span class="nf">query_decompose</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                    <span class="n">generator_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+                    <span class="n">generator_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+                    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">decompose_prompt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    decompose query to little piece of questions.</span>
 <span class="sd">    :param queries: List[str], queries to decompose.</span>
-<span class="sd">    :param llm: LLMPredictorType, language model to use.</span>
+<span class="sd">    :param generator_func: Callable, generator functions.</span>
+<span class="sd">    :param generator_params: Dict, generator parameters.</span>
 <span class="sd">    :param prompt: str, prompt to use for query decomposition.</span>
 <span class="sd">        default prompt comes from Visconde&#39;s StrategyQA few-shot prompt.</span>
-<span class="sd">    :param batch: int, batch size for llm.</span>
-<span class="sd">        Default is 16.</span>
 <span class="sd">    :return: List[List[str]], list of decomposed query. Return input query if query is not decomposable.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Run async query_decompose_pure function</span>
-    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">query_decompose_pure</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">llm</span><span class="p">,</span> <span class="n">prompt</span><span class="p">)</span> <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">]</span>
-    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch</span><span class="p">))</span>
+    <span class="n">full_prompts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">prompt</span><span class="p">):</span>
+            <span class="n">full_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;prompt: </span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="se">\n\n</span><span class="s2"> question: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">full_prompt</span> <span class="o">=</span> <span class="n">decompose_prompt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">full_prompts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">full_prompt</span><span class="p">)</span>
+    <span class="n">input_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;prompts&quot;</span><span class="p">:</span> <span class="n">full_prompts</span><span class="p">})</span>
+    <span class="n">result_df</span> <span class="o">=</span> <span class="n">generator_func</span><span class="p">(</span><span class="n">project_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">previous_result</span><span class="o">=</span><span class="n">input_df</span><span class="p">,</span> <span class="o">**</span><span class="n">generator_params</span><span class="p">)</span>
+    <span class="n">answers</span> <span class="o">=</span> <span class="n">result_df</span><span class="p">[</span><span class="s1">&#39;generated_texts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">get_query_decompose</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">answers</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">results</span></div>
 
 
 
-<div class="viewcode-block" id="query_decompose_pure">
-<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.query_decompose.query_decompose_pure">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">query_decompose_pure</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">llm</span><span class="p">:</span> <span class="n">LLMPredictorType</span><span class="p">,</span>
-                               <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">decompose_prompt</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="get_query_decompose">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.queryexpansion.html#autorag.nodes.queryexpansion.query_decompose.get_query_decompose">[docs]</a>
+<span class="k">def</span> <span class="nf">get_query_decompose</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">answer</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    decompose query to little piece of questions.</span>
 <span class="sd">    :param query: str, query to decompose.</span>
-<span class="sd">    :param llm: LLMPredictorType, language model to use.</span>
-<span class="sd">    :param prompt: str, prompt to use for query decomposition.</span>
-<span class="sd">        default prompt comes from Visconde&#39;s StrategyQA few-shot prompt.</span>
+<span class="sd">    :param answer: str, answer from query_decompose function.</span>
 <span class="sd">    :return: List[str], list of a decomposed query. Return input query if query is not decomposable.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">prompt</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">prompt</span> <span class="o">=</span> <span class="n">decompose_prompt</span>
-    <span class="n">full_prompt</span> <span class="o">=</span> <span class="s2">&quot;prompt: &quot;</span> <span class="o">+</span> <span class="n">prompt</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="s2">&quot;question: &quot;</span> <span class="o">+</span> <span class="n">query</span>
-    <span class="n">answer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">llm</span><span class="o">.</span><span class="n">acomplete</span><span class="p">(</span><span class="n">full_prompt</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">answer</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">&quot;the question needs no decomposition.&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;the question needs no decomposition&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">query</span><span class="p">]</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">answer</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">answer</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
         <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Decompositions:&quot;</span><span class="p">):</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">questions</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="s1">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
