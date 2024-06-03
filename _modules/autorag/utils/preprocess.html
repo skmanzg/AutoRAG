@@ -445,6 +445,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;generation_gt must be str or list, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">validate_qa_dataset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;qid&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> \
         <span class="s2">&quot;qid must be string type.&quot;</span>
@@ -461,6 +462,7 @@
 <div class="viewcode-block" id="cast_corpus_dataset">
 <a class="viewcode-back" href="../../../api_spec/autorag.utils.html#autorag.utils.preprocess.cast_corpus_dataset">[docs]</a>
 <span class="k">def</span> <span class="nf">cast_corpus_dataset</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">validate_corpus_dataset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">make_datetime_metadata</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
