@@ -418,12 +418,19 @@ Plus, it is open-source software.</p>
 <p>Information about the Embedding model can be found <a class="reference internal" href="../../local_model.html#supporting-embedding-models"><span class="std std-ref">Supporting Embedding models</span></a>.
 Plus, you can learn about how to add custom embedding model at <a class="reference internal" href="../../local_model.html#add-your-embedding-models"><span class="std std-ref">here</span></a>.</p>
 </div>
+<ul class="simple">
+<li><p><strong>Parameter</strong>: <code class="docutils literal notranslate"><span class="pre">embedding_batch</span></code></p></li>
+<li><p><strong>Usage</strong>: It is the batch size of the embedding model. It automatically set to the ingestion process using embedding
+model.
+If you get error on the embedding model, try to lower this parameter.</p></li>
+</ul>
 </section>
 <section id="example-config-yaml">
 <h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vectordb</span>
 <span class="w">    </span><span class="nt">embedding_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
+<span class="w">    </span><span class="nt">embedding_batch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
 </pre></div>
 </div>
 </section>
