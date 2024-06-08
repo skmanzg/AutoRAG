@@ -422,6 +422,65 @@ to a List, which is a list of options for a parameter that you can try for optim
 using <code class="docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code>, we have to write tuples as if we were writing them in python.</p>
 <p>So something like <code class="docutils literal notranslate"><span class="pre">('bm25',</span> <span class="pre">'vectordb')</span></code> with quotes will work.</p>
 </section>
+<section id="score-fusion-additional-explanation">
+<h2>📌 Score Fusion additional explanation<a class="headerlink" href="#score-fusion-additional-explanation" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Hybrid-dbsf</span></code> module and <code class="docutils literal notranslate"><span class="pre">Hybrid-rsf</span></code> module are similar in that they both use score fusion algorithm.</p>
+<p>Here is the Score Fusion algorithm’s flow:</p>
+<p><img alt="Score Fusion" src="../../_images/score_fusion.png" /></p>
+<ol class="arabic simple">
+<li><p>Get the Min/Max Score</p></li>
+<li><p>Apply Min-Max Normalization</p></li>
+<li><p>Multiply weights</p></li>
+<li><p>Score Fusion</p></li>
+</ol>
+<p>There are four main steps in the flow as follows</p>
+<p>RSF and DBSF differ only in the method for finding the Min-Max Score in step 1 (colored pink in the figure), while steps
+2, 3, and 4 are the same!</p>
+<p>Learn how to find the DBSF-specific Min-Max Score !!</p>
+<section id="get-the-min-max-score-in-dbsf">
+<h3>1. Get the Min/Max Score in DBSF ⭐⭐⭐<a class="headerlink" href="#get-the-min-max-score-in-dbsf" title="Link to this heading">¶</a></h3>
+<p>As the term Distribution Based suggests, DBSF uses a <strong>distribution</strong> to find the Min-Max Score!</p>
+<p>It uses the normal distribution, which is the distribution we are most familiar with</p>
+<p><img alt="Normal Distribution" src="../../_images/normal_distribution.png" /></p>
+<p>Based on the <strong>“68-95-99.7 rule” or “3-sigma rule”</strong> commonly used in statistics,
+we get <code class="docutils literal notranslate"><span class="pre">Max</span> <span class="pre">Score</span> <span class="pre">=</span> <span class="pre">mean</span> <span class="pre">+</span> <span class="pre">3</span> <span class="pre">*</span> <span class="pre">standard</span> <span class="pre">deviation</span></code>, <code class="docutils literal notranslate"><span class="pre">Min</span> <span class="pre">Score</span> <span class="pre">=</span> <span class="pre">mean</span> <span class="pre">-</span> <span class="pre">3</span> <span class="pre">*</span> <span class="pre">standard</span> <span class="pre">deviation</span></code>!</p>
+<p>Steps 2, 3, and 4 below are the same as for RSF.</p>
+</section>
+<section id="apply-min-max-normalization">
+<h3>2. Apply Min-Max Normalization<a class="headerlink" href="#apply-min-max-normalization" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">scaled_score</span> <span class="pre">=</span> <span class="pre">(score</span> <span class="pre">-</span> <span class="pre">min_score)</span> <span class="pre">/</span> <span class="pre">(max_score</span> <span class="pre">-</span> <span class="pre">min_score)</span></code></p>
+<p>Min-Max Normalization is a technique that scales the range of values from 0 to 1.</p>
+<p>After scaling, the minimum value is 0 and the maximum value is 1.</p>
+<p>For example, if you normalize a Score of [1, 3, 5], it becomes [0, 0.5, 1].</p>
+</section>
+<section id="multiply-weights">
+<h3>3. Multiply weights<a class="headerlink" href="#multiply-weights" title="Link to this heading">¶</a></h3>
+<p>Since we are looking at a hybrid retrieval module, we need to multiply each Normalized Score by a Weight.</p>
+<p>Let’s say we have a Score of [0, 0.25, 1] and a Score of [0, 0.5, 1].</p>
+<p>If Weight is 0.7 and 0.3, we simply multiply the respective Score values by 0.7 and 0.3!</p>
+</section>
+<section id="score-fusion">
+<h3>4. Score Fusion<a class="headerlink" href="#score-fusion" title="Link to this heading">¶</a></h3>
+<p>Score Fusion is literally the process of combining the two weighted scores we got!</p>
+<ul class="simple">
+<li><p>id: [<code class="docutils literal notranslate"><span class="pre">id_1</span></code>, <code class="docutils literal notranslate"><span class="pre">id_2</span></code>, <code class="docutils literal notranslate"><span class="pre">id_3</span></code>], Score: [0.1, 0.2, 0.7]</p></li>
+<li><p>id: [<code class="docutils literal notranslate"><span class="pre">id_2</span></code>, <code class="docutils literal notranslate"><span class="pre">id_3</span></code>, <code class="docutils literal notranslate"><span class="pre">id_4</span></code>], Score: [0.3, 0.8, 0.2]</p></li>
+</ul>
+<p>Suppose we have the following two results</p>
+<p>There is only one <code class="docutils literal notranslate"><span class="pre">id_1</span></code> and <code class="docutils literal notranslate"><span class="pre">id_4</span></code>, and two <code class="docutils literal notranslate"><span class="pre">id_2</span></code> and <code class="docutils literal notranslate"><span class="pre">id_3</span></code>.</p>
+<p>Then we can combine the two results as follows</p>
+<ul class="simple">
+<li><p>id_1 : 0.1</p></li>
+<li><p>id_2 : 0.2 + 0.3 = 0.5</p></li>
+<li><p>id_3 : 0.7 + 0.8 = 1.5</p></li>
+<li><p>id_4 : 0.2</p></li>
+</ul>
+<p>The example assumes a situation where top_k is 3, so if we pick the top 3 in score order, we get</p>
+<ul class="simple">
+<li><p>Id: [<code class="docutils literal notranslate"><span class="pre">id_3</span></code>, <code class="docutils literal notranslate"><span class="pre">id_2</span></code>, <code class="docutils literal notranslate"><span class="pre">id_4</span></code>], Score: [1.5, 0.5, 0.2].</p></li>
+</ul>
+</section>
+</section>
 <section id="module-parameters">
 <h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">¶</a></h2>
 <ul class="simple">
@@ -508,6 +567,13 @@ It is automatically generated when you run the optimization process.</p>
 <li><a class="reference internal" href="#">Hybrid - dbsf</a><ul>
 <li><a class="reference internal" href="#what-is-dbsf">What is dbsf?</a></li>
 <li><a class="reference internal" href="#hybird-additional-explanation">❗️Hybird additional explanation</a></li>
+<li><a class="reference internal" href="#score-fusion-additional-explanation">📌 Score Fusion additional explanation</a><ul>
+<li><a class="reference internal" href="#get-the-min-max-score-in-dbsf">1. Get the Min/Max Score in DBSF ⭐⭐⭐</a></li>
+<li><a class="reference internal" href="#apply-min-max-normalization">2. Apply Min-Max Normalization</a></li>
+<li><a class="reference internal" href="#multiply-weights">3. Multiply weights</a></li>
+<li><a class="reference internal" href="#score-fusion">4. Score Fusion</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-parameters"><strong>Module Parameters</strong></a></li>
 <li><a class="reference internal" href="#example-config-yaml"><strong>Example config.yaml</strong></a></li>
 </ul>
