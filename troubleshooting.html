@@ -400,7 +400,7 @@
           <section id="troubleshooting">
 <h1>TroubleShooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h1>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<h2>1. Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <section id="could-not-build-wheels">
 <h3>Could not build wheels<a class="headerlink" href="#could-not-build-wheels" title="Link to this heading">¶</a></h3>
 <p>If you face this kind of error during installation, try some methods below.</p>
@@ -421,7 +421,7 @@ brew<span class="w"> </span>install<span class="w"> </span>gcc<span class="w"> <
 </section>
 </section>
 <section id="optimization">
-<h2>Optimization<a class="headerlink" href="#optimization" title="Link to this heading">¶</a></h2>
+<h2>2. Optimization<a class="headerlink" href="#optimization" title="Link to this heading">¶</a></h2>
 <section id="facing-openai-api-error">
 <h3>Facing OPENAI API error<a class="headerlink" href="#facing-openai-api-error" title="Link to this heading">¶</a></h3>
 <ol class="arabic simple">
@@ -501,6 +501,28 @@ In our experiment, it occurred rate limit error when the batch size was 4.
 </div>
 </section>
 </section>
+<section id="llamaindex">
+<h2>3. LlamaIndex<a class="headerlink" href="#llamaindex" title="Link to this heading">¶</a></h2>
+<section id="facing-import-error">
+<h3>Facing Import Error<a class="headerlink" href="#facing-import-error" title="Link to this heading">¶</a></h3>
+<p>If you encountered the following llama_index ImportError, you need to check your LlamaIndex version.</p>
+<p>If it is lower than 0.10.0, you need to use a version at least 0.10.0!</p>
+</section>
+</section>
+<section id="gpu-related-error">
+<h2>4. GPU-related Error<a class="headerlink" href="#gpu-related-error" title="Link to this heading">¶</a></h2>
+<p>The error appears to be a VRAM out of memory error.</p>
+<p>In this case, try lowering the <code class="docutils literal notranslate"><span class="pre">batch</span></code> (which can be set as a module parameter in YAML) as much as possible,
+If that doesn’t work, we recommend using a quantized model (if available)!</p>
+</section>
+<section id="unicodedecodeerror">
+<h2>5. UnicodeDecodeError<a class="headerlink" href="#unicodedecodeerror" title="Link to this heading">¶</a></h2>
+<p>Error reading a parquet file on Windows!</p>
+<p>The workaround on Windows is to use engine=’pyarrow’,
+This is something that needs to be fixed inside AutoRAG.</p>
+<p>We’ll try to fix it in the <a class="reference external" href="https://github.com/Marker-Inc-Korea/AutoRAG/issues/494">issue</a> :)</p>
+<p>For now, please use Mac or Linux (or WSL on Windows)!</p>
+</section>
 </section>
 
         </article>
@@ -559,16 +581,22 @@ In our experiment, it occurred rate limit error when the batch size was 4.
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">TroubleShooting</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#installation">1. Installation</a><ul>
 <li><a class="reference internal" href="#could-not-build-wheels">Could not build wheels</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#optimization">Optimization</a><ul>
+<li><a class="reference internal" href="#optimization">2. Optimization</a><ul>
 <li><a class="reference internal" href="#facing-openai-api-error">Facing OPENAI API error</a></li>
 <li><a class="reference internal" href="#error-while-running-llm">Error while running LLM</a></li>
 <li><a class="reference internal" href="#the-length-or-row-is-different-from-the-original-data">The length or row is different from the original data</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#llamaindex">3. LlamaIndex</a><ul>
+<li><a class="reference internal" href="#facing-import-error">Facing Import Error</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gpu-related-error">4. GPU-related Error</a></li>
+<li><a class="reference internal" href="#unicodedecodeerror">5. UnicodeDecodeError</a></li>
 </ul>
 </li>
 </ul>
