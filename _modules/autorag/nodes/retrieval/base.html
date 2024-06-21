@@ -489,7 +489,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;invalid func name for using retrieval_io decorator.&quot;</span><span class="p">)</span>
 
         <span class="c1"># fetch data from corpus_data</span>
-        <span class="n">corpus_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;corpus.parquet&quot;</span><span class="p">))</span>
+        <span class="n">corpus_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;corpus.parquet&quot;</span><span class="p">),</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;pyarrow&#39;</span><span class="p">)</span>
         <span class="n">contents</span> <span class="o">=</span> <span class="n">fetch_contents</span><span class="p">(</span><span class="n">corpus_data</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">contents</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">scores</span>
