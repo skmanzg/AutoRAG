@@ -456,6 +456,12 @@
 
 <span class="sd">    :return: The tuple contains a list of passage ids that retrieved from vectordb and a list of its scores.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># truncate queries if embedding is openai and the query exceeded token limit</span>
+    <span class="n">openai_embedding_limit</span> <span class="o">=</span> <span class="mi">8191</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">embedding_model</span><span class="p">,</span> <span class="n">OpenAIEmbedding</span><span class="p">):</span>
+        <span class="n">queries</span> <span class="o">=</span> <span class="n">openai_truncate_by_token</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">openai_embedding_limit</span><span class="p">,</span>
+                                           <span class="n">embedding_model</span><span class="o">.</span><span class="n">model_name</span><span class="p">)</span>
+
     <span class="c1"># embed query</span>
     <span class="n">embedded_queries</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">embedding_model</span><span class="o">.</span><span class="n">get_query_embedding</span><span class="p">,</span> <span class="n">queries</span><span class="p">))</span>
 
@@ -492,7 +498,7 @@
 
         <span class="c1"># truncate by token if embedding_model is OpenAIEmbedding</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">embedding_model</span><span class="p">,</span> <span class="n">OpenAIEmbedding</span><span class="p">):</span>
-            <span class="n">openai_embedding_limit</span> <span class="o">=</span> <span class="mi">8191</span>
+            <span class="n">openai_embedding_limit</span> <span class="o">=</span> <span class="mi">8191</span>  <span class="c1"># all openai embedding model has 8191 max token input</span>
             <span class="n">new_contents</span> <span class="o">=</span> <span class="n">openai_truncate_by_token</span><span class="p">(</span><span class="n">new_contents</span><span class="p">,</span> <span class="n">openai_embedding_limit</span><span class="p">,</span> <span class="n">embedding_model</span><span class="o">.</span><span class="n">model_name</span><span class="p">)</span>
 
         <span class="n">new_ids</span> <span class="o">=</span> <span class="n">new_passage</span><span class="p">[</span><span class="s1">&#39;doc_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>

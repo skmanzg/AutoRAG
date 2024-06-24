@@ -396,6 +396,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">torch.cuda</span>
 
+<span class="kn">from</span> <span class="nn">autorag</span> <span class="kn">import</span> <span class="n">embedding_models</span>
 <span class="kn">from</span> <span class="nn">autorag.evaluation.metric.util</span> <span class="kn">import</span> <span class="n">calculate_cosine_similarity</span>
 <span class="kn">from</span> <span class="nn">autorag.nodes.passagefilter.base</span> <span class="kn">import</span> <span class="n">passage_filter_node</span>
 <span class="kn">from</span> <span class="nn">autorag.nodes.passagefilter.similarity_threshold_cutoff</span> <span class="kn">import</span> <span class="n">embedding_query_content</span>
@@ -426,7 +427,13 @@
 <span class="sd">        Default is 128.</span>
 <span class="sd">    :return: Tuple of lists containing the filtered contents, ids, and scores</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">query_embeddings</span><span class="p">,</span> <span class="n">content_embeddings</span> <span class="o">=</span> <span class="n">embedding_query_content</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">embedding_model</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">embedding_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">embedding_model</span> <span class="o">=</span> <span class="n">embedding_models</span><span class="p">[</span><span class="s1">&#39;openai&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">embedding_model</span> <span class="o">=</span> <span class="n">embedding_models</span><span class="p">[</span><span class="n">embedding_model</span><span class="p">]</span>
+
+    <span class="n">query_embeddings</span><span class="p">,</span> <span class="n">content_embeddings</span> <span class="o">=</span> <span class="n">embedding_query_content</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">embedding_model</span><span class="p">,</span>
+                                                                   <span class="n">batch</span><span class="p">)</span>
 
     <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">similarity_percentile_cutoff_pure</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">percentile</span><span class="p">),</span>
                        <span class="nb">zip</span><span class="p">(</span><span class="n">query_embeddings</span><span class="p">,</span> <span class="n">content_embeddings</span><span class="p">,</span> <span class="n">contents_list</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">,</span> <span class="n">scores_list</span><span class="p">)))</span>
