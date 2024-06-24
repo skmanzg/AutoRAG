@@ -413,13 +413,6 @@
 <li><p>Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </li>
-<li><p>(Optional) <code class="docutils literal notranslate"><span class="pre">num_gpus</span></code> (int):</p>
-<ul>
-<li><p>Number of GPUs in your machine.</p></li>
-<li><p>Default is 1.</p></li>
-<li><p>If you use CPU, just keep this parameter as 1.</p></li>
-</ul>
-</li>
 <li><p>(Optional) <code class="docutils literal notranslate"><span class="pre">prefix_prompt</span></code> (strings):</p>
 <ul>
 <li><p>The prefix prompt serves as the initial context or instruction for the language model.
@@ -442,7 +435,6 @@ signaling how to conclude the generated text or what format to follow at the end
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">upr</span>
 <span class="w">    </span><span class="nt">use_bf16</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
-<span class="w">    </span><span class="nt">num_gpus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 <span class="w">    </span><span class="nt">prefix_prompt</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Passage:</span><span class="nv"> </span><span class="s">&quot;</span>
 <span class="w">    </span><span class="nt">suffix_prompt</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Please</span><span class="nv"> </span><span class="s">write</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">question</span><span class="nv"> </span><span class="s">based</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">this</span><span class="nv"> </span><span class="s">passage.&quot;</span>
 </pre></div>
