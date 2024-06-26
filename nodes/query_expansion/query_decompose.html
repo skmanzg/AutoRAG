@@ -428,6 +428,57 @@ default prompt comes from Visconde’s StrategyQA few-shot prompt.</p></li>
 </pre></div>
 </div>
 </section>
+<section id="default-prompt">
+<h2>Default Prompt<a class="headerlink" href="#default-prompt" title="Link to this heading">¶</a></h2>
+<p>When the question doesn’t need decomposition, it must return “The question needs no decomposition”.
+Plus, each question will be allocated in <code class="docutils literal notranslate"><span class="pre">{question}</span></code>, so you have to write it in the prompt.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Decompose a question in self-contained sub-questions. Use \&quot;The question needs no decomposition\&quot; when no decomposition is needed.
+
+Example 1:
+
+Question: Is Hamlet more common on IMDB than Comedy of Errors?
+Decompositions: 
+1: How many listings of Hamlet are there on IMDB?
+2: How many listing of Comedy of Errors is there on IMDB?
+
+Example 2:
+
+Question: Are birds important to badminton?
+
+Decompositions:
+The question needs no decomposition
+
+Example 3:
+
+Question: Is it legal for a licensed child driving Mercedes-Benz to be employed in US?
+
+Decompositions:
+1: What is the minimum driving age in the US?
+2: What is the minimum age for someone to be employed in the US?
+
+Example 4:
+
+Question: Are all cucumbers the same texture?
+
+Decompositions:
+The question needs no decomposition
+
+Example 5:
+
+Question: Hydrogen&#39;s atomic number squared exceeds number of Spice Girls?
+
+Decompositions:
+1: What is the atomic number of hydrogen?
+2: How many Spice Girls are there?
+
+Example 6:
+
+Question: {question}
+
+Decompositions:
+</pre></div>
+</div>
+</section>
 </section>
 
         </article>
@@ -488,6 +539,7 @@ default prompt comes from Visconde’s StrategyQA few-shot prompt.</p></li>
 <li><a class="reference internal" href="#">Query Decompose</a><ul>
 <li><a class="reference internal" href="#module-parameters"><strong>Module Parameters</strong></a></li>
 <li><a class="reference internal" href="#example-config-yaml"><strong>Example config.yaml</strong></a></li>
+<li><a class="reference internal" href="#default-prompt">Default Prompt</a></li>
 </ul>
 </li>
 </ul>
