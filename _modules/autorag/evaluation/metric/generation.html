@@ -409,13 +409,14 @@
 
 <span class="kn">from</span> <span class="nn">autorag</span> <span class="kn">import</span> <span class="n">embedding_models</span>
 <span class="kn">from</span> <span class="nn">autorag.evaluation.metric.util</span> <span class="kn">import</span> <span class="n">calculate_cosine_similarity</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span><span class="p">,</span> <span class="n">openai_truncate_by_token</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span><span class="p">,</span> <span class="n">openai_truncate_by_token</span><span class="p">,</span> <span class="n">convert_inputs_to_list</span>
 
 
 <div class="viewcode-block" id="generation_metric">
 <a class="viewcode-back" href="../../../../api_spec/autorag.evaluation.metric.html#autorag.evaluation.metric.generation.generation_metric">[docs]</a>
 <span class="k">def</span> <span class="nf">generation_metric</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="nd">@convert_inputs_to_list</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute generation metric.</span>
@@ -437,6 +438,7 @@
 
 <div class="viewcode-block" id="huggingface_evaluate">
 <a class="viewcode-back" href="../../../../api_spec/autorag.evaluation.metric.html#autorag.evaluation.metric.generation.huggingface_evaluate">[docs]</a>
+<span class="nd">@convert_inputs_to_list</span>
 <span class="k">def</span> <span class="nf">huggingface_evaluate</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                          <span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
                          <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
@@ -474,6 +476,7 @@
 
 <div class="viewcode-block" id="meteor">
 <a class="viewcode-back" href="../../../../api_spec/autorag.evaluation.metric.html#autorag.evaluation.metric.generation.meteor">[docs]</a>
+<span class="nd">@convert_inputs_to_list</span>
 <span class="k">def</span> <span class="nf">meteor</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
            <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
            <span class="n">beta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
@@ -504,6 +507,7 @@
 
 <div class="viewcode-block" id="rouge">
 <a class="viewcode-back" href="../../../../api_spec/autorag.evaluation.metric.html#autorag.evaluation.metric.generation.rouge">[docs]</a>
+<span class="nd">@convert_inputs_to_list</span>
 <span class="k">def</span> <span class="nf">rouge</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
           <span class="n">rouge_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;rougeL&#39;</span><span class="p">,</span>
           <span class="n">use_stemmer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -551,6 +555,7 @@
 
 <div class="viewcode-block" id="sem_score">
 <a class="viewcode-back" href="../../../../api_spec/autorag.evaluation.metric.html#autorag.evaluation.metric.generation.sem_score">[docs]</a>
+<span class="nd">@convert_inputs_to_list</span>
 <span class="k">def</span> <span class="nf">sem_score</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
               <span class="n">embedding_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseEmbedding</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
               <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
@@ -607,6 +612,7 @@
 
 <div class="viewcode-block" id="g_eval">
 <a class="viewcode-back" href="../../../../api_spec/autorag.evaluation.metric.html#autorag.evaluation.metric.generation.g_eval">[docs]</a>
+<span class="nd">@convert_inputs_to_list</span>
 <span class="k">def</span> <span class="nf">g_eval</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
            <span class="n">metrics</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
            <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;gpt-4-0125-preview&#39;</span><span class="p">,</span>
@@ -702,6 +708,7 @@
 
 <div class="viewcode-block" id="bert_score">
 <a class="viewcode-back" href="../../../../api_spec/autorag.evaluation.metric.html#autorag.evaluation.metric.generation.bert_score">[docs]</a>
+<span class="nd">@convert_inputs_to_list</span>
 <span class="k">def</span> <span class="nf">bert_score</span><span class="p">(</span><span class="n">generation_gt</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">generations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
                <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;en&#39;</span><span class="p">,</span>
                <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>

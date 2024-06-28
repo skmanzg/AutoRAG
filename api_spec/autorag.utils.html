@@ -452,6 +452,12 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.convert_inputs_to_list">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">convert_inputs_to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#convert_inputs_to_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.convert_inputs_to_list" title="Link to this definition">¶</a></dt>
+<dd><p>Decorator to convert all function inputs to Python lists.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="autorag.utils.util.convert_string_to_tuple_in_dict">
 <span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">convert_string_to_tuple_in_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#convert_string_to_tuple_in_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.convert_string_to_tuple_in_dict" title="Link to this definition">¶</a></dt>
 <dd><p>Recursively converts strings that start with ‘(’ and end with ‘)’ to tuples in a dictionary.</p>
@@ -679,6 +685,12 @@ And its elements must be list type.</p>
 <span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">split_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#split_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.split_dataframe" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.utils.util.to_list">
+<span class="sig-prename descclassname"><span class="pre">autorag.utils.util.</span></span><span class="sig-name descname"><span class="pre">to_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/utils/util.html#to_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.utils.util.to_list" title="Link to this definition">¶</a></dt>
+<dd><p>Recursively convert collections to Python lists.</p>
+</dd></dl>
+
 </section>
 <section id="module-autorag.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-autorag.utils" title="Link to this heading">¶</a></h2>
@@ -745,6 +757,7 @@ And its elements must be list type.</p>
 <li><a class="reference internal" href="#module-autorag.utils.util">autorag.utils.util module</a><ul>
 <li><a class="reference internal" href="#autorag.utils.util.convert_datetime_string"><code class="docutils literal notranslate"><span class="pre">convert_datetime_string()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.convert_env_in_dict"><code class="docutils literal notranslate"><span class="pre">convert_env_in_dict()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.convert_inputs_to_list"><code class="docutils literal notranslate"><span class="pre">convert_inputs_to_list()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.convert_string_to_tuple_in_dict"><code class="docutils literal notranslate"><span class="pre">convert_string_to_tuple_in_dict()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.dict_to_markdown"><code class="docutils literal notranslate"><span class="pre">dict_to_markdown()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.dict_to_markdown_table"><code class="docutils literal notranslate"><span class="pre">dict_to_markdown_table()</span></code></a></li>
@@ -770,6 +783,7 @@ And its elements must be list type.</p>
 <li><a class="reference internal" href="#autorag.utils.util.select_top_k"><code class="docutils literal notranslate"><span class="pre">select_top_k()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.sort_by_scores"><code class="docutils literal notranslate"><span class="pre">sort_by_scores()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.utils.util.split_dataframe"><code class="docutils literal notranslate"><span class="pre">split_dataframe()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.utils.util.to_list"><code class="docutils literal notranslate"><span class="pre">to_list()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.utils">Module contents</a></li>
