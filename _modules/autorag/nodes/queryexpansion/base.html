@@ -437,6 +437,9 @@
                                 <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
                                 <span class="n">generator_func</span><span class="o">=</span><span class="n">generator_callable</span><span class="p">,</span>
                                 <span class="n">generator_params</span><span class="o">=</span><span class="n">generator_param</span><span class="p">)</span>
+        <span class="c1"># delete empty string in the nested expanded queries list</span>
+        <span class="n">expanded_queries</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">sublist</span><span class="p">))</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">expanded_queries</span><span class="p">]</span>
+        <span class="n">expanded_queries</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">sublist</span><span class="p">))</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">expanded_queries</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">expanded_queries</span>
 
     <span class="k">return</span> <span class="n">wrapper</span></div>
