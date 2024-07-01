@@ -416,8 +416,23 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.evaluation.metric.generation.bleu">
-<span class="sig-prename descclassname"><span class="pre">autorag.evaluation.metric.generation.</span></span><span class="sig-name descname"><span class="pre">bleu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/autorag/evaluation/metric/generation.html#bleu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluation.metric.generation.bleu" title="Link to this definition">¶</a></dt>
-<dd><p>Compute bleu score for generation.</p>
+<span class="sig-prename descclassname"><span class="pre">autorag.evaluation.metric.generation.</span></span><span class="sig-name descname"><span class="pre">bleu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">generation_gt:</span> <span class="pre">~typing.List[~typing.List[str]],</span> <span class="pre">generations:</span> <span class="pre">[&lt;class</span> <span class="pre">'str'&gt;],</span> <span class="pre">tokenize:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">smooth_method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'exp',</span> <span class="pre">smooth_value:</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">max_ngram_order:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">4,</span> <span class="pre">trg_lang:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'',</span> <span class="pre">**kwargs</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/evaluation/metric/generation.html#bleu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluation.metric.generation.bleu" title="Link to this definition">¶</a></dt>
+<dd><p>Computes the BLEU metric given pred and ground-truth.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tokenize</strong> – The tokenizer to use. If None, defaults to language-specific tokenizers with ‘13a’ as the fallback default. check #https://github.com/mjpost/sacrebleu/blob/master/sacrebleu/metrics/bleu.py</p></li>
+<li><p><strong>smooth_method</strong> – The smoothing method to use (‘floor’, ‘add-k’, ‘exp’ or ‘none’).</p></li>
+<li><p><strong>smooth_value</strong> – The smoothing value for <cite>floor</cite> and <cite>add-k</cite> methods. <cite>None</cite> falls back to default value.</p></li>
+<li><p><strong>max_ngram_order</strong> – If given, it overrides the maximum n-gram order (default: 4) when computing precisions.</p></li>
+<li><p><strong>trg_lang</strong> – An optional language code to raise potential tokenizer warnings.</p></li>
+<li><p><strong>generation_gt</strong> – A list of ground truth.
+Must be 2-d list of string.
+Because it can be a multiple ground truth.</p></li>
+<li><p><strong>generations</strong> – A list of generations that LLM generated.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
