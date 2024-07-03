@@ -1,7 +1,7 @@
 import pytest
 from llama_index.embeddings.openai import OpenAIEmbedding
 
-from autorag.evaluation.metric import bleu, meteor, rouge, sem_score, g_eval, bert_score
+from autorag.evaluation.metric import bleu, sacrebleu, meteor, rouge, sem_score, g_eval, bert_score
 from tests.delete_tests import is_github_action
 
 generation_gts = [
@@ -48,8 +48,12 @@ def ko_base_test_generation_metrics(func, solution, **kwargs):
                         zip(scores, solution))))
 
 def test_bleu():
-    base_test_generation_metrics(bleu, [51.1507, 23.5783, 100.0], lowercase=True)
-    ko_base_test_generation_metrics(bleu, [100.0, 81.9178, 73.7534], lowercase=True, tokenize='ko-mecab', max_ngram_order=2, trg_lang='ko')
+    base_test_generation_metrics(bleu, [0.7727, 0.4697, 1.0], max_order=2, smooth=True)
+
+
+def test_sacrebleu():
+    base_test_generation_metrics(sacrebleu, [62.37, 34.25, 100.0], smooth_method="floor", smooth_value=0.01,
+                                 max_ngram_order=3)
 
 
 def test_meteor():
