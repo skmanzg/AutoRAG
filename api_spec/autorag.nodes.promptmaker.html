@@ -305,6 +305,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/prompt_maker/prompt_maker.html">7. Prompt Maker</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of 7. Prompt Maker</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/prompt_maker/fstring.html">F-String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/prompt_maker/long_context_reorder.html">Long Context Reorder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nodes/prompt_maker/window_replacement.html">Window Replacement</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/generator/generator.html">8. Generator</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of 8. Generator</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -551,6 +552,52 @@ It contains previous result columns and prompt maker’s result columns which is
 </dd></dl>
 
 </section>
+<section id="module-autorag.nodes.promptmaker.window_replacement">
+<span id="autorag-nodes-promptmaker-window-replacement-module"></span><h2>autorag.nodes.promptmaker.window_replacement module<a class="headerlink" href="#module-autorag.nodes.promptmaker.window_replacement" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.promptmaker.window_replacement.window_replacement">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.promptmaker.window_replacement.</span></span><span class="sig-name descname"><span class="pre">window_replacement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrieved_contents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrieved_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/promptmaker/window_replacement.html#window_replacement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.promptmaker.window_replacement.window_replacement" title="Link to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Replace retrieved_contents with window to create a Prompt
+(only available for corpus chunked with Sentence window method)
+You must type a prompt or prompt list at config yaml file like this:</p>
+<p>nodes:
+- node_type: prompt_maker</p>
+<blockquote>
+<div><p>modules:
+- module_type: window_replacement</p>
+<blockquote>
+<div><p>prompt: [Answer this question: {query}</p>
+</div></blockquote>
+</div></blockquote>
+</div></blockquote>
+<dl class="simple">
+<dt>{retrieved_contents},</dt><dd><p>Read the passages carefully and answer this question: {query}</p>
+</dd>
+</dl>
+<p>Passages: {retrieved_contents}]</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">param prompt<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A prompt string.</p>
+</dd>
+<dt class="field-even">param queries<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of query strings.</p>
+</dd>
+<dt class="field-odd">param retrieved_contents<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of retrieved contents.</p>
+</dd>
+<dt class="field-even">param retrieved_metadata<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of retrieved metadata.</p>
+</dd>
+<dt class="field-odd">return<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Prompts that made by window_replacement.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
 <section id="module-autorag.nodes.promptmaker">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-autorag.nodes.promptmaker" title="Link to this heading">¶</a></h2>
 </section>
@@ -630,6 +677,10 @@ It contains previous result columns and prompt maker’s result columns which is
 <li><a class="reference internal" href="#autorag.nodes.promptmaker.run.evaluate_one_prompt_maker_node"><code class="docutils literal notranslate"><span class="pre">evaluate_one_prompt_maker_node()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.promptmaker.run.make_generator_callable_params"><code class="docutils literal notranslate"><span class="pre">make_generator_callable_params()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.promptmaker.run.run_prompt_maker_node"><code class="docutils literal notranslate"><span class="pre">run_prompt_maker_node()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-autorag.nodes.promptmaker.window_replacement">autorag.nodes.promptmaker.window_replacement module</a><ul>
+<li><a class="reference internal" href="#autorag.nodes.promptmaker.window_replacement.window_replacement"><code class="docutils literal notranslate"><span class="pre">window_replacement()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.promptmaker">Module contents</a></li>
