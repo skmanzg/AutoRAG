@@ -428,10 +428,14 @@
 <h3>Modules that use LLM model<a class="headerlink" href="#modules-that-use-llm-model" title="Link to this heading">¶</a></h3>
 <p>Most of the modules that using LLM model can take <code class="docutils literal notranslate"><span class="pre">llm</span></code> parameter to specify the LLM model.</p>
 <ul class="simple">
+<li><p><a class="reference internal" href="nodes/generator/llama_index_llm.html"><span class="std std-doc">llama_index_llm</span></a></p></li>
+</ul>
+<p>The following modules can use generator module, which including <code class="docutils literal notranslate"><span class="pre">llama_index_llm</span></code>.</p>
+<ul class="simple">
 <li><p><a class="reference internal" href="nodes/query_expansion/hyde.html"><span class="std std-doc">hyde</span></a></p></li>
 <li><p><a class="reference internal" href="nodes/query_expansion/query_decompose.html"><span class="std std-doc">query_decompose</span></a></p></li>
+<li><p><a class="reference internal" href="nodes/query_expansion/multi_query_expansion.html"><span class="std std-doc">multi_query_expansion</span></a></p></li>
 <li><p><a class="reference internal" href="nodes/passage_compressor/tree_summarize.html"><span class="std std-doc">tree_summarize</span></a></p></li>
-<li><p><a class="reference internal" href="nodes/generator/llama_index_llm.html"><span class="std std-doc">llama_index_llm</span></a></p></li>
 </ul>
 </section>
 <section id="supporting-llm-models">
@@ -549,7 +553,8 @@ To change the embedding model, you can change the <code class="docutils literal 
 </tbody>
 </table>
 </div>
-<p>For example, if you want to use OpenAI curie embedding model, you can set <code class="docutils literal notranslate"><span class="pre">embedding_model</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">openai_curie</span></code>.</p>
+<p>For example, if you want to use OpenAI text embedding large model, you can set <code class="docutils literal notranslate"><span class="pre">embedding_model</span></code> parameter
+to <code class="docutils literal notranslate"><span class="pre">openai_embed_3_large</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nodes</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">node_line_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node_line_1</span>
 <span class="w">    </span><span class="nt">nodes</span><span class="p">:</span>
@@ -558,11 +563,6 @@ To change the embedding model, you can change the <code class="docutils literal 
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vectordb</span>
 <span class="w">            </span><span class="nt">embedding_model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openai</span>
 </pre></div>
-</div>
-<div class="admonition attention">
-<p class="admonition-title">Attention</p>
-<p>You can’t pass embedding model parameters at the config yaml file like LLM models.
-Because the embedding model is initialized at the beginning of the AutoRAG program.</p>
 </div>
 </section>
 <section id="add-your-embedding-models">
@@ -573,17 +573,23 @@ For example,
 if you want to add <code class="docutils literal notranslate"><span class="pre">[KoSimCSE](https://huggingface.co/BM-K/KoSimCSE-roberta-multitask)</span></code> model for Korean embedding,
 execute the following code.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">autorag</span>
+<span class="kn">from</span> <span class="nn">autorag</span> <span class="kn">import</span> <span class="n">LazyInit</span>
 <span class="kn">from</span> <span class="nn">llama_index.embeddings.huggingface</span> <span class="kn">import</span> <span class="n">HuggingFaceEmbedding</span>
 
-<span class="n">autorag</span><span class="o">.</span><span class="n">generator_models</span><span class="p">[</span><span class="s1">&#39;kosimcse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">HuggingFaceEmbedding</span><span class="p">(</span><span class="s2">&quot;BM-K/KoSimCSE-roberta-multitask&quot;</span><span class="p">)</span>
+<span class="n">autorag</span><span class="o">.</span><span class="n">embedding_models</span><span class="p">[</span><span class="s1">&#39;kosimcse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LazyInit</span><span class="p">(</span><span class="n">HuggingFaceEmbedding</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;BM-K/KoSimCSE-roberta-multitask&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Then you can use <code class="docutils literal notranslate"><span class="pre">kosimcse</span></code> at config yaml file.</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
-<p>When you add new LLM model, you should add instance of the <code class="docutils literal notranslate"><span class="pre">BaseEmbedding</span></code> class from LlamaIndex.</p>
+<p>When you add new embedding model, you should use <code class="docutils literal notranslate"><span class="pre">LazyInit</span></code> class from autorag. The additional parameters have to be keyword parameter in the <code class="docutils literal notranslate"><span class="pre">LazyInit</span></code> initialization.</p>
 </div>
 </section>
+</section>
+<section id="use-vllm">
+<h2>Use vllm<a class="headerlink" href="#use-vllm" title="Link to this heading">¶</a></h2>
+<p>You can use vllm to use local LLM. For more information, please check out <a class="reference internal" href="nodes/generator/vllm.html"><span class="std std-doc">vllm</span></a> generator
+module docs.</p>
 </section>
 </section>
 
@@ -656,6 +662,7 @@ execute the following code.</p>
 <li><a class="reference internal" href="#add-your-embedding-models">Add your embedding models</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#use-vllm">Use vllm</a></li>
 </ul>
 </li>
 </ul>
