@@ -474,7 +474,7 @@ which is <code class="docutils literal notranslate"><span class="pre">llama_docu
 <span class="n">corpus_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;path/to/corpus.parquet&#39;</span><span class="p">)</span>
 <span class="n">llm</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;gpt-3.5-turbo&#39;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="n">qa_df</span> <span class="o">=</span> <span class="n">make_single_content_qa</span><span class="p">(</span><span class="n">corpus_df</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">generate_qa_llama_index</span><span class="p">,</span> <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span> <span class="n">question_num_per_content</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                               <span class="n">output_filepath</span><span class="o">=</span><span class="s1">&#39;path/to/qa.parquet&#39;</span><span class="p">)</span>
+                               <span class="n">output_filepath</span><span class="o">=</span><span class="s1">&#39;path/to/qa.parquet&#39;</span><span class="p">,</span> <span class="n">cache_batch</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">generate_qa_llama_index</span></code> is a function designed to generate <strong>questions</strong> and its <strong>generation_gt</strong> per content.
@@ -485,6 +485,14 @@ Which means it uses only one passage per question for answering the question.</p
 <div class="admonition-what-is-passage admonition">
 <p class="admonition-title">What is passage?</p>
 <p>Passage is chunked units from raw data.</p>
+</div>
+<div class="admonition-auto-save-feature admonition">
+<p class="admonition-title">Auto-save feature</p>
+<p>From AutoRAG v0.2.9, the auto-save feature added!
+Now, you don’t have to afraid that something wrong while the data generation.
+The data will save automatically to the input <code class="docutils literal notranslate"><span class="pre">output_filepath</span></code>.</p>
+<p>You can set how often you want to save the result to the file.
+Just adjust <code class="docutils literal notranslate"><span class="pre">cache_batch</span></code> parameter. Default is 32.</p>
 </div>
 </section>
 <section id="use-custom-prompt">
