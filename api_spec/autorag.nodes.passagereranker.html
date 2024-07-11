@@ -749,6 +749,26 @@ Return the given top-k passages as is.</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">async_run_llm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">messages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">ChatMessage</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ChatResponse</span></span></span><a class="reference internal" href="../_modules/autorag/nodes/passagereranker/rankgpt.html#AsyncRankGPTRerank.async_run_llm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.async_run_llm" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.llm">
+<span class="sig-name descname"><span class="pre">llm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">LLM</span></em><a class="headerlink" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.llm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.rankgpt_rerank_prompt">
+<span class="sig-name descname"><span class="pre">rankgpt_rerank_prompt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">BasePromptTemplate</span></em><a class="headerlink" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.rankgpt_rerank_prompt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.top_n">
+<span class="sig-name descname"><span class="pre">top_n</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.top_n" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.verbose">
+<span class="sig-name descname"><span class="pre">verbose</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.verbose" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py function">
@@ -1027,6 +1047,10 @@ The suffix prompt provides a cue or a closing instruction to the language model,
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank"><code class="docutils literal notranslate"><span class="pre">AsyncRankGPTRerank</span></code></a><ul>
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.async_postprocess_nodes"><code class="docutils literal notranslate"><span class="pre">AsyncRankGPTRerank.async_postprocess_nodes()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.async_run_llm"><code class="docutils literal notranslate"><span class="pre">AsyncRankGPTRerank.async_run_llm()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.llm"><code class="docutils literal notranslate"><span class="pre">AsyncRankGPTRerank.llm</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.rankgpt_rerank_prompt"><code class="docutils literal notranslate"><span class="pre">AsyncRankGPTRerank.rankgpt_rerank_prompt</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.top_n"><code class="docutils literal notranslate"><span class="pre">AsyncRankGPTRerank.top_n</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.passagereranker.rankgpt.AsyncRankGPTRerank.verbose"><code class="docutils literal notranslate"><span class="pre">AsyncRankGPTRerank.verbose</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#autorag.nodes.passagereranker.rankgpt.rankgpt"><code class="docutils literal notranslate"><span class="pre">rankgpt()</span></code></a></li>

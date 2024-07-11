@@ -452,7 +452,7 @@ at <a class="reference external" href="https://medium.com/&#64;autorag/sem-score
 <section id="g-eval">
 <h2>5. G-Eval<a class="headerlink" href="#g-eval" title="Link to this heading">¶</a></h2>
 <section id="id4">
-<h3>📌Definition<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<h3>📌 Definition<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
 <p>Here is the <a class="reference external" href="https://arxiv.org/abs/2303.16634">link</a> that introduced <em><strong>G-Eval</strong></em></p>
 <p><em><strong>G-Eval</strong></em>, a framework of using large language models with <strong>chain-of-thoughts</strong> (CoT) and a form-filling paradigm,
 to assess the quality of NLG outputs.</p>
@@ -462,7 +462,7 @@ summarization task, outperforming all previous methods by a large margin.</p>
 </section>
 <hr class="docutils" />
 <section id="coherence">
-<h3>🍀1. Coherence<a class="headerlink" href="#coherence" title="Link to this heading">¶</a></h3>
+<h3>5-1. Coherence<a class="headerlink" href="#coherence" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Evaluate whether the answer is logically consistent and flows naturally.</p></li>
 <li><p>Evaluate the connections between sentences and how they fit into the overall context.</p></li>
@@ -470,7 +470,7 @@ summarization task, outperforming all previous methods by a large margin.</p>
 </section>
 <hr class="docutils" />
 <section id="consistency">
-<h3>🍀2. Consistency<a class="headerlink" href="#consistency" title="Link to this heading">¶</a></h3>
+<h3>5-2. Consistency<a class="headerlink" href="#consistency" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Evaluate whether the answer is consistent with and does not contradict the question asked or the information
 presented.</p></li>
@@ -480,18 +480,27 @@ presented.</p></li>
 </section>
 <hr class="docutils" />
 <section id="fluency">
-<h3>🍀3. Fluency<a class="headerlink" href="#fluency" title="Link to this heading">¶</a></h3>
+<h3>5-3. Fluency<a class="headerlink" href="#fluency" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Evaluate answers for fluency</p></li>
 </ul>
 </section>
 <hr class="docutils" />
 <section id="relevance">
-<h3>🍀4. Relevance<a class="headerlink" href="#relevance" title="Link to this heading">¶</a></h3>
+<h3>5-4. Relevance<a class="headerlink" href="#relevance" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Evaluate how well the answer meets the question’s requirements</p></li>
 <li><p>A highly relevant answer should be directly related to the question’s core topic or keyword.</p></li>
 </ul>
+</section>
+<section id="how-to-use-specific-g-eval-metrics">
+<h3>❗How to use specific G-Eval metrics<a class="headerlink" href="#how-to-use-specific-g-eval-metrics" title="Link to this heading">¶</a></h3>
+<p>You can use specific G-Eval metrics to use <code class="docutils literal notranslate"><span class="pre">metrics</span></code> parameter.</p>
+<p>Here is an example yaml file that uses <strong>G-Eval consistency</strong> metric.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">g_eval</span>
+<span class="w">  </span><span class="nt">metrics</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">consistency</span><span class="w"> </span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
 </section>
 </section>
 <section id="bert-score">
@@ -579,11 +588,12 @@ Cosine Similarity for each token-pair, and weight each token with IDF.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#g-eval">5. G-Eval</a><ul>
-<li><a class="reference internal" href="#id4">📌Definition</a></li>
-<li><a class="reference internal" href="#coherence">🍀1. Coherence</a></li>
-<li><a class="reference internal" href="#consistency">🍀2. Consistency</a></li>
-<li><a class="reference internal" href="#fluency">🍀3. Fluency</a></li>
-<li><a class="reference internal" href="#relevance">🍀4. Relevance</a></li>
+<li><a class="reference internal" href="#id4">📌 Definition</a></li>
+<li><a class="reference internal" href="#coherence">5-1. Coherence</a></li>
+<li><a class="reference internal" href="#consistency">5-2. Consistency</a></li>
+<li><a class="reference internal" href="#fluency">5-3. Fluency</a></li>
+<li><a class="reference internal" href="#relevance">5-4. Relevance</a></li>
+<li><a class="reference internal" href="#how-to-use-specific-g-eval-metrics">❗How to use specific G-Eval metrics</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#bert-score">6. Bert Score</a><ul>
