@@ -15,10 +15,10 @@
         gtag('js', new Date());
         gtag('config', 'G-T8ZKQM6RT9');
     </script>
-    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Hybrid - rsf" href="hybrid_rsf.html" /><link rel="prev" title="Hybrid - rrf" href="hybrid_rrf.html" />
+    <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="3. Passage Augmenter" href="../passage_augmenter/passage_augmenter.html" /><link rel="prev" title="Hybrid - rrf" href="hybrid_rrf.html" />
         <link rel="canonical" href="https://docs.auto-rag.com/nodes/retrieval/hybrid_cc.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
+    <!-- Generated with Sphinx 7.4.0 and Furo 2024.05.06 -->
         <title>Hybrid - cc - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=387cc868" />
@@ -268,8 +268,6 @@
 <li class="toctree-l2"><a class="reference internal" href="vectordb.html">Vectordb</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hybrid_rrf.html">Hybrid - rrf</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Hybrid - cc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hybrid_rsf.html">Hybrid - rsf</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hybrid_dbsf.html">Hybrid - dbsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../passage_augmenter/passage_augmenter.html">3. Passage Augmenter</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage Augmenter</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -411,30 +409,50 @@ This algorithm allows for the calculation of scores with varying weights between
 <p>By default, <code class="docutils literal notranslate"><span class="pre">hybrid</span></code> is designed to be used without writing target_module_params. Other modules listed in target_modules
 must be included in the config file, and hybrid is calculated based on the best of the results from those modules.</p>
 <p>Once evaluated to find the optimal pipeline, extracting the pipeline creates a parameter called target_module_params. This helps the hybrid work even if you don’t include other modules, which is useful in test dataset evaluation and deployment situations.</p>
-<p>Also, target_modules and target_module_params must be in the form of a tuple. By default, tuples don’t work in yaml files, but AutoRAG specifically uses them. In the AutoRAG config yaml file, a tuple is a tuple of parameters, as opposed to a List, which is a list of options for a parameter that you can try for optimization. Note that because we are using <code class="docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code>, we have to write tuples as if we were writing them in python.</p>
-<p>So something like <code class="docutils literal notranslate"><span class="pre">('bm25',</span> <span class="pre">'vectordb')</span></code> with quotes will work.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>You don’t have to specify the module that you want to fuse. It will auto-detect the best module name and parameter for each lexcial and semantic modules.</p>
+</div>
+<p>`## <strong>Node Parameters</strong></p>
+<ul class="simple">
+<li><p>(Required) <strong>top_k</strong>: Essential parameter for retrieval node.
+`</p></li>
+</ul>
 </section>
 <section id="module-parameters">
 <h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><strong>Parameters</strong>: <code class="docutils literal notranslate"><span class="pre">target_modules</span></code>, <code class="docutils literal notranslate"><span class="pre">weights</span></code>, <code class="docutils literal notranslate"><span class="pre">target_module_params</span></code></p></li>
-<li><p><strong>Purpose</strong>: This module combines different retrieval modules (target_modules) and applies weights to them, adjusting their influence on the final retrieval outcome. The <code class="docutils literal notranslate"><span class="pre">target_module_params</span></code> allows for further customization of each target module.</p></li>
+<li><p>(Required) <strong>normalize_method</strong>: The normalization method to use.
+There are some normalization method that you can use at the hybrid cc method.
+AutoRAG support following.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">mm</span></code>: Min-max scaling</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tmm</span></code>: Theoretical min-max scaling</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z</span></code>: z-score normalization</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dbsf</span></code>: 3-sigma normalization</p></li>
 </ul>
-<div class="admonition attention">
-<p class="admonition-title">Attention</p>
-<p>In the config YAML file that you wrote, you don’t have to specify the target_module_params.
-It is automatically generated when you run the optimization process.</p>
-</div>
+</li>
+<li><p>(Optional) <strong>weight_range</strong>: The range of the weight that you want to explore. If the weight is 1.0, it means the
+weight to the semantic module will be 1.0 and weight to the lexical module will be 0.0.
+You have to input this value as tuple. It looks like this. <code class="docutils literal notranslate"><span class="pre">(0.2,</span> <span class="pre">0.8)</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">(0.0,</span> <span class="pre">1.0)</span></code>.</p></li>
+<li><p>(Optional) <strong>test_weight_size</strong>: The size of the weight that tested for optimization. If the weight range
+is <code class="docutils literal notranslate"><span class="pre">(0.2,</span> <span class="pre">0.8)</span></code> and the size is 7, it will evaluate the following weights.
+<code class="docutils literal notranslate"><span class="pre">0.2,</span> <span class="pre">0.3,</span> <span class="pre">0.4,</span> <span class="pre">0.5,</span> <span class="pre">0.6,</span> <span class="pre">0.7,</span> <span class="pre">0.8</span></code>. Default is 101.</p></li>
+<li><p>(Optional) <strong>semantic_theoretical_min_value</strong>: This value used by <code class="docutils literal notranslate"><span class="pre">tmm</span></code> normalization method. You can set the
+theoretical minimum value by yourself. Default is -1.</p></li>
+<li><p>(Optional) <strong>lexical_theoretical_min_value</strong>: This value used by <code class="docutils literal notranslate"><span class="pre">tmm</span></code> normalization method. You can set the
+theoretical minimum value by yourself. Default is 0.</p></li>
+</ul>
 </section>
 <section id="example-config-yaml">
 <h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid_cc</span>
-<span class="w">    </span><span class="nt">target_modules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(&#39;bm25&#39;, &#39;vectordb&#39;)</span>
-<span class="w">    </span><span class="nt">weights</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(0.5, 0.5)</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(0.3, 0.7)</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(0.7, 0.3)</span>
+<span class="w">    </span><span class="nt">normalize_method</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">mm</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tmm</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">z</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">dbsf</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">weight_range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(0.0, 1.0)</span>
+<span class="w">    </span><span class="nt">test_weight_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<span class="w">    </span><span class="nt">lexical_theoretical_min_value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">semantic_theoretical_min_value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1</span>
 </pre></div>
 </div>
 </section>
@@ -445,12 +463,12 @@ It is automatically generated when you run the optimization process.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="hybrid_rsf.html">
+          <a class="next-page" href="../passage_augmenter/passage_augmenter.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Hybrid - rsf</div>
+                <div class="title">3. Passage Augmenter</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>

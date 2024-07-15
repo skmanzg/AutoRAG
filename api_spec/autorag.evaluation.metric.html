@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="autorag.nodes package" href="autorag.nodes.html" /><link rel="prev" title="autorag.evaluation package" href="autorag.evaluation.html" />
         <link rel="canonical" href="https://docs.auto-rag.com/api_spec/autorag.evaluation.metric.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
+    <!-- Generated with Sphinx 7.4.0 and Furo 2024.05.06 -->
         <title>autorag.evaluation.metric package - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=387cc868" />
@@ -265,8 +265,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/vectordb.html">Vectordb</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_cc.html">Hybrid - cc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_rsf.html">Hybrid - rsf</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_dbsf.html">Hybrid - dbsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/passage_augmenter/passage_augmenter.html">3. Passage Augmenter</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage Augmenter</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -417,7 +415,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.evaluation.metric.generation.bleu">
-<span class="sig-prename descclassname"><span class="pre">autorag.evaluation.metric.generation.</span></span><span class="sig-name descname"><span class="pre">bleu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">generation_gt:</span> <span class="pre">~typing.List[~typing.List[str]],</span> <span class="pre">generations:</span> <span class="pre">[&lt;class</span> <span class="pre">'str'&gt;],</span> <span class="pre">tokenize:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">smooth_method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'exp',</span> <span class="pre">smooth_value:</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">max_ngram_order:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">4,</span> <span class="pre">trg_lang:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'',</span> <span class="pre">**kwargs</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/evaluation/metric/generation.html#bleu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluation.metric.generation.bleu" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">autorag.evaluation.metric.generation.</span></span><span class="sig-name descname"><span class="pre">bleu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/evaluation/metric/generation.html#bleu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.evaluation.metric.generation.bleu" title="Link to this definition">¶</a></dt>
 <dd><p>Computes the BLEU metric given pred and ground-truth.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

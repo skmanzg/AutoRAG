@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Hybrid - cc" href="hybrid_cc.html" /><link rel="prev" title="Vectordb" href="vectordb.html" />
         <link rel="canonical" href="https://docs.auto-rag.com/nodes/retrieval/hybrid_rrf.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
+    <!-- Generated with Sphinx 7.4.0 and Furo 2024.05.06 -->
         <title>Hybrid - rrf - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=387cc868" />
@@ -268,8 +268,6 @@
 <li class="toctree-l2"><a class="reference internal" href="vectordb.html">Vectordb</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Hybrid - rrf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hybrid_cc.html">Hybrid - cc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hybrid_rsf.html">Hybrid - rsf</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hybrid_dbsf.html">Hybrid - dbsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../passage_augmenter/passage_augmenter.html">3. Passage Augmenter</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage Augmenter</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -406,32 +404,30 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">hybrid_rrf</span></code> module is designed to retrieve passages from multiple retrievals.
 The <code class="docutils literal notranslate"><span class="pre">hybrid_rrf</span></code> module is tailored for retrieving passages from multiple sources of information. It utilizes the Reciprocal Rank Fusion (RRF) algorithm to calculate final similarity scores. This calculation is based on the ranking of passages in each retrieval, effectively combining retrieval scores from different sources.</p>
 <section id="hybird-additional-explanation">
-<h2>❗ Hybird additional explanation<a class="headerlink" href="#hybird-additional-explanation" title="Link to this heading">¶</a></h2>
-<p>By default, <code class="docutils literal notranslate"><span class="pre">hybrid</span></code> is designed to be used without writing target_module_params. Other modules listed in target_modules
-must be included in the config YAML file, and hybrid is calculated based on the best of the results from those modules.</p>
-<p>Once evaluated to find the optimal pipeline, extracting the pipeline creates a parameter called target_module_params. This helps the hybrid work even if you don’t include other modules, which is useful in test dataset evaluation and deployment situations.</p>
-<p>Also, target_modules and target_module_params must be in the form of a tuple. By default, tuples don’t work in yaml files, but AutoRAG specifically uses them. In the AutoRAG config YAML file, a tuple is a tuple of parameters, as opposed to a List, which is a list of options for a parameter that you can try for optimization. Note that because we are using <code class="docutils literal notranslate"><span class="pre">ast.literal_eval()</span></code>, we have to write tuples as if we were writing them in python.</p>
-<p>So something like <code class="docutils literal notranslate"><span class="pre">('bm25',</span> <span class="pre">'vectordb')</span></code> with quotes will work.</p>
+<h2>❗️Hybird additional explanation<a class="headerlink" href="#hybird-additional-explanation" title="Link to this heading">¶</a></h2>
+<p>You can specify which rrf_k range that you want to explore. AutoRAG will find the optimal rrf_k parameter among your
+specified range.
+So, specify the range of rrf_k using <code class="docutils literal notranslate"><span class="pre">weight_range</span></code> is important to use hybrid_rrf.</p>
+</section>
+<section id="node-parameters">
+<h2><strong>Node Parameters</strong><a class="headerlink" href="#node-parameters" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>(Required) <strong>top_k</strong>: Essential parameter for retrieval node.</p></li>
+</ul>
 </section>
 <section id="module-parameters">
 <h2><strong>Module Parameters</strong><a class="headerlink" href="#module-parameters" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><strong>Parameters</strong>: <code class="docutils literal notranslate"><span class="pre">target_modules</span></code>, <code class="docutils literal notranslate"><span class="pre">rrf_k</span></code>, <code class="docutils literal notranslate"><span class="pre">target_module_params</span></code></p></li>
-<li><p><strong>Functionality</strong>: Configures the Hybrid RRF module by specifying target modules, the RRF constant ‘k’.
-<code class="docutils literal notranslate"><span class="pre">rrf_k</span></code> parameter can take a huge impact of the performance.</p></li>
+<li><p>(Optional) <strong>weight_range</strong>: The range of the weight(rrf_k) that you want to explore.
+The parameter name is <code class="docutils literal notranslate"><span class="pre">weight</span></code>, but it is actually <code class="docutils literal notranslate"><span class="pre">rrf_k</span></code> parameter at rrf algorithm.
+You have to input this value as tuple. It looks like this. <code class="docutils literal notranslate"><span class="pre">(10,</span> <span class="pre">60)</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">80)</span></code>.</p></li>
 </ul>
-<div class="admonition attention">
-<p class="admonition-title">Attention</p>
-<p>In the config YAML file that you wrote, you don’t have to specify the target_module_params.
-It is automatically generated when you run the optimization process.</p>
-</div>
 </section>
 <section id="example-config-yaml">
 <h2><strong>Example config.yaml</strong><a class="headerlink" href="#example-config-yaml" title="Link to this heading">¶</a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">module_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hybrid_rrf</span>
-<span class="w">    </span><span class="nt">target_modules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(&#39;bm25&#39;, &#39;vectordb&#39;)</span>
-<span class="w">    </span><span class="nt">rrf_k</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">10</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">weight_range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(4, 80)</span>
 </pre></div>
 </div>
 </section>
@@ -493,7 +489,8 @@ It is automatically generated when you run the optimization process.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Hybrid - rrf</a><ul>
-<li><a class="reference internal" href="#hybird-additional-explanation">❗ Hybird additional explanation</a></li>
+<li><a class="reference internal" href="#hybird-additional-explanation">❗️Hybird additional explanation</a></li>
+<li><a class="reference internal" href="#node-parameters"><strong>Node Parameters</strong></a></li>
 <li><a class="reference internal" href="#module-parameters"><strong>Module Parameters</strong></a></li>
 <li><a class="reference internal" href="#example-config-yaml"><strong>Example config.yaml</strong></a></li>
 </ul>

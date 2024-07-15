@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="autorag.schema package" href="autorag.schema.html" /><link rel="prev" title="autorag.nodes.queryexpansion package" href="autorag.nodes.queryexpansion.html" />
         <link rel="canonical" href="https://docs.auto-rag.com/api_spec/autorag.nodes.retrieval.html" />
 
-    <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
+    <!-- Generated with Sphinx 7.4.0 and Furo 2024.05.06 -->
         <title>autorag.nodes.retrieval package - AutoRAG documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=387cc868" />
@@ -265,8 +265,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/vectordb.html">Vectordb</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_rrf.html">Hybrid - rrf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_cc.html">Hybrid - cc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_rsf.html">Hybrid - rsf</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../nodes/retrieval/hybrid_dbsf.html">Hybrid - dbsf</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../nodes/passage_augmenter/passage_augmenter.html">3. Passage Augmenter</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 3. Passage Augmenter</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -540,18 +538,17 @@ Its data structure looks like this:</p>
 <section id="module-autorag.nodes.retrieval.hybrid_cc">
 <span id="autorag-nodes-retrieval-hybrid-cc-module"></span><h2>autorag.nodes.retrieval.hybrid_cc module<a class="headerlink" href="#module-autorag.nodes.retrieval.hybrid_cc" title="Link to this heading">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_cc.cc_pure">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_cc.</span></span><span class="sig-name descname"><span class="pre">cc_pure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_cc.html#cc_pure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_cc.cc_pure" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_cc.fuse_per_query">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_cc.</span></span><span class="sig-name descname"><span class="pre">fuse_per_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semantic_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lexical_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semantic_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lexical_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semantic_theoretical_min_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lexical_theoretical_min_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_cc.html#fuse_per_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_cc.fuse_per_query" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_cc.hybrid_cc">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_cc.</span></span><span class="sig-name descname"><span class="pre">hybrid_cc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.5,</span> <span class="pre">0.5)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_cc.html#hybrid_cc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_cc.hybrid_cc" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_cc.</span></span><span class="sig-name descname"><span class="pre">hybrid_cc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'mm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semantic_theoretical_min_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lexical_theoretical_min_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_cc.html#hybrid_cc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_cc.hybrid_cc" title="Link to this definition">¶</a></dt>
 <dd><p>Hybrid CC function.
-CC (convex combination) is a method to fuse multiple retrieval results.
+CC (convex combination) is a method to fuse lexical and semantic retrieval results.
 It is a method that first normalizes the scores of each retrieval result,
 and then combines them with the given weights.
-To use this function, you must input ids and scores as tuple.
 It is uniquer than other retrieval modules, because it does not really execute retrieval,
 but just fuse the results of other retrieval functions.
 So you have to run more than two retrieval modules before running this function.
@@ -561,71 +558,64 @@ Make it as tuple and input it to this function.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ids</strong> – The tuple of ids that you want to fuse.
-The length of this must be the same as the length of scores.</p></li>
+The length of this must be the same as the length of scores.
+The semantic retrieval ids must be the first index.</p></li>
 <li><p><strong>scores</strong> – The retrieve scores that you want to fuse.
-The length of this must be the same as the length of ids.</p></li>
+The length of this must be the same as the length of ids.
+The semantic retrieval scores must be the first index.</p></li>
 <li><p><strong>top_k</strong> – The number of passages to be retrieved.</p></li>
-<li><p><strong>weights</strong> – Weight for each retrieval result.
-Default is (0.5, 0.5).
-You must set its length as the same as the length of ids and scores.
-Plus, the sum of the weights must be 1.</p></li>
+<li><p><strong>normalize_method</strong> – <p>The normalization method to use.
+There are some normalization method that you can use at the hybrid cc method.
+AutoRAG support following.</p>
+<blockquote>
+<div><ul>
+<li><p><cite>mm</cite>: Min-max scaling</p></li>
+<li><p><cite>tmm</cite>: Theoretical min-max scaling</p></li>
+<li><p><cite>z</cite>: z-score normalization</p></li>
+<li><p><cite>dbsf</cite>: 3-sigma normalization</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>weight</strong> – The weight value. If the weight is 1.0, it means the
+weight to the semantic module will be 1.0 and weight to the lexical module will be 0.0.</p></li>
+<li><p><strong>semantic_theoretical_min_value</strong> – This value used by <cite>tmm</cite> normalization method. You can set the
+theoretical minimum value by yourself. Default is -1.</p></li>
+<li><p><strong>lexical_theoretical_min_value</strong> – This value used by <cite>tmm</cite> normalization method. You can set the
+theoretical minimum value by yourself. Default is 0.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The tuple of ids and fused scores that fused by CC.</p>
+<dd class="field-even"><p>The tuple of ids and fused scores that fused by CC. Plus, the third element is selected weight value.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</section>
-<section id="module-autorag.nodes.retrieval.hybrid_dbsf">
-<span id="autorag-nodes-retrieval-hybrid-dbsf-module"></span><h2>autorag.nodes.retrieval.hybrid_dbsf module<a class="headerlink" href="#module-autorag.nodes.retrieval.hybrid_dbsf" title="Link to this heading">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_dbsf.dbsf_min_max_scores">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_dbsf.</span></span><span class="sig-name descname"><span class="pre">dbsf_min_max_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_dbsf.html#dbsf_min_max_scores"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_dbsf.dbsf_min_max_scores" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_cc.normalize_dbsf">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_cc.</span></span><span class="sig-name descname"><span class="pre">normalize_dbsf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_min_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_cc.html#normalize_dbsf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_cc.normalize_dbsf" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_dbsf.dbsf_pure">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_dbsf.</span></span><span class="sig-name descname"><span class="pre">dbsf_pure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.5,</span> <span class="pre">0.5)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_dbsf.html#dbsf_pure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_dbsf.dbsf_pure" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_cc.normalize_mm">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_cc.</span></span><span class="sig-name descname"><span class="pre">normalize_mm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_min_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_cc.html#normalize_mm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_cc.normalize_mm" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_dbsf.hybrid_dbsf">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_dbsf.</span></span><span class="sig-name descname"><span class="pre">hybrid_dbsf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.5,</span> <span class="pre">0.5)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_dbsf.html#hybrid_dbsf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_dbsf.hybrid_dbsf" title="Link to this definition">¶</a></dt>
-<dd><p>Hybrid DBSF function.
-DBSF (Distribution Based Score Fusion) is a method to combine multiple retrieval results based on their distribution.
-It is uniquer than other retrieval modules, because it does not really execute retrieval,
-but just fuse the results of other retrieval functions.
-So you have to run more than two retrieval modules before running this function.
-And collect ids and scores result from each retrieval module.
-Make it as tuple and input it to this function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ids</strong> – The tuple of ids that you want to fuse.
-The length of this must be the same as the length of scores.</p></li>
-<li><p><strong>scores</strong> – The retrieve scores that you want to fuse.
-The length of this must be the same as the length of ids.</p></li>
-<li><p><strong>top_k</strong> – The number of passages to be retrieved.</p></li>
-<li><p><strong>weights</strong> – Weight for each retrieval result.
-Default is (0.5, 0.5).
-You must set its length as the same as the length of ids and scores.
-Plus, the sum of the weights must be 1.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The tuple of ids and fused scores that fused by DBSF.</p>
-</dd>
-</dl>
-</dd></dl>
+<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_cc.normalize_tmm">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_cc.</span></span><span class="sig-name descname"><span class="pre">normalize_tmm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_min_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_cc.html#normalize_tmm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_cc.normalize_tmm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_cc.normalize_z">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_cc.</span></span><span class="sig-name descname"><span class="pre">normalize_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_min_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_cc.html#normalize_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_cc.normalize_z" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </section>
 <section id="module-autorag.nodes.retrieval.hybrid_rrf">
 <span id="autorag-nodes-retrieval-hybrid-rrf-module"></span><h2>autorag.nodes.retrieval.hybrid_rrf module<a class="headerlink" href="#module-autorag.nodes.retrieval.hybrid_rrf" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_rrf.hybrid_rrf">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_rrf.</span></span><span class="sig-name descname"><span class="pre">hybrid_rrf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rrf_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_rrf.html#hybrid_rrf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_rrf.hybrid_rrf" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_rrf.</span></span><span class="sig-name descname"><span class="pre">hybrid_rrf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rrf_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_rrf.html#hybrid_rrf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_rrf.hybrid_rrf" title="Link to this definition">¶</a></dt>
 <dd><p>Hybrid RRF function.
 RRF (Rank Reciprocal Fusion) is a method to fuse multiple retrieval results.
 It is common to fuse dense retrieval and sparse retrieval results using RRF.
@@ -643,9 +633,12 @@ The length of this must be the same as the length of scores.</p></li>
 <li><p><strong>scores</strong> – The retrieve scores that you want to fuse.
 The length of this must be the same as the length of ids.</p></li>
 <li><p><strong>top_k</strong> – The number of passages to be retrieved.</p></li>
-<li><p><strong>rrf_k</strong> – Hyperparameter for RRF.
+<li><p><strong>weight</strong> – Hyperparameter for RRF.
+It was originally rrf_k value.
 Default is 60.
 For more information, please visit our documentation.</p></li>
+<li><p><strong>rrf_k</strong> – (Deprecated) Hyperparameter for RRF.
+It was originally rrf_k value. Will remove at further version.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -662,54 +655,6 @@ For more information, please visit our documentation.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_rrf.rrf_pure">
 <span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_rrf.</span></span><span class="sig-name descname"><span class="pre">rrf_pure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rrf_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_rrf.html#rrf_pure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_rrf.rrf_pure" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</section>
-<section id="module-autorag.nodes.retrieval.hybrid_rsf">
-<span id="autorag-nodes-retrieval-hybrid-rsf-module"></span><h2>autorag.nodes.retrieval.hybrid_rsf module<a class="headerlink" href="#module-autorag.nodes.retrieval.hybrid_rsf" title="Link to this heading">¶</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_rsf.hybrid_rsf">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_rsf.</span></span><span class="sig-name descname"><span class="pre">hybrid_rsf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.5,</span> <span class="pre">0.5)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_rsf.html#hybrid_rsf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_rsf.hybrid_rsf" title="Link to this definition">¶</a></dt>
-<dd><p>Hybrid RSF function.
-RSF (Relative Score Fusion) is a method to combine multiple retrieval results based on their relative scores.
-It is uniquer than other retrieval modules, because it does not really execute retrieval,
-but just fuse the results of other retrieval functions.
-So you have to run more than two retrieval modules before running this function.
-And collect ids and scores result from each retrieval module.
-Make it as tuple and input it to this function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ids</strong> – The tuple of ids that you want to fuse.
-The length of this must be the same as the length of scores.</p></li>
-<li><p><strong>scores</strong> – The retrieve scores that you want to fuse.
-The length of this must be the same as the length of ids.</p></li>
-<li><p><strong>top_k</strong> – The number of passages to be retrieved.</p></li>
-<li><p><strong>weights</strong> – Weight for each retrieval result.
-Default is (0.5, 0.5).
-You must set its length as the same as the length of ids and scores.
-Plus, the sum of the weights must be 1.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The tuple of ids and fused scores that fused by RSF.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_rsf.rsf_min_max_scores">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_rsf.</span></span><span class="sig-name descname"><span class="pre">rsf_min_max_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_rsf.html#rsf_min_max_scores"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_rsf.rsf_min_max_scores" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_rsf.rsf_pure">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_rsf.</span></span><span class="sig-name descname"><span class="pre">rsf_pure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.5,</span> <span class="pre">0.5)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_rsf.html#rsf_pure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_rsf.rsf_pure" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.retrieval.hybrid_rsf.score_fusion">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.hybrid_rsf.</span></span><span class="sig-name descname"><span class="pre">score_fusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_max_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.5,</span> <span class="pre">0.5)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/hybrid_rsf.html#score_fusion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.hybrid_rsf.score_fusion" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -743,7 +688,7 @@ The columns will be ‘retrieved_contents’, ‘retrieved_ids’, ‘retrieve_s
 
 <dl class="py function">
 <dt class="sig sig-object py" id="autorag.nodes.retrieval.run.get_hybrid_execution_times">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.run.</span></span><span class="sig-name descname"><span class="pre">get_hybrid_execution_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filenames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/run.html#get_hybrid_execution_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.run.get_hybrid_execution_times" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.run.</span></span><span class="sig-name descname"><span class="pre">get_hybrid_execution_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lexical_summary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semantic_summary</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/run.html#get_hybrid_execution_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.run.get_hybrid_execution_times" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -752,8 +697,8 @@ The columns will be ‘retrieved_contents’, ‘retrieved_ids’, ‘retrieve_s
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.retrieval.run.get_module_params">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.run.</span></span><span class="sig-name descname"><span class="pre">get_module_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filenames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/run.html#get_module_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.run.get_module_params" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="autorag.nodes.retrieval.run.optimize_hybrid">
+<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.run.</span></span><span class="sig-name descname"><span class="pre">optimize_hybrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hybrid_module_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hybrid_module_param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrieval_gt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qa_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/run.html#optimize_hybrid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.run.optimize_hybrid" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -774,23 +719,6 @@ Could be query expansion’s best result or qa data.</p></li>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The best result dataframe.
 It contains previous result columns and retrieval node’s result columns.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="autorag.nodes.retrieval.run.select_result_for_hybrid">
-<span class="sig-prename descclassname"><span class="pre">autorag.nodes.retrieval.run.</span></span><span class="sig-name descname"><span class="pre">select_result_for_hybrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_modules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/autorag/nodes/retrieval/run.html#select_result_for_hybrid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#autorag.nodes.retrieval.run.select_result_for_hybrid" title="Link to this definition">¶</a></dt>
-<dd><p>Get ids and scores of target_module from summary.csv and each result parquet file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>node_dir</strong> – The directory of the node.</p></li>
-<li><p><strong>target_modules</strong> – The name of the target modules.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of filenames.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -932,14 +860,12 @@ Its usage is for async retrieval of vector_db row by row.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.retrieval.hybrid_cc">autorag.nodes.retrieval.hybrid_cc module</a><ul>
-<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_cc.cc_pure"><code class="docutils literal notranslate"><span class="pre">cc_pure()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_cc.fuse_per_query"><code class="docutils literal notranslate"><span class="pre">fuse_per_query()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_cc.hybrid_cc"><code class="docutils literal notranslate"><span class="pre">hybrid_cc()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-autorag.nodes.retrieval.hybrid_dbsf">autorag.nodes.retrieval.hybrid_dbsf module</a><ul>
-<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_dbsf.dbsf_min_max_scores"><code class="docutils literal notranslate"><span class="pre">dbsf_min_max_scores()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_dbsf.dbsf_pure"><code class="docutils literal notranslate"><span class="pre">dbsf_pure()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_dbsf.hybrid_dbsf"><code class="docutils literal notranslate"><span class="pre">hybrid_dbsf()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_cc.normalize_dbsf"><code class="docutils literal notranslate"><span class="pre">normalize_dbsf()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_cc.normalize_mm"><code class="docutils literal notranslate"><span class="pre">normalize_mm()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_cc.normalize_tmm"><code class="docutils literal notranslate"><span class="pre">normalize_tmm()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_cc.normalize_z"><code class="docutils literal notranslate"><span class="pre">normalize_z()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.retrieval.hybrid_rrf">autorag.nodes.retrieval.hybrid_rrf module</a><ul>
@@ -948,21 +874,13 @@ Its usage is for async retrieval of vector_db row by row.</p>
 <li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_rrf.rrf_pure"><code class="docutils literal notranslate"><span class="pre">rrf_pure()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-autorag.nodes.retrieval.hybrid_rsf">autorag.nodes.retrieval.hybrid_rsf module</a><ul>
-<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_rsf.hybrid_rsf"><code class="docutils literal notranslate"><span class="pre">hybrid_rsf()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_rsf.rsf_min_max_scores"><code class="docutils literal notranslate"><span class="pre">rsf_min_max_scores()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_rsf.rsf_pure"><code class="docutils literal notranslate"><span class="pre">rsf_pure()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.nodes.retrieval.hybrid_rsf.score_fusion"><code class="docutils literal notranslate"><span class="pre">score_fusion()</span></code></a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#module-autorag.nodes.retrieval.run">autorag.nodes.retrieval.run module</a><ul>
 <li><a class="reference internal" href="#autorag.nodes.retrieval.run.edit_summary_df_params"><code class="docutils literal notranslate"><span class="pre">edit_summary_df_params()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.retrieval.run.evaluate_retrieval_node"><code class="docutils literal notranslate"><span class="pre">evaluate_retrieval_node()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.retrieval.run.get_hybrid_execution_times"><code class="docutils literal notranslate"><span class="pre">get_hybrid_execution_times()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.retrieval.run.get_ids_and_scores"><code class="docutils literal notranslate"><span class="pre">get_ids_and_scores()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.nodes.retrieval.run.get_module_params"><code class="docutils literal notranslate"><span class="pre">get_module_params()</span></code></a></li>
+<li><a class="reference internal" href="#autorag.nodes.retrieval.run.optimize_hybrid"><code class="docutils literal notranslate"><span class="pre">optimize_hybrid()</span></code></a></li>
 <li><a class="reference internal" href="#autorag.nodes.retrieval.run.run_retrieval_node"><code class="docutils literal notranslate"><span class="pre">run_retrieval_node()</span></code></a></li>
-<li><a class="reference internal" href="#autorag.nodes.retrieval.run.select_result_for_hybrid"><code class="docutils literal notranslate"><span class="pre">select_result_for_hybrid()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-autorag.nodes.retrieval.vectordb">autorag.nodes.retrieval.vectordb module</a><ul>
