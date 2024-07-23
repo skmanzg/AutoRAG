@@ -378,17 +378,18 @@
         <article role="main" id="furo-main-content">
           <h1>Source code for autorag.nodes.retrieval.vectordb</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">chromadb</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">chromadb</span> <span class="kn">import</span> <span class="n">GetResult</span><span class="p">,</span> <span class="n">QueryResult</span>
 <span class="kn">from</span> <span class="nn">chromadb.utils.batch_utils</span> <span class="kn">import</span> <span class="n">create_batches</span>
 <span class="kn">from</span> <span class="nn">llama_index.core.embeddings</span> <span class="kn">import</span> <span class="n">BaseEmbedding</span>
 <span class="kn">from</span> <span class="nn">llama_index.embeddings.openai</span> <span class="kn">import</span> <span class="n">OpenAIEmbedding</span>
 
 <span class="kn">from</span> <span class="nn">autorag.nodes.retrieval.base</span> <span class="kn">import</span> <span class="n">retrieval_node</span><span class="p">,</span> <span class="n">evenly_distribute_passages</span>
 <span class="kn">from</span> <span class="nn">autorag.utils</span> <span class="kn">import</span> <span class="n">validate_corpus_dataset</span>
-<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span><span class="p">,</span> <span class="n">openai_truncate_by_token</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">process_batch</span><span class="p">,</span> <span class="n">openai_truncate_by_token</span><span class="p">,</span> <span class="n">flatten_apply</span>
 
 
 <div class="viewcode-block" id="vectordb">
@@ -396,7 +397,8 @@
 <span class="nd">@retrieval_node</span>
 <span class="k">def</span> <span class="nf">vectordb</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">collection</span><span class="p">:</span> <span class="n">chromadb</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span>
              <span class="n">embedding_model</span><span class="p">:</span> <span class="n">BaseEmbedding</span><span class="p">,</span>
-             <span class="n">embedding_batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
+             <span class="n">embedding_batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
+             <span class="n">ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    VectorDB retrieval function.</span>
 <span class="sd">    You have to get a chroma collection that is already ingested.</span>
@@ -410,6 +412,9 @@
 <span class="sd">    :param embedding_batch: The number of queries to be processed in parallel.</span>
 <span class="sd">        This is used to prevent API error at the query embedding.</span>
 <span class="sd">        Default is 128.</span>
+<span class="sd">    :param ids: The optional list of ids that you want to retrieve.</span>
+<span class="sd">        You don&#39;t need to specify this in the general use cases.</span>
+<span class="sd">        Default is None.</span>
 
 <span class="sd">    :return: The 2-d list contains a list of passage ids that retrieved from vectordb and 2-d list of its scores.</span>
 <span class="sd">        It will be a length of queries. And each element has a length of top_k.</span>
@@ -417,8 +422,25 @@
     <span class="c1"># check if bm25_corpus is valid</span>
     <span class="k">assert</span> <span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> \
         <span class="s2">&quot;collection must contain at least one document. Please check you ingested collection correctly.&quot;</span>
+    <span class="c1"># truncate queries and embedding execution here.</span>
+    <span class="n">openai_embedding_limit</span> <span class="o">=</span> <span class="mi">8191</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">embedding_model</span><span class="p">,</span> <span class="n">OpenAIEmbedding</span><span class="p">):</span>
+        <span class="n">queries</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">query_list</span><span class="p">:</span> <span class="n">openai_truncate_by_token</span><span class="p">(</span><span class="n">query_list</span><span class="p">,</span> <span class="n">openai_embedding_limit</span><span class="p">,</span>
+                                                                       <span class="n">embedding_model</span><span class="o">.</span><span class="n">model_name</span><span class="p">),</span> <span class="n">queries</span><span class="p">))</span>
+
+    <span class="n">query_embeddings</span> <span class="o">=</span> <span class="n">flatten_apply</span><span class="p">(</span><span class="n">run_query_embedding_batch</span><span class="p">,</span> <span class="n">queries</span><span class="p">,</span> <span class="n">embedding_model</span><span class="o">=</span><span class="n">embedding_model</span><span class="p">,</span>
+                                     <span class="n">batch_size</span><span class="o">=</span><span class="n">embedding_batch</span><span class="p">)</span>
+
+    <span class="c1"># if ids are specified, fetch the ids score from Chroma</span>
+    <span class="k">if</span> <span class="n">ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">chromadb</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+        <span class="n">score_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">query_embedding_list</span><span class="p">,</span> <span class="n">id_list</span><span class="p">:</span> <span class="n">get_id_scores</span><span class="p">(</span><span class="n">id_list</span><span class="p">,</span> <span class="n">query_embedding_list</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">client</span><span class="p">),</span>
+            <span class="n">query_embeddings</span><span class="p">,</span> <span class="n">ids</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ids</span><span class="p">,</span> <span class="n">score_result</span>
+
     <span class="c1"># run async vector_db_pure function</span>
-    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">vectordb_pure</span><span class="p">(</span><span class="n">input_queries</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">embedding_model</span><span class="p">)</span> <span class="k">for</span> <span class="n">input_queries</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">]</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">vectordb_pure</span><span class="p">(</span><span class="n">query_embedding</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span> <span class="k">for</span> <span class="n">query_embedding</span> <span class="ow">in</span> <span class="n">query_embeddings</span><span class="p">]</span>
     <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">process_batch</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">embedding_batch</span><span class="p">))</span>
     <span class="n">id_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">))</span>
@@ -429,30 +451,20 @@
 
 <div class="viewcode-block" id="vectordb_pure">
 <a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.vectordb.vectordb_pure">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">vectordb_pure</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">collection</span><span class="p">:</span> <span class="n">chromadb</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span>
-                        <span class="n">embedding_model</span><span class="p">:</span> <span class="n">BaseEmbedding</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">vectordb_pure</span><span class="p">(</span><span class="n">query_embeddings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">collection</span><span class="p">:</span> <span class="n">chromadb</span><span class="o">.</span><span class="n">Collection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span>
+    <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Async VectorDB retrieval function.</span>
 <span class="sd">    Its usage is for async retrieval of vector_db row by row.</span>
 
-<span class="sd">    :param queries: A list of query strings.</span>
+<span class="sd">    :param query_embeddings: A list of query embeddings.</span>
 <span class="sd">    :param top_k: The number of passages to be retrieved.</span>
 <span class="sd">    :param collection: A chroma collection instance that will be used to retrieve passages.</span>
-<span class="sd">    :param embedding_model: An embedding model instance that will be used to embed queries.</span>
 
 <span class="sd">    :return: The tuple contains a list of passage ids that retrieved from vectordb and a list of its scores.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># truncate queries if embedding is openai and the query exceeded token limit</span>
-    <span class="n">openai_embedding_limit</span> <span class="o">=</span> <span class="mi">8191</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">embedding_model</span><span class="p">,</span> <span class="n">OpenAIEmbedding</span><span class="p">):</span>
-        <span class="n">queries</span> <span class="o">=</span> <span class="n">openai_truncate_by_token</span><span class="p">(</span><span class="n">queries</span><span class="p">,</span> <span class="n">openai_embedding_limit</span><span class="p">,</span>
-                                           <span class="n">embedding_model</span><span class="o">.</span><span class="n">model_name</span><span class="p">)</span>
-
-    <span class="c1"># embed query</span>
-    <span class="n">embedded_queries</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">embedding_model</span><span class="o">.</span><span class="n">get_query_embedding</span><span class="p">,</span> <span class="n">queries</span><span class="p">))</span>
-
     <span class="n">id_result</span><span class="p">,</span> <span class="n">score_result</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">embedded_query</span> <span class="ow">in</span> <span class="n">embedded_queries</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">embedded_query</span> <span class="ow">in</span> <span class="n">query_embeddings</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query_embeddings</span><span class="o">=</span><span class="n">embedded_query</span><span class="p">,</span> <span class="n">n_results</span><span class="o">=</span><span class="n">top_k</span><span class="p">)</span>
         <span class="n">id_result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">])</span>
         <span class="n">score_result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;distances&#39;</span><span class="p">])</span>
@@ -494,6 +506,43 @@
             <span class="n">ids</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">embed_content</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span> <span class="n">embeddings</span><span class="o">=</span><span class="n">embed_content</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="run_query_embedding_batch">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.vectordb.run_query_embedding_batch">[docs]</a>
+<span class="k">def</span> <span class="nf">run_query_embedding_batch</span><span class="p">(</span><span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">embedding_model</span><span class="p">:</span> <span class="n">BaseEmbedding</span><span class="p">,</span>
+                              <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">queries</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">):</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">queries</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch_size</span><span class="p">]</span>
+        <span class="n">embeddings</span> <span class="o">=</span> <span class="n">embedding_model</span><span class="o">.</span><span class="n">get_text_embedding_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="get_id_scores">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.vectordb.get_id_scores">[docs]</a>
+<span class="k">def</span> <span class="nf">get_id_scores</span><span class="p">(</span><span class="n">ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">query_embeddings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
+                  <span class="n">collection</span><span class="p">:</span> <span class="n">chromadb</span><span class="o">.</span><span class="n">Collection</span><span class="p">,</span> <span class="n">temp_client</span><span class="p">:</span> <span class="n">chromadb</span><span class="o">.</span><span class="n">Client</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ids</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">ids</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="n">id_results</span><span class="p">:</span> <span class="n">GetResult</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;embeddings&#39;</span><span class="p">])</span>
+    <span class="n">temp_collection</span> <span class="o">=</span> <span class="n">temp_client</span><span class="o">.</span><span class="n">create_collection</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;temp&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;hnsw:space&quot;</span><span class="p">:</span> <span class="s2">&quot;cosine&quot;</span><span class="p">})</span>
+    <span class="n">temp_collection</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">id_results</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">],</span> <span class="n">embeddings</span><span class="o">=</span><span class="n">id_results</span><span class="p">[</span><span class="s1">&#39;embeddings&#39;</span><span class="p">])</span>
+
+    <span class="n">query_result</span><span class="p">:</span> <span class="n">QueryResult</span> <span class="o">=</span> <span class="n">temp_collection</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query_embeddings</span><span class="o">=</span><span class="n">query_embeddings</span><span class="p">,</span> <span class="n">n_results</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_result</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_result</span><span class="p">[</span><span class="s1">&#39;distances&#39;</span><span class="p">])</span>
+    <span class="n">id_scores_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">id_</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">id_</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">id_list</span><span class="p">,</span> <span class="n">score_list</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">query_result</span><span class="p">[</span><span class="s1">&#39;ids&#39;</span><span class="p">],</span> <span class="n">query_result</span><span class="p">[</span><span class="s1">&#39;distances&#39;</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">id_</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">id_scores_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">id_idx</span> <span class="o">=</span> <span class="n">id_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
+            <span class="n">id_scores_dict</span><span class="p">[</span><span class="n">id_</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score_list</span><span class="p">[</span><span class="n">id_idx</span><span class="p">])</span>
+    <span class="n">id_scores_pd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">id_scores_dict</span><span class="p">)</span>
+    <span class="n">temp_client</span><span class="o">.</span><span class="n">delete_collection</span><span class="p">(</span><span class="s2">&quot;temp&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">id_scores_pd</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
 
 </pre></div>
         </article>

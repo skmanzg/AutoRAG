@@ -380,6 +380,7 @@
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -388,6 +389,8 @@
 
 <span class="kn">from</span> <span class="nn">autorag.evaluation</span> <span class="kn">import</span> <span class="n">evaluate_retrieval</span>
 <span class="kn">from</span> <span class="nn">autorag.strategy</span> <span class="kn">import</span> <span class="n">measure_speed</span><span class="p">,</span> <span class="n">filter_by_threshold</span><span class="p">,</span> <span class="n">select_best</span>
+<span class="kn">from</span> <span class="nn">autorag.support</span> <span class="kn">import</span> <span class="n">get_support_modules</span>
+<span class="kn">from</span> <span class="nn">autorag.utils.util</span> <span class="kn">import</span> <span class="n">get_best_row</span><span class="p">,</span> <span class="n">to_list</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;AutoRAG&quot;</span><span class="p">)</span>
 
@@ -533,7 +536,8 @@
             <span class="n">filename_first</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hybrid_modules</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># for Evaluator</span>
             <span class="c1"># get id and score</span>
-            <span class="n">ids_scores</span> <span class="o">=</span> <span class="n">get_ids_and_scores</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="p">[</span><span class="n">semantic_selected_filename</span><span class="p">,</span> <span class="n">lexical_selected_filename</span><span class="p">])</span>
+            <span class="n">ids_scores</span> <span class="o">=</span> <span class="n">get_ids_and_scores</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="p">[</span><span class="n">semantic_selected_filename</span><span class="p">,</span> <span class="n">lexical_selected_filename</span><span class="p">],</span>
+                                            <span class="n">semantic_summary_df</span><span class="p">,</span> <span class="n">lexical_summary_df</span><span class="p">,</span> <span class="n">previous_result</span><span class="p">)</span>
             <span class="n">hybrid_module_params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">{</span><span class="o">**</span><span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">ids_scores</span><span class="p">},</span> <span class="n">hybrid_module_params</span><span class="p">))</span>
 
             <span class="c1"># optimize each modules</span>
@@ -627,15 +631,70 @@
 
 <div class="viewcode-block" id="get_ids_and_scores">
 <a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.get_ids_and_scores">[docs]</a>
-<span class="k">def</span> <span class="nf">get_ids_and_scores</span><span class="p">(</span><span class="n">node_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filenames</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">get_ids_and_scores</span><span class="p">(</span><span class="n">node_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filenames</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                       <span class="n">semantic_summary_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                       <span class="n">lexical_summary_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                       <span class="n">previous_result</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]]:</span>
+    <span class="n">project_dir</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">PurePath</span><span class="p">(</span><span class="n">node_dir</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
     <span class="n">best_results_df</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
         <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">filename</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">node_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">),</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;pyarrow&#39;</span><span class="p">),</span> <span class="n">filenames</span><span class="p">))</span>
     <span class="n">ids</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;retrieved_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">best_results_df</span><span class="p">))</span>
     <span class="n">scores</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;retrieve_scores&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">best_results_df</span><span class="p">))</span>
+    <span class="c1"># search non-duplicate ids</span>
+    <span class="n">semantic_ids</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">ids</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">lexical_ids</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">ids</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">get_non_duplicate_ids</span><span class="p">(</span><span class="n">target_ids</span><span class="p">,</span> <span class="n">compare_ids</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get non-duplicate ids from target_ids and compare_ids.</span>
+<span class="sd">        If you want to non-duplicate ids of semantic_ids, you have to put it at target_ids.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result_ids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_ids</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">compare_ids</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">target_id_list</span><span class="p">,</span> <span class="n">compare_id_list</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">target_ids</span><span class="p">,</span> <span class="n">compare_ids</span><span class="p">):</span>
+            <span class="n">query_duplicated</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">compare_id_list</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">target_id_list</span><span class="p">))</span>
+            <span class="n">duplicate_list</span> <span class="o">=</span> <span class="n">query_duplicated</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_duplicated</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">[]</span>
+            <span class="n">result_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">duplicate_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result_ids</span>
+
+    <span class="n">lexical_target_ids</span> <span class="o">=</span> <span class="n">get_non_duplicate_ids</span><span class="p">(</span><span class="n">lexical_ids</span><span class="p">,</span> <span class="n">semantic_ids</span><span class="p">)</span>
+    <span class="n">semantic_target_ids</span> <span class="o">=</span> <span class="n">get_non_duplicate_ids</span><span class="p">(</span><span class="n">semantic_ids</span><span class="p">,</span> <span class="n">lexical_ids</span><span class="p">)</span>
+
+    <span class="n">new_id_tuple</span> <span class="o">=</span> <span class="p">([</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">semantic_ids</span><span class="p">,</span> <span class="n">semantic_target_ids</span><span class="p">)],</span>
+                    <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lexical_ids</span><span class="p">,</span> <span class="n">lexical_target_ids</span><span class="p">)])</span>
+
+    <span class="c1"># search non-duplicate ids&#39; scores</span>
+    <span class="n">new_semantic_scores</span> <span class="o">=</span> <span class="n">get_scores_by_ids</span><span class="p">(</span><span class="n">semantic_target_ids</span><span class="p">,</span> <span class="n">semantic_summary_df</span><span class="p">,</span> <span class="n">project_dir</span><span class="p">,</span> <span class="n">previous_result</span><span class="p">)</span>
+    <span class="n">new_lexical_scores</span> <span class="o">=</span> <span class="n">get_scores_by_ids</span><span class="p">(</span><span class="n">lexical_target_ids</span><span class="p">,</span> <span class="n">lexical_summary_df</span><span class="p">,</span> <span class="n">project_dir</span><span class="p">,</span> <span class="n">previous_result</span><span class="p">)</span>
+
+    <span class="n">new_score_tuple</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">new_semantic_scores</span><span class="p">)],</span>
+        <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">new_lexical_scores</span><span class="p">)],</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s1">&#39;ids&#39;</span><span class="p">:</span> <span class="n">ids</span><span class="p">,</span>
-        <span class="s1">&#39;scores&#39;</span><span class="p">:</span> <span class="n">scores</span><span class="p">,</span>
+        <span class="s1">&#39;ids&#39;</span><span class="p">:</span> <span class="n">new_id_tuple</span><span class="p">,</span>
+        <span class="s1">&#39;scores&#39;</span><span class="p">:</span> <span class="n">new_score_tuple</span><span class="p">,</span>
     <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="get_scores_by_ids">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.get_scores_by_ids">[docs]</a>
+<span class="k">def</span> <span class="nf">get_scores_by_ids</span><span class="p">(</span><span class="n">ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                      <span class="n">module_summary_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                      <span class="n">project_dir</span><span class="p">,</span> <span class="n">previous_result</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+    <span class="n">module_name</span> <span class="o">=</span> <span class="n">get_best_row</span><span class="p">(</span><span class="n">module_summary_df</span><span class="p">)[</span><span class="s1">&#39;module_name&#39;</span><span class="p">]</span>
+    <span class="n">module_params</span> <span class="o">=</span> <span class="n">get_best_row</span><span class="p">(</span><span class="n">module_summary_df</span><span class="p">)[</span><span class="s1">&#39;module_params&#39;</span><span class="p">]</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="n">get_support_modules</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
+    <span class="n">result_df</span> <span class="o">=</span> <span class="n">module</span><span class="p">(</span><span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span> <span class="n">previous_result</span><span class="o">=</span><span class="n">previous_result</span><span class="p">,</span> <span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span> <span class="o">**</span><span class="n">module_params</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">to_list</span><span class="p">(</span><span class="n">result_df</span><span class="p">[</span><span class="s1">&#39;retrieve_scores&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="find_unique_elems">
+<a class="viewcode-back" href="../../../../api_spec/autorag.nodes.retrieval.html#autorag.nodes.retrieval.run.find_unique_elems">[docs]</a>
+<span class="k">def</span> <span class="nf">find_unique_elems</span><span class="p">(</span><span class="n">list1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">list2</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">list1</span><span class="p">)</span><span class="o">.</span><span class="n">symmetric_difference</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">list2</span><span class="p">)))</span></div>
 
 
 
