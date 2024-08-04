@@ -415,21 +415,31 @@ Therefore, the strategy sets the parameters needed to evaluate the answer of the
 </div>
 <section id="strategy-parameters">
 <h4><strong>Strategy Parameters</strong>:<a class="headerlink" href="#strategy-parameters" title="Link to this heading">¶</a></h4>
-<ol class="arabic simple">
-<li><p><strong>Metrics</strong>: Metrics such as <code class="docutils literal notranslate"><span class="pre">bleu</span></code>,<code class="docutils literal notranslate"><span class="pre">meteor</span></code>, and <code class="docutils literal notranslate"><span class="pre">rouge</span></code> are used to evaluate the performance of the prompt maker process through its impact on generator (llm) outcomes.</p></li>
-<li><p><strong>Speed Threshold</strong>: <code class="docutils literal notranslate"><span class="pre">speed_threshold</span></code> is applied across all nodes, ensuring that any method exceeding the average processing time for a query is not utilized.</p></li>
-<li><p><strong>Token Threshold</strong>: <code class="docutils literal notranslate"><span class="pre">token_threshold</span></code> ensuring that output prompt average token length does not exceed the
+<ol class="arabic">
+<li><p><strong>Metrics</strong>: (Essential) Metrics such as <code class="docutils literal notranslate"><span class="pre">bleu</span></code>,<code class="docutils literal notranslate"><span class="pre">meteor</span></code>, and <code class="docutils literal notranslate"><span class="pre">rouge</span></code> are used to evaluate the performance of the
+prompt maker process through its impact on generator (llm) outcomes.</p></li>
+<li><p><strong>Speed Threshold</strong>: (Optional) <code class="docutils literal notranslate"><span class="pre">speed_threshold</span></code> is applied across all nodes, ensuring that any method exceeding the
+average processing time for a query is not utilized.</p></li>
+<li><p><strong>Token Threshold</strong>: (Optional) <code class="docutils literal notranslate"><span class="pre">token_threshold</span></code> ensuring that output prompt average token length does not exceed
+the
 threshold.</p></li>
-<li><p><strong>tokenizer</strong>: Since you don’t know what LLM model you will use in the next nodes, you can specify the tokenizer name
+<li><p><strong>tokenizer</strong>: (Optional) Since you don’t know what LLM model you will use in the next nodes, you can specify the
+tokenizer name
 to use in <code class="docutils literal notranslate"><span class="pre">token_threshold</span></code> strategy.
 You can use OpenAI model names or Huggingface model names that support <code class="docutils literal notranslate"><span class="pre">AutoTokenizer</span></code>.
 It will automatically find the tokenizer for the model name you specify.
 Default is ‘gpt2’.</p></li>
-<li><p><strong>Generator Modules</strong>: The prompt maker node can use all modules and module parameters from the generator node,
+<li><p><strong>Generator Modules</strong>: (Optional, but recommended to set) The prompt maker node can use all modules and module
+parameters from the generator node,
 including:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../generator/llama_index_llm.html"><span class="std std-doc">llama_index_llm</span></a>: with <code class="docutils literal notranslate"><span class="pre">llm</span></code> and additional llm parameters</p></li>
+<li><p><a class="reference internal" href="../generator/openai_llm.html"><span class="std std-doc">openai_llm</span></a>: with <code class="docutils literal notranslate"><span class="pre">llm</span></code> and additional openai <code class="docutils literal notranslate"><span class="pre">AsyncOpenAI</span></code> parameters</p></li>
+<li><p><a class="reference internal" href="../generator/vllm.html"><span class="std std-doc">vllm</span></a>: with <code class="docutils literal notranslate"><span class="pre">llm</span></code> and additional vllm parameters</p></li>
 </ul>
+<p>And the default model of generator module for evaluating prompt maker is openai gpt-3.5-turbo model.</p>
+<p>Plus, the evaluation of prompt maker will skip when there are only one combination of prompt maker modules and
+options.</p>
 </li>
 </ol>
 </section>

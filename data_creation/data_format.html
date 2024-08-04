@@ -447,6 +447,12 @@ You can answer the question with any of these documents.</p>
 it is okay to save it as 1-d list or just string.
 If you save it as 1-d list, it treats as ‘and’ operation.</p>
 </div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The ids of retrieval_gt must be included in the corpus dataset as <code class="docutils literal notranslate"><span class="pre">doc_id</span></code>.</p>
+<p>When AutoRAG starts to evaluate, it checks the existence of the retrieval ids in the corpus dataset.</p>
+<p>You MUST match the retrieval_gt ids with the corpus dataset.</p>
+</div>
 <p>This column is crucial because AutoRAG evaluate retrieval performance with this column.
 It can affect hugely to optimization performance or nodes like retrieval, query expansion or passage reranker.</p>
 </section>
@@ -481,6 +487,7 @@ Your RAG system will retrieve passages in this corpus dataset, so chunking strat
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Do not make a duplicate doc id. It can occur unexpected behavior.</p>
+<p>Plus, we suggest you to double-check that retrieval_gt ids in the QA dataset are included in the corpus dataset as <code class="docutils literal notranslate"><span class="pre">doc_id</span></code>.</p>
 </div>
 </section>
 <section id="contents">

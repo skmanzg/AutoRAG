@@ -392,9 +392,14 @@
 In this documentation, you can learn about how AutoRAG works under the hood.</p>
 <section id="swapping-modules-in-node">
 <h2>Swapping modules in Node<a class="headerlink" href="#swapping-modules-in-node" title="Link to this heading">¶</a></h2>
-<p><img alt="Advanced RAG" src="../_images/advanced_RAG.png" /></p>
+<p><img alt="Advanced RAG" src="https://github.com/Marker-Inc-Korea/AutoRAG/assets/96727832/79dda7ba-e9d8-4552-9e7b-6a5f9edc4c1a" /></p>
 <p>Here is the diagram of the overall AutoRAG pipeline.
 Each node represents a node, and each node’s result passed to the next node.</p>
+<div class="admonition-do-i-need-to-use-all-nodes admonition">
+<p class="admonition-title">Do I need to use all nodes?</p>
+<p>No. The essential node for the ‘working’ RAG pipeline is <code class="docutils literal notranslate"><span class="pre">retrieval</span></code>, <code class="docutils literal notranslate"><span class="pre">prompt</span> <span class="pre">maker</span></code> and <code class="docutils literal notranslate"><span class="pre">generator</span></code>.</p>
+<p>The other nodes are optional, so you can add it for the better performance.</p>
+</div>
 <p>But remember, you can set multiple modules and multiple parameters in each node.
 And you get the best result among them.</p>
 <p>For achieving this, AutoRAG first makes all possible combinations of modules and parameters in each node.
