@@ -407,7 +407,8 @@ Once you have it, the optimal RAG pipeline can be found using AutoRAG easily.</p
 we provide a detailed guide at <a class="reference internal" href="data_creation/tutorial.html"><span class="std std-doc">here</span></a>.</p>
 <p>For users who want to use a pre-made evaluation dataset,
 we provide example datasets at <a class="reference internal" href="data_creation/data_format.html#samples"><span class="std std-ref">here</span></a>.</p>
-<p>Also, you can check out sample datasets at <a class="reference external" href="https://huggingface.co/collections/MarkrAI/autorag-evaluation-datasets-65c0ee87d673dcc686bd14b8">huggingface</a>.
+<p>Also, you can check out sample datasets
+at <a class="reference external" href="https://huggingface.co/collections/MarkrAI/autorag-evaluation-datasets-65c0ee87d673dcc686bd14b8">huggingface</a>.
 You can download it manually using huggingface datasets library.</p>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
@@ -435,14 +436,35 @@ Download <code class="docutils literal notranslate"><span class="pre">starter.ya
 <p>If you want to write your own custom config yaml file for detailed configuration and experiment,
 check out the <a class="reference internal" href="optimization/optimization.html"><span class="std std-doc">optimization</span></a> section.</p>
 </div>
+<section id="validate-your-system">
+<h3>Validate your system<a class="headerlink" href="#validate-your-system" title="Link to this heading">¶</a></h3>
+<p>Before you start the optimization, you might need to validate your system.
+When you run AutoRAG, there might be an error in your YAML file, python dependencies, GPU error, or unexpected errors.
+So it is recommended to run the validation.
+It runs whole optimization, but only to find a system error with minimum cost.</p>
+<p>You can run validation with cli command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autorag<span class="w"> </span>validate<span class="w"> </span>--config<span class="w"> </span>your/path/to/default_config.yaml<span class="w"> </span>--qa_data_path<span class="w"> </span>your/path/to/qa.parquet<span class="w"> </span>--corpus_data_path<span class="w"> </span>your/path/to/corpus.parquet
+</pre></div>
+</div>
+<p>Or you can use python code like below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.validator</span> <span class="kn">import</span> <span class="n">Validator</span>
+
+<span class="n">validator</span> <span class="o">=</span> <span class="n">Validator</span><span class="p">(</span><span class="n">qa_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/qa.parquet&#39;</span><span class="p">,</span> <span class="n">corpus_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/corpus.parquet&#39;</span><span class="p">)</span>
+<span class="n">validator</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="s1">&#39;your/path/to/default_config.yaml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="run-autorag-optimization">
+<h3>Run AutoRAG optimization<a class="headerlink" href="#run-autorag-optimization" title="Link to this heading">¶</a></h3>
 <p>Run below code at CLI, then AutoRAG automatically evaluate your dataset and find the best RAG pipeline for your dataset.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autorag<span class="w"> </span>evaluate<span class="w"> </span>--config<span class="w"> </span>your/path/to/default_config.yaml<span class="w"> </span>--qa_data_path<span class="w"> </span>your/path/to/qa.parquet<span class="w"> </span>--corpus_data_path<span class="w"> </span>your/path/to/corpus.parquet
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>autorag<span class="w"> </span>evaluate<span class="w"> </span>--config<span class="w"> </span>your/path/to/default_config.yaml<span class="w"> </span>--qa_data_path<span class="w"> </span>your/path/to/qa.parquet<span class="w"> </span>--corpus_data_path<span class="w"> </span>your/path/to/corpus.parquet<span class="w"> </span>--project_dir<span class="w"> </span>./your/project/directory
 </pre></div>
 </div>
 <p>Or you can use python code like below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">autorag.evaluator</span> <span class="kn">import</span> <span class="n">Evaluator</span>
 
-<span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">qa_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/qa.parquet&#39;</span><span class="p">,</span> <span class="n">corpus_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/corpus.parquet&#39;</span><span class="p">)</span>
+<span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">qa_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/qa.parquet&#39;</span><span class="p">,</span> <span class="n">corpus_data_path</span><span class="o">=</span><span class="s1">&#39;your/path/to/corpus.parquet&#39;</span><span class="p">,</span>
+                      <span class="n">project_dir</span><span class="o">=</span><span class="s1">&#39;your/path/to/project_directory&#39;</span><span class="p">)</span>
 <span class="n">evaluator</span><span class="o">.</span><span class="n">start_trial</span><span class="p">(</span><span class="s1">&#39;your/path/to/config.yaml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -462,6 +484,13 @@ You can find out more information about folder structure and result files at <a 
 <p class="admonition-title">Want to specify project folder?</p>
 <p>You can specify project directory with <code class="docutils literal notranslate"><span class="pre">--project_dir</span></code> option or project_dir parameter.</p>
 </div>
+<div class="admonition-why-use-python-command admonition">
+<p class="admonition-title">Why use python command?</p>
+<p>You have to use python command when you want to add custom LLM models or custom embedding models.
+Because the addition process must be executed as python code.
+Please refer <a class="reference external" href="https://docs.auto-rag.com/local_model.html">this document</a> to know how to add custom LLM or embedding models.</p>
+</div>
+</section>
 <section id="restart-a-trial-if-an-error-occurs-during-the-trial">
 <h3>❗Restart a trial if an error occurs during the trial<a class="headerlink" href="#restart-a-trial-if-an-error-occurs-during-the-trial" title="Link to this heading">¶</a></h3>
 <p>If an error occurs during the trial, you can restart the trial.</p>
@@ -647,6 +676,8 @@ and evaluate it again and again for better result.</p>
 <li><a class="reference internal" href="#">Tutorial</a><ul>
 <li><a class="reference internal" href="#prepare-evaluation-dataset">Prepare Evaluation Dataset</a></li>
 <li><a class="reference internal" href="#find-optimal-rag-pipeline">Find Optimal RAG Pipeline</a><ul>
+<li><a class="reference internal" href="#validate-your-system">Validate your system</a></li>
+<li><a class="reference internal" href="#run-autorag-optimization">Run AutoRAG optimization</a></li>
 <li><a class="reference internal" href="#restart-a-trial-if-an-error-occurs-during-the-trial">❗Restart a trial if an error occurs during the trial</a></li>
 </ul>
 </li>
